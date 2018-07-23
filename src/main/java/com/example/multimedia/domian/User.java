@@ -21,10 +21,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Length(min = 6,max = 12)
+    @Length(min = 6,max = 12, message = "用户名长度为6-12位")
     private String username;
 
-    @Length(min = 6,max = 12)
+    @Length(min = 6,max = 12,message = "密码长度为6-12位")
     private String password;
 
 }

@@ -6,6 +6,7 @@ import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,10 +21,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResultVo save(User user) {
-        if (userRepository.findByUsername(user.getUsername())==null){
+        if (findByUsername(user.getUsername())==null){
+            user.setPassword(encryptPassword(user.getPassword()));
             userRepository.save(user);
             return ResultVoUtil.success();
         }
         return ResultVoUtil.error(0,"账号已经存在");
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    private String encryptPassword(String password){
+       return new BCryptPasswordEncoder().encode(password);
     }
 }

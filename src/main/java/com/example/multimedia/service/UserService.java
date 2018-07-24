@@ -12,8 +12,14 @@ public interface UserService {
     /**
      * 用户注册
      * @param user
-     * @return
+     * @return ResultVo
      */
     ResultVo save(User user);
 
+    /**
+     * 用户查询
+     * @param username
+     * @return User
+     */
+    User findByUsername(String username);
 }

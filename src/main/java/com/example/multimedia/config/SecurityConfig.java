@@ -1,8 +1,16 @@
 package com.example.multimedia.config;
 
+import com.example.multimedia.handler.AuthenticationFailureHandler;
+import com.example.multimedia.handler.AuthenticationSuccessHandler;
+import com.example.multimedia.handler.LogoutHandle;
+import com.example.multimedia.service.impl.SecurityUserImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * @author CookiesEason
@@ -12,25 +20,54 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private SecurityUserImpl securityUser;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .requestMatchers().anyRequest()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/user/api/register").permitAll()
+                    .antMatchers("/user/api/*").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error")
-                .permitAll()
+                    .loginPage("/login")
+                    .successHandler(authenticationSuccessHandler())
+                    .failureHandler(authenticationFailureHandler())
+                    .permitAll()
                 .and()
-                .logout().permitAll()
+                    .logout()
+                    .logoutSuccessHandler(logoutHandle())
+                    .permitAll()
                 .and()
                 .csrf().disable();
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(securityUser).passwordEncoder(bCryptPasswordEncoder());
+    }
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new AuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler(){
+        return new AuthenticationFailureHandler();
+    }
+
+    @Bean
+    public LogoutHandle logoutHandle(){
+        return new LogoutHandle();
+    }
 
 }

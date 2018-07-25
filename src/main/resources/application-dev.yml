@@ -10,3 +10,9 @@ spring:
       ddl-auto: update
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+tengxun:
+  accessKey: AKIDELHhzAodcP1Yu76yFNOF6qOkuseOwlOv
+  secretKey: SimXFtQmyzufHjFiicKrYAg1Pm0iLtGR
+  bucket: ap-shanghai
+  bucketName: picture-1253231183
+  path: https://picture-1253231183.cos.ap-shanghai.myqcloud.com

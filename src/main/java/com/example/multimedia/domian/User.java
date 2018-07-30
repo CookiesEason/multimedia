@@ -25,7 +25,7 @@ public class User {
     @Length(min = 8,message = "密码长度至少为8位")
     private String password;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST,orphanRemoval = true)
     private UserInfo userInfo;
 
     @ManyToMany(fetch = FetchType.EAGER)

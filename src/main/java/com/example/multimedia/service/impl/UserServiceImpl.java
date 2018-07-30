@@ -10,6 +10,8 @@ import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,17 +62,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultVo save(UserInfo userInfo, MultipartFile multipartFile) {
         // TODO: 2018/07/30 用户个人中心
-        ResultVo resultVo = fileService.uploadFile(multipartFile);
-        if (findByNickname(userInfo.getNickname())==null ||
-                findByNickname(userInfo.getNickname()).getNickname().equals(userInfo.getNickname())){
-            if (resultVo.getCode() ==1){
-                userInfo.setHeadImgUrl(resultVo.getMsg());
-                userInfoRepository.save(userInfo);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        if (multipartFile==null){
+            if (findByNickname(userInfo.getNickname())==null ||
+                    user.getUserInfo().getNickname().equals(userInfo.getNickname())){
+                user.setUserInfo(userInfo);
+                userRepository.save(user);
                 return ResultVoUtil.success();
             }
-            return ResultVoUtil.error(0,"发生错误，请重新尝试。");
+            return ResultVoUtil.error(0,"用户名已经存在");
+        }else {
+            ResultVo resultVo = fileService.uploadFile(multipartFile);
+            if (findByNickname(userInfo.getNickname())==null ||
+                    user.getUserInfo().getNickname().equals(userInfo.getNickname())){
+                if (resultVo.getCode() ==1){
+                    userInfo.setHeadImgUrl(resultVo.getData().toString());
+                    user.setUserInfo(userInfo);
+                    userRepository.save(user);
+                    return ResultVoUtil.success();
+                }
+                return ResultVoUtil.error(0,"发生错误，请重新尝试。");
+            }
+            return ResultVoUtil.error(0,"用户名已经存在");
         }
-        return ResultVoUtil.error(0,"用户名已经存在");
     }
 
     @Override

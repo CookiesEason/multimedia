@@ -25,6 +25,9 @@ public class User {
     @Length(min = 8,message = "密码长度至少为8位")
     private String password;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    private UserInfo userInfo;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roleList;
 

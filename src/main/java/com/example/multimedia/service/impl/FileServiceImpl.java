@@ -46,9 +46,8 @@ public class FileServiceImpl implements FileService {
         ClientConfig clientConfig = new ClientConfig(new Region(tengXunProperties.getBucket()));
         COSClient cosClient = new COSClient(cred,clientConfig);
         String bucketName = tengXunProperties.getBucketName();
-        File localFile = null;
         try {
-            localFile = File.createTempFile("temp",null);
+            File localFile = File.createTempFile("temp", null);
             multipartFile.transferTo(localFile);
             String key = "/"+year+"/"+month+"/"+day+"/"+newFileName;
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);

@@ -1,7 +1,9 @@
 package com.example.multimedia.service;
 
 import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.vo.ResultVo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author CookiesEason
@@ -22,4 +24,18 @@ public interface UserService {
      * @return User
      */
     User findByUsername(String username);
+
+    /**
+     * 更新用户个人信息
+     * @param userInfo
+     * @return
+     */
+    ResultVo save(UserInfo userInfo, MultipartFile multipartFile);
+
+    /**
+     * 用户信息查询
+     * @param nickname
+     * @return
+     */
+    UserInfo findByNickname(String nickname);
 }

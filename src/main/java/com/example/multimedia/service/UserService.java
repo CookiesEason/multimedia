@@ -37,5 +37,5 @@ public interface UserService {
      * @param nickname
      * @return
      */
-    UserInfo findByNickname(String nickname);
+    User findByUserInfoNickname(String nickname);
 }

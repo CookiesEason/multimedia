@@ -1,5 +1,6 @@
 package com.example.multimedia.domian;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -23,9 +24,10 @@ public class User {
     private String username;
 
     @Length(min = 8,message = "密码长度至少为8位")
+    @JsonIgnore
     private String password;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST,orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
     private UserInfo userInfo;
 
     @ManyToMany(fetch = FetchType.EAGER)

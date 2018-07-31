@@ -2,6 +2,7 @@ package com.example.multimedia.controller;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
+import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.service.FileService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
@@ -22,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("register")
     private ResultVo registerUser(@Validated User user){

@@ -2,7 +2,6 @@ package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
-import com.example.multimedia.repository.UserInfoRepository;
 import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.repository.UserRoleRepository;
 import com.example.multimedia.service.FileService;
@@ -16,8 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -31,9 +28,6 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
-
-    @Autowired
     private UserRoleRepository userRoleRepository;
 
     @Autowired
@@ -45,7 +39,6 @@ public class UserServiceImpl implements UserService {
             UserInfo userInfo = new UserInfo();
             user.setPassword(encryptPassword(user.getPassword()));
             userInfo.setNickname(user.getUsername());
-            userInfoRepository.save(userInfo);
             user.setUserInfo(userInfo);
             user.setRoleList(Arrays.asList(userRoleRepository.getOne(1L)));
             userRepository.save(user);
@@ -66,9 +59,9 @@ public class UserServiceImpl implements UserService {
                 .getAuthentication()
                 .getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername());
+        String originalName = user.getUserInfo().getNickname();
         if (multipartFile==null){
-            if (findByNickname(userInfo.getNickname())==null ||
-                    user.getUserInfo().getNickname().equals(userInfo.getNickname())){
+            if (checkNickName(userInfo)|| userInfo.getNickname().equals(originalName)){
                 user.setUserInfo(userInfo);
                 userRepository.save(user);
                 return ResultVoUtil.success();
@@ -76,8 +69,7 @@ public class UserServiceImpl implements UserService {
             return ResultVoUtil.error(0,"用户名已经存在");
         }else {
             ResultVo resultVo = fileService.uploadFile(multipartFile);
-            if (findByNickname(userInfo.getNickname())==null ||
-                    user.getUserInfo().getNickname().equals(userInfo.getNickname())){
+            if (checkNickName(userInfo)|| userInfo.getNickname().equals(originalName)){
                 if (resultVo.getCode() ==1){
                     userInfo.setHeadImgUrl(resultVo.getData().toString());
                     user.setUserInfo(userInfo);
@@ -91,11 +83,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfo findByNickname(String nickname) {
-        return userInfoRepository.findByNickname(nickname);
+    public User findByUserInfoNickname(String nickname) {
+        return userRepository.findByUserInfoNickname(nickname);
     }
 
     private String encryptPassword(String password){
        return new BCryptPasswordEncoder().encode(password);
+    }
+
+    private boolean checkNickName(UserInfo userInfo){
+        return findByUserInfoNickname(userInfo.getNickname()) == null;
     }
 }

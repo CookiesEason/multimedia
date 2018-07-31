@@ -1,6 +1,7 @@
 package com.example.multimedia.repository;
 
 import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -11,4 +12,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByUsername(String username);
 
+    User findByUserInfoNickname(String nickname);
 }

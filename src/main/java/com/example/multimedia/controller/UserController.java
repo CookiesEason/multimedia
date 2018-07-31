@@ -9,6 +9,7 @@ import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,26 +19,25 @@ import org.springframework.web.multipart.MultipartFile;
  * 2018/07/23 14:59
  */
 @RestController
-@RequestMapping("user/api/")
 public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @PostMapping("register")
     private ResultVo registerUser(@Validated User user){
         return userService.save(user);
     }
 
-    @GetMapping("info")
+    @GetMapping("user/api/info")
     private ResultVo info(){
-        return ResultVoUtil.success(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+        return ResultVoUtil.success(userService.findByUsername(userDetails.getUsername()));
     }
 
-    @PostMapping("info")
+    @PostMapping("user/api/info")
     private ResultVo updateInfo(@Validated UserInfo userInfo,
                                 @RequestParam(value = "file",required = false)  MultipartFile multipartFile) {
         return userService.save(userInfo, multipartFile);

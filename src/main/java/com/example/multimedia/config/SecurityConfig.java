@@ -1,5 +1,6 @@
 package com.example.multimedia.config;
 
+import com.example.multimedia.filter.JwtAuthenticationTokenFilter;
 import com.example.multimedia.handler.AuthenticationFailureHandler;
 import com.example.multimedia.handler.AuthenticationSuccessHandler;
 import com.example.multimedia.handler.LogoutHandle;
@@ -10,7 +11,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @author CookiesEason
@@ -29,8 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers().anyRequest()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/register").permitAll()
-                    .antMatchers("/api/user/*").hasAnyRole("USER")
+                    .antMatchers("register").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -43,7 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessHandler(logoutHandle())
                     .permitAll()
                 .and()
-                .csrf().disable();
+                    .addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                    .csrf().disable()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
@@ -69,6 +73,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public LogoutHandle logoutHandle(){
         return new LogoutHandle();
+    }
+
+    @Bean
+    public JwtAuthenticationTokenFilter authenticationTokenFilter(){
+        return new JwtAuthenticationTokenFilter();
     }
 
 }

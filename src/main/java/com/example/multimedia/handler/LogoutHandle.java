@@ -1,6 +1,8 @@
 package com.example.multimedia.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.example.multimedia.util.CookieUtil;
+import com.example.multimedia.util.JwtUtil;
 import com.example.multimedia.util.ResultVoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,7 @@ public class LogoutHandle extends SimpleUrlLogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         response.setContentType("application/json; charset=utf-8");
         String res = JSON.toJSONString(ResultVoUtil.success());
+        CookieUtil.set(response, JwtUtil.TOKEN_PREFIX,null,0);
         response.getWriter().write(res);
     }
 }

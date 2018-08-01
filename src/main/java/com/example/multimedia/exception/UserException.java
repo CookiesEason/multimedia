@@ -1,12 +1,13 @@
 package com.example.multimedia.exception;
 
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * @author CookiesEason
  * 2018/07/23 15:40
  */
-@Data
+@Getter
 public class UserException extends RuntimeException {
     private Integer code;
 

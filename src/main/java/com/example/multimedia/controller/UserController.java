@@ -29,7 +29,7 @@ public class UserController {
         return userService.save(user);
     }
 
-    @GetMapping("user/api/info")
+    @GetMapping("api/user/info")
     private ResultVo info(){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication()
@@ -37,7 +37,7 @@ public class UserController {
         return ResultVoUtil.success(userService.findByUsername(userDetails.getUsername()));
     }
 
-    @PostMapping("user/api/info")
+    @PostMapping("api/user/info")
     private ResultVo updateInfo(@Validated UserInfo userInfo,
                                 @RequestParam(value = "file",required = false)  MultipartFile multipartFile) {
         return userService.save(userInfo, multipartFile);

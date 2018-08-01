@@ -30,7 +30,7 @@ public interface UserService {
      * @param userInfo
      * @return
      */
-    ResultVo save(UserInfo userInfo, MultipartFile multipartFile);
+    ResultVo save(UserInfo userInfo);
 
     /**
      * 用户信息查询
@@ -38,4 +38,12 @@ public interface UserService {
      * @return
      */
     User findByUserInfoNickname(String nickname);
+
+    /**
+     * 头像上传
+     * @param multipartFile
+     * @return
+     */
+    ResultVo updateHead(MultipartFile multipartFile);
+
 }

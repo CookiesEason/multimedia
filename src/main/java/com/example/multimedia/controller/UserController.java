@@ -2,8 +2,6 @@ package com.example.multimedia.controller;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
-import com.example.multimedia.repository.UserRepository;
-import com.example.multimedia.service.FileService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -38,8 +36,12 @@ public class UserController {
     }
 
     @PostMapping("/api/user/info")
-    private ResultVo updateInfo(@Validated UserInfo userInfo,
-                                @RequestParam(value = "file",required = false)  MultipartFile multipartFile) {
-        return userService.save(userInfo, multipartFile);
+    private ResultVo updateInfo(@RequestBody @Validated UserInfo userInfo) {
+        return userService.save(userInfo);
+    }
+
+    @PostMapping("/api/user/head")
+    private ResultVo uploadHead(@RequestParam("file") MultipartFile multipartFile){
+        return userService.updateHead(multipartFile);
     }
 }

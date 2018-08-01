@@ -53,38 +53,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultVo save(UserInfo userInfo, MultipartFile multipartFile) {
+    public ResultVo save(UserInfo userInfo) {
         // TODO: 2018/07/30 用户个人中心
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        User user = userRepository.findByUsername(userDetails.getUsername());
+        User user = getUser();
         String originalName = user.getUserInfo().getNickname();
-        if (multipartFile==null){
-            if (checkNickName(userInfo)|| userInfo.getNickname().equals(originalName)){
-                user.setUserInfo(userInfo);
-                userRepository.save(user);
-                return ResultVoUtil.success();
-            }
-            return ResultVoUtil.error(0,"用户名已经存在");
-        }else {
-            ResultVo resultVo = fileService.uploadFile(multipartFile);
-            if (checkNickName(userInfo)|| userInfo.getNickname().equals(originalName)){
-                if (resultVo.getCode() ==1){
-                    userInfo.setHeadImgUrl(resultVo.getData().toString());
-                    user.setUserInfo(userInfo);
-                    userRepository.save(user);
-                    return ResultVoUtil.success();
-                }
-                return ResultVoUtil.error(0,"发生错误，请重新尝试。");
-            }
-            return ResultVoUtil.error(0,"用户名已经存在");
+        if (checkNickName(userInfo) || userInfo.getNickname().equals(originalName)) {
+            user.setUserInfo(userInfo);
+            userRepository.save(user);
+            return ResultVoUtil.success();
         }
+        return ResultVoUtil.error(0, "用户名已经存在");
     }
 
     @Override
     public User findByUserInfoNickname(String nickname) {
         return userRepository.findByUserInfoNickname(nickname);
+    }
+
+    @Override
+    public ResultVo updateHead(MultipartFile multipartFile) {
+        ResultVo resultVo = fileService.uploadFile(multipartFile);
+        if (resultVo.getCode()==1){
+            User user = getUser();
+            user.getUserInfo().setHeadImgUrl(resultVo.getData().toString());
+            userRepository.save(user);
+        }
+        return resultVo;
     }
 
     private String encryptPassword(String password){
@@ -93,5 +87,12 @@ public class UserServiceImpl implements UserService {
 
     private boolean checkNickName(UserInfo userInfo){
         return findByUserInfoNickname(userInfo.getNickname()) == null;
+    }
+
+    private User getUser(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername());
     }
 }

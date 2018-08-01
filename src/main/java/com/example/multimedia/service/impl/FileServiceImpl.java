@@ -11,6 +11,7 @@ import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
+import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +33,10 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ResultVo uploadFile(MultipartFile multipartFile){
-        if (multipartFile == null){
+        if (multipartFile.getSize()>5242880){
+            return ResultVoUtil.error(0,"文件大小不能超过5Mb");
+        }
+        if (multipartFile.isEmpty()){
             return ResultVoUtil.error(0,"文件不能为空");
         }
         String oldFileName = multipartFile.getOriginalFilename();
@@ -52,14 +56,13 @@ public class FileServiceImpl implements FileService {
             String key = "/"+year+"/"+month+"/"+day+"/"+newFileName;
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
             PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
-            //todo 将路径存入数据库
             return ResultVoUtil.success(tengXunProperties.getPath()+putObjectRequest.getKey());
         }catch (IOException e){
-            e.printStackTrace();
+           e.printStackTrace();
         }
         finally {
             cosClient.shutdown();
         }
-        return ResultVoUtil.error(0,"发生错误");
+        return ResultVoUtil.error(0,"发生错误,请稍后重试");
     }
 }

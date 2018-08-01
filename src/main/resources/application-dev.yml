@@ -10,6 +10,10 @@ spring:
       ddl-auto: update
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  servlet:
+    multipart:
+      max-file-size: 5Mb
+      max-request-size: 10MB
 tengxun:
   accessKey: AKIDELHhzAodcP1Yu76yFNOF6qOkuseOwlOv
   secretKey: SimXFtQmyzufHjFiicKrYAg1Pm0iLtGR

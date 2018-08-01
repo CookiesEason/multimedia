@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,12 @@ public class ExceptionsHandler {
         e.getBindingResult().getAllErrors().forEach(objectError ->
                 messages.add(objectError.getDefaultMessage()));
         return ResultVoUtil.error(0,messages.toString());
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    @ResponseBody
+    public ResultVo handleAll(MultipartException e){
+        return ResultVoUtil.error(0,"发生错误,请检查你的文件,文件大小不能超过5Mb");
     }
 
 }

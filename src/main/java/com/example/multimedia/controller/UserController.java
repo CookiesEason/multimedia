@@ -24,7 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("register")
+    @PostMapping("/api/user/register")
     private ResultVo registerUser(@Validated User user){
         return userService.save(user);
     }

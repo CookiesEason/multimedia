@@ -14,9 +14,16 @@ spring:
     multipart:
       max-file-size: 5Mb
       max-request-size: 10MB
+  mail:
+    host: smtp.qq.com
+    username: 837447352@qq.com
+    password: tbtshyehhponbbfa
+    default-encoding: UTF-8
 tengxun:
   accessKey: AKIDELHhzAodcP1Yu76yFNOF6qOkuseOwlOv
   secretKey: SimXFtQmyzufHjFiicKrYAg1Pm0iLtGR
   bucket: ap-shanghai
   bucketName: picture-1253231183
   path: https://picture-1253231183.cos.ap-shanghai.myqcloud.com
+mail:
+  activateUrl: http://localhost:8080/api/user/activateEmail?

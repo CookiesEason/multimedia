@@ -5,6 +5,7 @@ import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.repository.UserRoleRepository;
 import com.example.multimedia.service.FileService;
+import com.example.multimedia.service.MailService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.EmailUtil;
 import com.example.multimedia.util.ResultVoUtil;
@@ -38,6 +39,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private MailService mailService;
+
     @Override
     public ResultVo save(User user) {
         if (findByUsername(user.getUsername())==null){
@@ -46,7 +50,9 @@ public class UserServiceImpl implements UserService {
                 user.setPassword(encryptPassword(user.getPassword()));
                 userInfo.setNickname(user.getUsername());
                 user.setUserInfo(userInfo);
-                user.setActiveCode(EmailUtil.generateActivateCode(user.getEmail()));
+                String activateCode = EmailUtil.generateActivateCode(user.getUsername());
+                user.setActiveCode(activateCode);
+                mailService.sendEmail(user.getEmail(),user.getUsername(),activateCode);
                 user.setRoleList(Arrays.asList(userRoleRepository.getOne(1L)));
                 userRepository.save(user);
                 return ResultVoUtil.success();
@@ -98,9 +104,11 @@ public class UserServiceImpl implements UserService {
                 return ResultVoUtil.error(1,"已激活成功");
             }
             if ((System.currentTimeMillis()-user.getDate().getTime())>EmailUtil.DAY){
-                user.setActiveCode(EmailUtil.generateActivateCode(username));
+                String activateCode = EmailUtil.generateActivateCode(user.getUsername());
+                user.setActiveCode(activateCode);
                 user.setDate(new Timestamp(System.currentTimeMillis()));
                 userRepository.save(user);
+                mailService.sendEmail(user.getEmail(),username,activateCode);
                 return ResultVoUtil.error(0,"激活邮件已经过期,稍后重新发送新的激活邮件");
             }else if (user.getActiveCode().equals(activeCode)){
                 user.setActive(true);

@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers().anyRequest()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/user/register").permitAll()
+                    .antMatchers("/api/user/register","/api/user/activateEmail").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

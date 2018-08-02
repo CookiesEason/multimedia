@@ -1,10 +1,17 @@
 package com.example.multimedia.domian;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,6 +20,7 @@ import java.util.List;
  * 用户
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Data
 public class User {
 
@@ -24,8 +32,21 @@ public class User {
     private String username;
 
     @Length(min = 8,message = "密码长度至少为8位")
-    @JsonIgnore
     private String password;
+
+    @Email(message = "请输入正确的邮箱格式")
+    @NotBlank(message = "邮箱不能为空")
+    private String email;
+
+    @JsonIgnore
+    private String activeCode;
+
+    @CreatedDate
+    private Timestamp date;
+
+    private boolean active = false;
+
+    private boolean enable = true;
 
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
     private UserInfo userInfo;
@@ -33,4 +54,13 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roleList;
 
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

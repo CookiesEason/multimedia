@@ -3,6 +3,8 @@ package com.example.multimedia.handler;
 import com.example.multimedia.exception.UserException;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
+import com.sun.org.apache.regexp.internal.RE;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,4 +37,9 @@ public class ExceptionsHandler {
         return ResultVoUtil.error(0,"发生错误,请检查你的文件,文件大小不能超过5Mb");
     }
 
+    @ExceptionHandler(UserException.class)
+    @ResponseBody
+    public ResultVo handleUserException(UserException e){
+        return ResultVoUtil.error(0,e.getMessage());
+    }
 }

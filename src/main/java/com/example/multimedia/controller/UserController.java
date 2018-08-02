@@ -23,8 +23,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/api/user/register")
-    private ResultVo registerUser(@Validated User user){
+    private ResultVo registerUser(@RequestBody @Validated User user){
         return userService.save(user);
+    }
+
+    @GetMapping("/api/user/activateEmail")
+    private ResultVo activateEmail(@RequestParam String username,@RequestParam String activeCode){
+        return userService.activateEmail(username,activeCode);
     }
 
     @GetMapping("/api/user/info")

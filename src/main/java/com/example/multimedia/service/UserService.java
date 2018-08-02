@@ -46,4 +46,18 @@ public interface UserService {
      */
     ResultVo updateHead(MultipartFile multipartFile);
 
+    /**
+     * 激活邮箱
+     * @param username
+     * @param activeCode
+     * @return
+     */
+    ResultVo activateEmail(String username, String activeCode);
+
+    /**
+     * 查找邮箱
+     * @param user
+     * @return
+     */
+    User findByEmail(User user);
 }

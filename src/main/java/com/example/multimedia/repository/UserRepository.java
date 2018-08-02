@@ -2,6 +2,7 @@ package com.example.multimedia.repository;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

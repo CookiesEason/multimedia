@@ -60,4 +60,11 @@ public interface UserService {
      * @return
      */
     User findByEmail(User user);
+
+    /**
+     * 查询所有用户
+     * @return
+     */
+    ResultVo findALL(int page);
+
 }

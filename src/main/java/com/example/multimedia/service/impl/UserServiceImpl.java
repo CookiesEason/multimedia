@@ -2,6 +2,7 @@ package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
+import com.example.multimedia.dto.UsersDTO;
 import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.repository.UserRoleRepository;
 import com.example.multimedia.service.FileService;
@@ -11,11 +12,15 @@ import com.example.multimedia.util.EmailUtil;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
@@ -123,6 +128,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(User user) {
         return userRepository.findByEmail(user.getEmail());
+    }
+
+    @Override
+    public ResultVo findALL(int page) {
+        int size=10;
+        Pageable pageable = PageRequest.of(page,size);
+        Page<User> users = userRepository.findAll(pageable);
+        UsersDTO usersDTO = new UsersDTO(users.getContent(),(int) users.getTotalElements(),users.getTotalPages());
+        return ResultVoUtil.success(usersDTO);
     }
 
     private String encryptPassword(String password){

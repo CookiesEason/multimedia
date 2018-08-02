@@ -26,6 +26,7 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public ResultVo sendEmail(String email,String username,String activateCode) {
+        // TODO: 2018/08/02 应该要写一个邮件模板html来进行发送
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("837447352@qq.com");
         message.setTo(email);

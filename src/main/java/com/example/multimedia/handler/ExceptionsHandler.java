@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,5 +43,13 @@ public class ExceptionsHandler {
     @ResponseBody
     public ResultVo handleUserException(UserException e){
         return ResultVoUtil.error(0,e.getMessage());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public ResultVo handleConstraintViolationException(ConstraintViolationException e){
+        List<String> messages = new ArrayList<>();
+        e.getConstraintViolations().forEach(constraintViolation -> messages.add(constraintViolation.getMessage()));
+        return ResultVoUtil.error(0,messages.toString());
     }
 }

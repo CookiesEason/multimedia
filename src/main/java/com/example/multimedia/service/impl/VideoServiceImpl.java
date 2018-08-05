@@ -70,11 +70,11 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public ResultVo findMyVideos(int page,String order) {
+    public ResultVo findMyVideos(int page,String order,boolean isEnable) {
         int size = 10;
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
-        Page<Video> videos = videoRepository.findAll(pageable);
+        Page<Video> videos = videoRepository.findAllByEnable(pageable,isEnable);
         VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
                 (long) videos.getTotalPages());
         return ResultVoUtil.success(videosDTO);

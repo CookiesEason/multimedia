@@ -1,6 +1,8 @@
 package com.example.multimedia.repository;
 
 import com.example.multimedia.domian.Video;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
@@ -15,5 +17,7 @@ public interface VideoRepository extends JpaRepository<Video,Long> {
     void deleteByIdAndUserId(long id,long userId);
 
     Video findByIdAndUserId(long id,long userId);
+
+    Page<Video> findAllByEnable(Pageable pageable, boolean enable);
 
 }

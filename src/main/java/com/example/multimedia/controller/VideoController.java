@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 2018/08/03 16:46
  */
 @RestController
-@RequestMapping("/api/video/")
+@RequestMapping("/api/video")
 public class VideoController {
 
     @Autowired
@@ -46,8 +46,9 @@ public class VideoController {
     @GetMapping
     @ResponseBody
     private ResultVo findAll(@RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "createDate") String order){
-        return videoService.findMyVideos(page,order);
+                             @RequestParam(defaultValue = "createDate") String sort,
+                             @RequestParam(defaultValue = "true") boolean isEnable){
+        return videoService.findMyVideos(page,sort,isEnable);
     }
 
 

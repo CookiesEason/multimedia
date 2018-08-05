@@ -24,10 +24,10 @@ public interface VideoService {
     ResultVo uploadVideo(String title,String introduction,String tag,MultipartFile multipartFile);
 
     /**
-     * 查找自己所有视频
+     * 查找自己所有视频(已通过，和未通过)
      * @return ResultVo
      */
-    ResultVo findMyVideos(int page,String order);
+    ResultVo findMyVideos(int page,String order,boolean isEnable);
 
     /**
      * 删除视频

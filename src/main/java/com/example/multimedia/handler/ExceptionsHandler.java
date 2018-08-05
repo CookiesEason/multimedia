@@ -34,7 +34,7 @@ public class ExceptionsHandler {
     @ExceptionHandler(MultipartException.class)
     @ResponseBody
     public ResultVo handleAll(MultipartException e){
-        return ResultVoUtil.error(0,"发生错误,请检查你的文件,文件大小不能超过5Mb");
+        return ResultVoUtil.error(0,"发生错误,请检查你的文件,文件大小不能超过100Mb");
     }
 
     @ExceptionHandler(UserException.class)

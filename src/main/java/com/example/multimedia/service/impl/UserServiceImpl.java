@@ -9,8 +9,11 @@ import com.example.multimedia.service.MailService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.EmailUtil;
 import com.example.multimedia.util.ResultVoUtil;
+import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -63,6 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "user", key = "#username")
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -70,7 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultVo save(UserInfo userInfo) {
         // TODO: 2018/07/30 用户个人中心
-        User user = getUser();
+        User user = findByUsername(UserUtil.getUserName());
         String originalName = user.getUserInfo().getNickname();
         if (checkNickName(userInfo) || userInfo.getNickname().equals(originalName)) {
             user.setUserInfo(userInfo);
@@ -89,7 +93,7 @@ public class UserServiceImpl implements UserService {
     public ResultVo updateHead(MultipartFile multipartFile) {
         ResultVo resultVo = fileService.uploadFile(multipartFile);
         if (resultVo.getCode()==1){
-            User user = getUser();
+            User user = findByUsername(UserUtil.getUserName());
             user.getUserInfo().setHeadImgUrl(resultVo.getData().toString());
             userRepository.save(user);
         }
@@ -133,10 +137,4 @@ public class UserServiceImpl implements UserService {
         return findByUserInfoNickname(userInfo.getNickname()) == null;
     }
 
-    private User getUser(){
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return userRepository.findByUsername(userDetails.getUsername());
-    }
 }

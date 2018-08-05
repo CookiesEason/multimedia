@@ -3,6 +3,8 @@ package com.example.multimedia.service;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.vo.ResultVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

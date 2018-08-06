@@ -5,6 +5,7 @@ import com.example.multimedia.domian.VideoComment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
 @Data
 public class CommentDTO {
 
-    private Long id;
+    private Long userId;
 
     private Long commentId;
 
@@ -24,15 +25,18 @@ public class CommentDTO {
 
     private String headUrl;
 
+    private Timestamp createDate;
+
     @JsonProperty(value = "replyComments")
     private List<ReplyDTO> replyDTOList;
 
     public CommentDTO(VideoComment videoComment, User user, List<ReplyDTO> replyDTOList) {
-        this.id = user.getId();
+        this.userId = user.getId();
         this.commentId = videoComment.getId();
         this.content = videoComment.getContent();
         this.nickname = user.getUserInfo().getNickname();
         this.headUrl = user.getUserInfo().getHeadImgUrl();
+        this.createDate = videoComment.getDate();
         this.replyDTOList = replyDTOList;
     }
 }

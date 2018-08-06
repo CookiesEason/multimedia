@@ -74,11 +74,9 @@ public class VideoCommentServiceImpl implements CommentService {
             List<VideoReply> replyList = replyService.findAllByCommentId(comment.getId());
             List<ReplyDTO> replyDTOList = new ArrayList<>();
             replyList.forEach(videoReply -> {
-                ReplyDTO replyDTO = new ReplyDTO();
-                replyDTO.setReplyId(videoReply.getId());
-                replyDTO.setFromUser(new SimpleUserDTO(userService.findById(videoReply.getFromUid())));
-                replyDTO.setContent(videoReply.getContent());
-                replyDTO.setReplyUser(new SimpleUserDTO(userService.findById(videoReply.getToUid())));
+                ReplyDTO replyDTO = new ReplyDTO(videoReply,
+                        new SimpleUserDTO(userService.findById(videoReply.getFromUid())),
+                        new SimpleUserDTO(userService.findById(videoReply.getToUid())));
                 replyDTOList.add(replyDTO);
             });
             CommentDTO commentDTO = new CommentDTO(comment,user,replyDTOList);

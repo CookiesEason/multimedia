@@ -46,6 +46,12 @@ public class UserServiceImpl implements UserService {
     private MailService mailService;
 
     @Override
+    @Cacheable(value = "user", key = "#id")
+    public User findById(Long id) {
+        return userRepository.findUserById(id);
+    }
+
+    @Override
     public ResultVo save(User user) {
         if (findByUsername(user.getUsername())==null){
             if (findByEmail(user)==null){

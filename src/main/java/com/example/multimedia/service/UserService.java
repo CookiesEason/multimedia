@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface UserService {
 
+    User findById(Long id);
+
     /**
      * 用户注册
      * @param user

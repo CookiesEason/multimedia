@@ -39,4 +39,10 @@ public interface CommentService {
      */
     void deleteById(Long id);
 
+    /**
+     * 删除所有主题评论
+     * @param contentId
+     */
+    void deleteAllBycontentId(Long contentId);
+
 }

@@ -1,25 +1,34 @@
 package com.example.multimedia.service.impl.videoserviceimpl;
 
+import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.videodomian.VideoComment;
+import com.example.multimedia.dto.SimpleUserDTO;
+import com.example.multimedia.dto.VideoDTO;
 import com.example.multimedia.dto.VideosDTO;
 import com.example.multimedia.domian.videodomian.Tags;
 import com.example.multimedia.domian.videodomian.Video;
 import com.example.multimedia.repository.TagsRepository;
 import com.example.multimedia.repository.VideoRepository;
-import com.example.multimedia.service.FileService;
-import com.example.multimedia.service.UserService;
-import com.example.multimedia.service.VideoService;
+import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
 
 /**
  * @author CookiesEason
@@ -30,7 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class VideoServiceImpl implements VideoService {
 
-    private final static String PREFIX_VIDEO="videodomian/";
+    private final static String PREFIX_VIDEO="video/";
 
     @Autowired
     private TagsRepository tagsRepository;
@@ -44,13 +53,21 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     private VideoRepository videoRepository;
 
+    @Autowired
+    @Qualifier(value = "VideoCommentService")
+    private CommentService videoCommentService;
+
+    @Autowired
+    @Qualifier(value = "VideoLikeService")
+    private LikeService videoLikeService;
+
     @Override
     public ResultVo uploadVideo(String title,String introduction,String tag,MultipartFile multipartFile) {
         Video video = new Video();
         if (multipartFile==null){
             video.setTitle(title);
             video.setIntroduction(introduction);
-            video.setUserId(getUserId(UserUtil.getUserName()));
+            video.setUserId(getUser(UserUtil.getUserName()).getId());
             return saveVideo(video, tagsRepository.findByTag(tag));
         }
         if (!multipartFile.getOriginalFilename().contains(PREFIX_VIDEO)){
@@ -60,7 +77,7 @@ public class VideoServiceImpl implements VideoService {
             }
             video.setTitle(title);
             video.setIntroduction(introduction);
-            video.setUserId(getUserId(UserUtil.getUserName()));
+            video.setUserId(getUser(UserUtil.getUserName()).getId());
             video.setVideoUrl(resultVo.getData().toString());
             return saveVideo(video, tagsRepository.findByTag(tag));
         }else {
@@ -82,13 +99,15 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public ResultVo deleteById(long id) {
-        videoRepository.deleteByIdAndUserId(id,getUserId(UserUtil.getUserName()));
+        videoRepository.deleteByIdAndUserId(id,getUser(UserUtil.getUserName()).getId());
+        videoCommentService.deleteAllBycontentId(id);
+        videoLikeService.deleteAllById(id);
         return ResultVoUtil.success();
     }
 
     @Override
     public ResultVo updateVideo(long id,String title, String introduction, String tag) {
-        Video video = videoRepository.findByIdAndUserId(id,getUserId(UserUtil.getUserName()));
+        Video video = videoRepository.findByIdAndUserId(id,getUser(UserUtil.getUserName()).getId());
         video.setTitle(title);
         video.setIntroduction(introduction);
         Tags tags = tagsRepository.findByTag(tag);
@@ -97,21 +116,43 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public ResultVo findById(long id) {
-        return ResultVoUtil.success(videoRepository.findById(id));
+        VideoDTO videoDTO = new VideoDTO(
+                new SimpleUserDTO(getUser(UserUtil.getUserName())),
+                videoRepository.findById(id),
+                videoLikeService.countAllById(id));
+        return ResultVoUtil.success(videoDTO);
+    }
+
+    @Override
+    public Video findById(Long id) {
+        Optional<Video> video = videoRepository.findById(id);
+        return video.orElse(null);
+    }
+
+    @Override
+    public Video save(Video video) {
+        return videoRepository.save(video);
+    }
+
+    @Override
+    public void play(Long videoId) {
+        Video video = findById(videoId);
+        video.setPlayCount(video.getPlayCount()+1);
+        save(video);
     }
 
     private ResultVo saveVideo(Video video, Tags tags) {
         if (tags!=null){
             video.setTags(tags);
-            videoRepository.save(video);
+            save(video);
             return ResultVoUtil.success();
         }else {
             return ResultVoUtil.error(0,"分类不存在,请检查你选择的分类");
         }
     }
 
-    public long getUserId(String username){
-        return userService.findByUsername(username).getId();
+    public User getUser(String username){
+        return userService.findByUsername(username);
     }
 
 

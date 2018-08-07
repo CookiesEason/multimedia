@@ -1,5 +1,6 @@
 package com.example.multimedia.service;
 
+import com.example.multimedia.domian.videodomian.Video;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,5 +52,25 @@ public interface VideoService {
      * @return
      */
     ResultVo findById(long id);
+
+    /**
+     * 查找某视频
+     * @param id
+     * @return
+     */
+    Video findById(Long id);
+
+    /**
+     * 保存
+     * @param video
+     * @return
+     */
+    Video save(Video video);
+
+    /**
+     * 播放次数
+     * @param videoId
+     */
+    void play(Long videoId);
 
 }

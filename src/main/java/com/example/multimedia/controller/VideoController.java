@@ -1,8 +1,10 @@
 package com.example.multimedia.controller;
 
+import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.VideoService;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +18,10 @@ public class VideoController {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    @Qualifier(value = "VideoLikeService")
+    private LikeService videoLikeService;
 
     @PostMapping
     @ResponseBody
@@ -43,12 +49,28 @@ public class VideoController {
         return videoService.deleteById(id);
     }
 
+    @GetMapping("/user")
+    @ResponseBody
+    private ResultVo findMyVideos(@RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "createDate") String sort,
+                             @RequestParam(defaultValue = "true") boolean enable){
+        return videoService.findMyVideos(page,sort,enable);
+    }
+
     @GetMapping
     @ResponseBody
-    private ResultVo findAll(@RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "createDate") String sort,
-                             @RequestParam(defaultValue = "true") boolean isEnable){
-        return videoService.findMyVideos(page,sort,isEnable);
+    private ResultVo findVideos(){
+        return null;
+    }
+
+    @PostMapping("/like/{videoId}")
+    private void videoLike(@PathVariable Long videoId){
+        videoLikeService.like(videoId);
+    }
+
+    @PostMapping("/play/{video}")
+    private void play(@PathVariable Long videoId){
+        videoService.play(videoId);
     }
 
 

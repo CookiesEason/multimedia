@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author CookiesEason
  * 2018/08/07 14:19
@@ -47,6 +49,16 @@ public class VideoCommentLikeServiceImpl implements LikeService {
     @Override
     public Long countAllById(Long id) {
         return videoCommentLikeRepository.countAllBycommentIdAndStatus(id,true);
+    }
+
+    @Override
+    public void deleteAllByIds(List<Long> ids) {
+        videoCommentLikeRepository.deleteAllByCommentIdIn(ids);
+    }
+
+    @Override
+    public void deleteAllById(Long id) {
+        videoCommentLikeRepository.deleteAllByCommentId(id);
     }
 
     private VideoCommentLike status(Long commentId){

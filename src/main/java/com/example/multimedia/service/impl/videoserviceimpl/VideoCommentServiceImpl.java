@@ -51,12 +51,16 @@ public class VideoCommentServiceImpl implements CommentService {
     private LikeService videoReplyLikeService;
 
     @Autowired
+    @Qualifier(value = "VideoReplyService")
+    private ReplyService videoReplyService;
+
+    @Autowired
     private UserService userService;
 
     @Override
     public ResultVo createComment(Long videoId,String content) {
         VideoComment videoComment = new VideoComment();
-        if (videoService.findById(videoId).getData()==null){
+        if (videoService.findById(videoId)==null){
             return ResultVoUtil.error(0,"视频不存在,无法进行评论");
         }
         videoComment.setVideoId(videoId);
@@ -103,6 +107,19 @@ public class VideoCommentServiceImpl implements CommentService {
         if (deleteId!=0){
             replyService.deleteAllByCommentId(id);
         }
+        videoCommentLikeService.deleteAllById(id);
+    }
+
+    @Override
+    public void deleteAllBycontentId(Long videoId) {
+        List<VideoComment> videoComments = videoCommentRepository.deleteAllByVideoId(videoId);
+        List<Long> ids= new ArrayList<>();
+        for (VideoComment videoComment : videoComments){
+           Long id =  videoComment.getId();
+           ids.add(id);
+        }
+        videoReplyService.deleteAllByCommentIdIn(ids);
+        videoCommentLikeService.deleteAllByIds(ids);
     }
 
     private Long getUid(){

@@ -40,4 +40,9 @@ public interface ReplyService {
      * 删除某评论下所有回复
      */
     void deleteAllByCommentId(Long commentId);
+
+    /**
+     * 批量删除
+     */
+    void deleteAllByCommentIdIn(List<Long> ids);
 }

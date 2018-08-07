@@ -3,6 +3,7 @@ package com.example.multimedia.service.impl.videoserviceimpl;
 import com.example.multimedia.domian.videodomian.VideoReply;
 import com.example.multimedia.repository.VideoReplyRepository;
 import com.example.multimedia.service.CommentService;
+import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.ReplyService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,15 +34,16 @@ public class VideoReplyServiceImpl implements ReplyService {
     private CommentService commentService;
 
     @Autowired
+    @Qualifier(value = "VideoReplyLikeService")
+    private LikeService videoReplyLikeService;
+
+    @Autowired
     private UserService userService;
 
     @Override
     public VideoReply findById(Long id) {
         Optional<VideoReply> videoReply = videoReplyRepository.findById(id);
-        if (videoReply.isPresent()){
-            return videoReply.get();
-        }
-        return null;
+        return videoReply.orElse(null);
     }
 
     @Override
@@ -69,7 +72,24 @@ public class VideoReplyServiceImpl implements ReplyService {
 
     @Override
     public void deleteAllByCommentId(Long commentId) {
-        videoReplyRepository.deleteAllByCommentId(commentId);
+        List<VideoReply> videoReplies = videoReplyRepository.deleteAllByCommentId(commentId);
+        List<Long> ids = new ArrayList<>();
+        for (VideoReply videoReply : videoReplies){
+            Long id = videoReply.getId();
+            ids.add(id);
+        }
+        videoReplyLikeService.deleteAllByIds(ids);
+    }
+
+    @Override
+    public void deleteAllByCommentIdIn(List<Long> ids) {
+        List<VideoReply> videoReplies = videoReplyRepository.deleteAllByCommentIdIn(ids);
+        List<Long> replyIds = new ArrayList<>();
+        for (VideoReply videoReply : videoReplies){
+            Long id = videoReply.getId();
+            replyIds.add(id);
+        }
+        videoReplyLikeService.deleteAllByIds(replyIds);
     }
 
     private Long getUid(){

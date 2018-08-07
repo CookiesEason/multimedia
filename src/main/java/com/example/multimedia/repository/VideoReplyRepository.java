@@ -13,7 +13,9 @@ public interface VideoReplyRepository extends JpaRepository<VideoReply,Long> {
 
     List<VideoReply> findAllByCommentId(Long commentId);
 
-    void deleteAllByCommentId(Long id);
+    List<VideoReply> deleteAllByCommentId(Long id);
 
     void deleteByIdAndFromUid(Long id,Long fromId);
+
+    List<VideoReply> deleteAllByCommentIdIn(List <Long> ids);
 }

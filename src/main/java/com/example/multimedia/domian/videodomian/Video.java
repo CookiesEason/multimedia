@@ -1,5 +1,6 @@
 package com.example.multimedia.domian.videodomian;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
@@ -32,14 +33,14 @@ public class Video {
 
     private String videoUrl;
 
-    private long likeCount;
-
     private long playCount;
+
+    private long likeCount;
 
     @CreatedDate
     private Timestamp createDate;
 
-    private boolean enable = false;
+    private boolean enable = true;
 
     @OneToOne(fetch = FetchType.EAGER)
     private Tags tags;

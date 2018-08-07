@@ -1,5 +1,7 @@
 package com.example.multimedia.service;
 
+import java.util.List;
+
 /**
  * 点赞
  * @author CookiesEason
@@ -10,5 +12,9 @@ public interface LikeService {
     void like(Long id);
 
     Long countAllById(Long id);
+
+    void deleteAllByIds(List<Long> ids);
+
+    void deleteAllById(Long id);
 
 }

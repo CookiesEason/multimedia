@@ -1,6 +1,7 @@
 package com.example.multimedia.controller;
 
 import com.example.multimedia.service.CommentService;
+import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.ReplyService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -18,38 +19,56 @@ public class CommentController {
 
     @Autowired
     @Qualifier(value = "VideoCommentService")
-    private CommentService commentService;
+    private CommentService videoCommentService;
 
     @Autowired
     @Qualifier(value = "VideoReplyService")
-    private ReplyService replyService;
+    private ReplyService videoReplyService;
+
+    @Autowired
+    @Qualifier(value = "VideoCommentLikeService")
+    private LikeService videoCommentLikeService;
+
+    @Autowired
+    @Qualifier(value = "VideoReplyLikeService")
+    private LikeService videoReplyLikeService;
 
     @GetMapping("/video/{videoId}")
     private ResultVo getComments(@PathVariable Long videoId,@RequestParam(defaultValue = "0") int page){
-        return commentService.getComments(videoId,page);
+        return videoCommentService.getComments(videoId,page);
     }
 
     @PostMapping("/video/add")
     private ResultVo createComment(@RequestParam Long videoId,@RequestParam String content){
-        return commentService.createComment(videoId,content);
+        return videoCommentService.createComment(videoId,content);
     }
 
     @PostMapping("/video/reply")
     private ResultVo replyComment(@RequestParam Long commentId,@RequestParam String content,
                                   @RequestParam Long toUid){
-        return replyService.reply(commentId,content,toUid);
+        return videoReplyService.reply(commentId,content,toUid);
     }
 
     @DeleteMapping("/video/{commendId}")
     private ResultVo deleteComment(@PathVariable Long commendId){
-        commentService.deleteById(commendId);
+        videoCommentService.deleteById(commendId);
         return ResultVoUtil.success();
     }
 
     @DeleteMapping("/video/reply/{replyId}")
     private ResultVo deleteReply(@PathVariable Long replyId){
-        replyService.deleteById(replyId);
+        videoReplyService.deleteById(replyId);
         return ResultVoUtil.success();
+    }
+
+    @PostMapping("/video/replyLike/{replyId}")
+    private void videoReplyLike(@PathVariable Long replyId){
+        videoReplyLikeService.like(replyId);
+    }
+
+    @PostMapping("/video/commentLike/{commentId}")
+    private void videoCommentLike(@PathVariable Long commentId){
+        videoCommentLikeService.like(commentId);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.multimedia.service;
 
-import com.example.multimedia.domian.VideoReply;
+import com.example.multimedia.domian.videodomian.VideoReply;
 import com.example.multimedia.vo.ResultVo;
 
 import java.util.List;
@@ -10,6 +10,9 @@ import java.util.List;
  * 2018/08/05 19:55
  */
 public interface ReplyService {
+
+    VideoReply findById(Long id);
+
 
     /**
      * 回复

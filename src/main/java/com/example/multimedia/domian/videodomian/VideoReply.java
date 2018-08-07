@@ -1,4 +1,4 @@
-package com.example.multimedia.domian;
+package com.example.multimedia.domian.videodomian;
 
 import com.example.multimedia.domian.abstractdomian.AbstractReply;
 

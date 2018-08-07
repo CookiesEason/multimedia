@@ -1,6 +1,6 @@
-package com.example.multimedia.service.impl;
+package com.example.multimedia.service.impl.videoserviceimpl;
 
-import com.example.multimedia.domian.VideoReply;
+import com.example.multimedia.domian.videodomian.VideoReply;
 import com.example.multimedia.repository.VideoReplyRepository;
 import com.example.multimedia.service.CommentService;
 import com.example.multimedia.service.ReplyService;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author CookiesEason
@@ -32,6 +33,15 @@ public class VideoReplyServiceImpl implements ReplyService {
 
     @Autowired
     private UserService userService;
+
+    @Override
+    public VideoReply findById(Long id) {
+        Optional<VideoReply> videoReply = videoReplyRepository.findById(id);
+        if (videoReply.isPresent()){
+            return videoReply.get();
+        }
+        return null;
+    }
 
     @Override
     public ResultVo reply(Long commentId, String content, Long toUid) {

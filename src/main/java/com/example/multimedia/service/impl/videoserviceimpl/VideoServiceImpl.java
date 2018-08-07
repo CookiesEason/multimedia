@@ -1,8 +1,8 @@
-package com.example.multimedia.service.impl;
+package com.example.multimedia.service.impl.videoserviceimpl;
 
 import com.example.multimedia.dto.VideosDTO;
-import com.example.multimedia.domian.Tags;
-import com.example.multimedia.domian.Video;
+import com.example.multimedia.domian.videodomian.Tags;
+import com.example.multimedia.domian.videodomian.Video;
 import com.example.multimedia.repository.TagsRepository;
 import com.example.multimedia.repository.VideoRepository;
 import com.example.multimedia.service.FileService;
@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class VideoServiceImpl implements VideoService {
 
-    private final static String PREFIX_VIDEO="video/";
+    private final static String PREFIX_VIDEO="videodomian/";
 
     @Autowired
     private TagsRepository tagsRepository;

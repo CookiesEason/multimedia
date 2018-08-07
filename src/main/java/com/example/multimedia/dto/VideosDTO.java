@@ -1,7 +1,6 @@
 package com.example.multimedia.dto;
 
-import com.example.multimedia.domian.Video;
-import lombok.Data;
+import com.example.multimedia.domian.videodomian.Video;
 import lombok.Getter;
 
 import java.util.List;

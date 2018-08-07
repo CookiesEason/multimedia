@@ -1,20 +1,15 @@
-package com.example.multimedia.service.impl;
+package com.example.multimedia.service.impl.videoserviceimpl;
 
 import com.example.multimedia.domian.User;
-import com.example.multimedia.domian.Video;
-import com.example.multimedia.domian.VideoComment;
-import com.example.multimedia.domian.VideoReply;
+import com.example.multimedia.domian.videodomian.VideoComment;
+import com.example.multimedia.domian.videodomian.VideoReply;
 import com.example.multimedia.domian.abstractdomian.AbstractComment;
 import com.example.multimedia.dto.CommentDTO;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.ReplyDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.repository.VideoCommentRepository;
-import com.example.multimedia.repository.VideoReplyRepository;
-import com.example.multimedia.service.CommentService;
-import com.example.multimedia.service.ReplyService;
-import com.example.multimedia.service.UserService;
-import com.example.multimedia.service.VideoService;
+import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -48,6 +43,14 @@ public class VideoCommentServiceImpl implements CommentService {
     private ReplyService replyService;
 
     @Autowired
+    @Qualifier(value = "VideoCommentLikeService")
+    private LikeService videoCommentLikeService;
+
+    @Autowired
+    @Qualifier(value = "VideoReplyLikeService")
+    private LikeService videoReplyLikeService;
+
+    @Autowired
     private UserService userService;
 
     @Override
@@ -75,11 +78,13 @@ public class VideoCommentServiceImpl implements CommentService {
             List<ReplyDTO> replyDTOList = new ArrayList<>();
             replyList.forEach(videoReply -> {
                 ReplyDTO replyDTO = new ReplyDTO(videoReply,
+                        videoReplyLikeService.countAllById(videoReply.getId()),
                         new SimpleUserDTO(userService.findById(videoReply.getFromUid())),
                         new SimpleUserDTO(userService.findById(videoReply.getToUid())));
                 replyDTOList.add(replyDTO);
             });
-            CommentDTO commentDTO = new CommentDTO(comment,user,replyDTOList);
+            CommentDTO commentDTO = new CommentDTO(comment,videoCommentLikeService.countAllById(comment.getId()),
+                    user,replyDTOList);
             commentList.add(commentDTO);
         });
         PageDTO<CommentDTO> comments = new PageDTO<>(commentList,videoComments.getTotalElements(),

@@ -1,4 +1,4 @@
-package com.example.multimedia.domian;
+package com.example.multimedia.domian.videodomian;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

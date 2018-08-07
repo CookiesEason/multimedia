@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -27,10 +28,6 @@ public abstract class AbstractComment {
     private String content;
 
     private Long fromUid;
-
-    private Long likeCount;
-
-    private Long likeUid;
 
     @CreatedDate
     private Timestamp date;

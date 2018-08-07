@@ -1,6 +1,6 @@
 package com.example.multimedia.repository;
 
-import com.example.multimedia.domian.VideoComment;
+import com.example.multimedia.domian.videodomian.VideoComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
 package com.example.multimedia.repository;
 
-import com.example.multimedia.domian.VideoReply;
+import com.example.multimedia.domian.videodomian.VideoReply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

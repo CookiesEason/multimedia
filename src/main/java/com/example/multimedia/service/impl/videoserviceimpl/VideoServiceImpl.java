@@ -67,7 +67,7 @@ public class VideoServiceImpl implements VideoService {
         if (multipartFile==null){
             video.setTitle(title);
             video.setIntroduction(introduction);
-            video.setUserId(getUser(UserUtil.getUserName()).getId());
+            video.setUserId(getUid());
             return saveVideo(video, tagsRepository.findByTag(tag));
         }
         if (!multipartFile.getOriginalFilename().contains(PREFIX_VIDEO)){
@@ -77,7 +77,7 @@ public class VideoServiceImpl implements VideoService {
             }
             video.setTitle(title);
             video.setIntroduction(introduction);
-            video.setUserId(getUser(UserUtil.getUserName()).getId());
+            video.setUserId(getUid());
             video.setVideoUrl(resultVo.getData().toString());
             return saveVideo(video, tagsRepository.findByTag(tag));
         }else {
@@ -91,7 +91,37 @@ public class VideoServiceImpl implements VideoService {
         int size = 10;
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
-        Page<Video> videos = videoRepository.findAllByEnable(pageable,isEnable);
+        Page<Video> videos = videoRepository.findAllByUserIdAndEnable(pageable,getUid(),isEnable);
+        VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
+                (long) videos.getTotalPages());
+        return ResultVoUtil.success(videosDTO);
+    }
+
+    @Override
+    public ResultVo findVideos(int page,int size,String order) {
+        Sort sort = new Sort(Sort.Direction.DESC,order);
+        Pageable pageable = PageRequest.of(page,size,sort);
+        Page<Video> videos = videoRepository.findAllByEnable(pageable,true);
+        VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
+                (long) videos.getTotalPages());
+        return ResultVoUtil.success(videosDTO);
+    }
+
+    @Override
+    public ResultVo findAllByTag(int page, int size, String order, String tag) {
+        Sort sort = new Sort(Sort.Direction.DESC,order);
+        Pageable pageable = PageRequest.of(page,size,sort);
+        Page<Video> videos = videoRepository.findAllByEnableAndTagsTag(pageable,true,tag);
+        VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
+                (long) videos.getTotalPages());
+        return ResultVoUtil.success(videosDTO);
+    }
+
+    @Override
+    public ResultVo findAllByUserId(int page, int size, String order, Long userId) {
+        Sort sort = new Sort(Sort.Direction.DESC,order);
+        Pageable pageable = PageRequest.of(page,size,sort);
+        Page<Video> videos = videoRepository.findAllByUserIdAndEnable(pageable,userId,true);
         VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
                 (long) videos.getTotalPages());
         return ResultVoUtil.success(videosDTO);
@@ -99,7 +129,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public ResultVo deleteById(long id) {
-        videoRepository.deleteByIdAndUserId(id,getUser(UserUtil.getUserName()).getId());
+        videoRepository.deleteByIdAndUserId(id,getUid());
         videoCommentService.deleteAllBycontentId(id);
         videoLikeService.deleteAllById(id);
         return ResultVoUtil.success();
@@ -107,7 +137,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public ResultVo updateVideo(long id,String title, String introduction, String tag) {
-        Video video = videoRepository.findByIdAndUserId(id,getUser(UserUtil.getUserName()).getId());
+        Video video = videoRepository.findByIdAndUserId(id,getUid());
         video.setTitle(title);
         video.setIntroduction(introduction);
         Tags tags = tagsRepository.findByTag(tag);
@@ -118,8 +148,7 @@ public class VideoServiceImpl implements VideoService {
     public ResultVo findById(long id) {
         VideoDTO videoDTO = new VideoDTO(
                 new SimpleUserDTO(getUser(UserUtil.getUserName())),
-                videoRepository.findById(id),
-                videoLikeService.countAllById(id));
+                videoRepository.findById(id));
         return ResultVoUtil.success(videoDTO);
     }
 
@@ -155,5 +184,8 @@ public class VideoServiceImpl implements VideoService {
         return userService.findByUsername(username);
     }
 
+    private Long getUid(){
+        return userService.findByUsername(UserUtil.getUserName()).getId();
+    }
 
 }

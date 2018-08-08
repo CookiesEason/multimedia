@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @author CookiesEason
@@ -13,6 +14,8 @@ import java.sql.Timestamp;
  */
 @Data
 public class VideoDTO {
+
+    private Long videoId;
 
     private SimpleUserDTO user;
 
@@ -32,13 +35,14 @@ public class VideoDTO {
 
     private Boolean enable;
 
-    public VideoDTO(SimpleUserDTO user, Video video,Long likeCount) {
+    public VideoDTO(SimpleUserDTO user, Video video) {
+        this.videoId = video.getId();
         this.user = user;
         this.title = video.getTitle();
         this.introduction = video.getIntroduction();
         this.videoUrl = video.getIntroduction();
         this.playCount = video.getPlayCount();
-        this.likeCount = likeCount;
+        this.likeCount = video.getLikeCount();
         this.createDate = video.getCreateDate();
         this.tag = video.getTags().getTag();
         this.enable = video.isEnable();

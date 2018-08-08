@@ -2,6 +2,7 @@ package com.example.multimedia.controller;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
+import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -49,4 +50,14 @@ public class UserController {
     private ResultVo uploadHead(@RequestParam("file") MultipartFile multipartFile){
         return userService.updateHead(multipartFile);
     }
+
+    @GetMapping("/api/user/{userId}")
+    private ResultVo simpleUserInfo(@PathVariable Long userId){
+        User user = userService.findById(userId);
+        if (user!=null){
+            return ResultVoUtil.success(new SimpleUserDTO(user));
+        }
+        return ResultVoUtil.error(0,"不存在该用户");
+    }
+
 }

@@ -20,6 +20,10 @@ public interface VideoRepository extends JpaRepository<Video,Long> {
 
     Video findByIdAndUserId(long id,long userId);
 
+    Page<Video> findAllByUserIdAndEnable(Pageable pageable, Long userId,boolean enable);
+
     Page<Video> findAllByEnable(Pageable pageable, boolean enable);
+
+    Page<Video> findAllByEnableAndTagsTag(Pageable pageable,boolean enable,String tag);
 
 }

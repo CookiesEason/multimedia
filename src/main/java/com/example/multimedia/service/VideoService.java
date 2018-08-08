@@ -31,6 +31,35 @@ public interface VideoService {
     ResultVo findMyVideos(int page,String order,boolean isEnable);
 
     /**
+     * 展示所有视频(不分类)
+     * @param page 页数
+     * @param size 每页显示数量
+     * @param order 排序字段
+     * @return ResultVo
+     */
+    ResultVo findVideos(int page, int size,String order);
+
+    /**
+     * 分类查找视频
+     * @param page 页数
+     * @param size 每页显示数量
+     * @param order 排序字段
+     * @param tag 分类
+     * @return ResultVo
+     */
+    ResultVo findAllByTag(int page, int size,String order,String tag);
+
+    /**
+     * 查看某用户的所有视频
+     * @param page 页数
+     * @param size 每页显示数量
+     * @param order 排序字段
+     * @param userId 用户id
+     * @return
+     */
+    ResultVo findAllByUserId(int page, int size,String order,Long userId);
+
+    /**
      * 删除视频
      * @param id;
      * @return ResultVo

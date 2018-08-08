@@ -2,6 +2,7 @@ package com.example.multimedia.controller;
 
 import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.VideoService;
+import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -52,15 +53,36 @@ public class VideoController {
     @GetMapping("/user")
     @ResponseBody
     private ResultVo findMyVideos(@RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "createDate") String sort,
-                             @RequestParam(defaultValue = "true") boolean enable){
+                                  @RequestParam(defaultValue = "createDate") String sort,
+                                  @RequestParam(defaultValue = "true") boolean enable){
+        // TODO: 2018/08/08  可能按需求 对 视频也要进行分类 
         return videoService.findMyVideos(page,sort,enable);
+    }
+
+    @GetMapping("/user/{userId}")
+    @ResponseBody
+    private ResultVo findUserVideos(@PathVariable Long userId,
+                                    @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size,
+                                  @RequestParam(defaultValue = "createDate") String sort){
+        return videoService.findAllByUserId(page,size,sort,userId);
     }
 
     @GetMapping
     @ResponseBody
-    private ResultVo findVideos(){
-        return null;
+    private ResultVo findVideos(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "createDate") String sort){
+       return videoService.findVideos(page,size,sort);
+    }
+
+    @GetMapping("/tag")
+    @ResponseBody
+    private ResultVo findVideosByTag(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "createDate") String sort,
+                                     @RequestParam String tag){
+        return videoService.findAllByTag(page,size,sort,tag);
     }
 
     @PostMapping("/like/{videoId}")

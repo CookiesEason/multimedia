@@ -59,7 +59,7 @@ public class VideoLikeServiceImpl implements LikeService {
     }
 
     @Override
-    public void deleteAllBy(List<Long> ids) {
+    public void deleteAllByIds(List<Long> ids) {
         return;
     }
 

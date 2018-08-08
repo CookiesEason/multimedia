@@ -68,6 +68,7 @@ public class VideoReplyServiceImpl implements ReplyService {
     @Override
     public void deleteById(Long id) {
         videoReplyRepository.deleteByIdAndFromUid(id,getUid());
+        videoReplyLikeService.deleteAllById(id);
     }
 
     @Override

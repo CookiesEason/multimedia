@@ -1,5 +1,8 @@
 package com.example.multimedia.service;
 
+import com.example.multimedia.domian.abstractdomian.AbstractLike;
+import com.example.multimedia.domian.videodomian.VideoLike;
+
 import java.util.List;
 
 /**
@@ -16,5 +19,7 @@ public interface LikeService {
     void deleteAllByIds(List<Long> ids);
 
     void deleteAllById(Long id);
+
+   AbstractLike status(Long videoId);
 
 }

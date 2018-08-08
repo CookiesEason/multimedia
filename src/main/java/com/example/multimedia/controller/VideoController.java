@@ -37,7 +37,7 @@ public class VideoController {
         return videoService.findById(id);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ResponseBody
     private ResultVo updateVideo(@PathVariable long id,@RequestParam String title,
                                  @RequestParam String introduction, @RequestParam String tag){
@@ -90,7 +90,7 @@ public class VideoController {
         videoLikeService.like(videoId);
     }
 
-    @PostMapping("/play/{video}")
+    @PostMapping("/play/{videoId}")
     private void play(@PathVariable Long videoId){
         videoService.play(videoId);
     }

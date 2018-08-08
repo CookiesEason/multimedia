@@ -33,19 +33,22 @@ public class VideoDTO {
 
     private String tag;
 
+    private Boolean isLike;
+
     private Boolean enable;
 
-    public VideoDTO(SimpleUserDTO user, Video video) {
+    public VideoDTO(SimpleUserDTO user, Video video,Boolean isLike) {
         this.videoId = video.getId();
         this.user = user;
         this.title = video.getTitle();
         this.introduction = video.getIntroduction();
-        this.videoUrl = video.getIntroduction();
+        this.videoUrl = video.getVideoUrl();
         this.playCount = video.getPlayCount();
         this.likeCount = video.getLikeCount();
         this.createDate = video.getCreateDate();
         this.tag = video.getTags().getTag();
         this.enable = video.isEnable();
+        this.isLike = isLike;
 }
 
     @Override

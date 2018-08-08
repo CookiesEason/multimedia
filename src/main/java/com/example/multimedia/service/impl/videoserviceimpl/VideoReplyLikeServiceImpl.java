@@ -61,7 +61,8 @@ public class VideoReplyLikeServiceImpl implements LikeService {
         videoReplyLikeRepository.deleteAllByReplyId(id);
     }
 
-    private VideoReplyLike status(Long replyId){
+    @Override
+    public VideoReplyLike status(Long replyId){
         return videoReplyLikeRepository.findByUserIdAndReplyId(getUid(),replyId);
     }
 

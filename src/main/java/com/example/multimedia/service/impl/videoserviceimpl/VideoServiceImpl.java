@@ -2,6 +2,7 @@ package com.example.multimedia.service.impl.videoserviceimpl;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.videodomian.VideoComment;
+import com.example.multimedia.domian.videodomian.VideoLike;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.dto.VideoDTO;
 import com.example.multimedia.dto.VideosDTO;
@@ -146,9 +147,15 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public ResultVo findById(long id) {
+        boolean isLike = false;
+        VideoLike videoLike = (VideoLike) videoLikeService.status(id);
+        if (videoLike!=null){
+            isLike = videoLike.isStatus();
+        }
         VideoDTO videoDTO = new VideoDTO(
                 new SimpleUserDTO(getUser(UserUtil.getUserName())),
-                videoRepository.findById(id));
+                videoRepository.findById(id),
+                isLike);
         return ResultVoUtil.success(videoDTO);
     }
 

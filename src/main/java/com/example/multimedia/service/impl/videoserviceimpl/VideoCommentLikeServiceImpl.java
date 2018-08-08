@@ -61,7 +61,8 @@ public class VideoCommentLikeServiceImpl implements LikeService {
         videoCommentLikeRepository.deleteAllByCommentId(id);
     }
 
-    private VideoCommentLike status(Long commentId){
+    @Override
+    public VideoCommentLike status(Long commentId){
         return videoCommentLikeRepository.findByUserIdAndCommentId(getUid(),commentId);
     }
 

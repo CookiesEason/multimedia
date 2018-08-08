@@ -11,7 +11,6 @@ import java.io.Serializable;
  * 2018/07/23 15:53
  */
 @Data
-@JsonIgnoreProperties(value = "hibernateLazyInitializer")
 public class ResultVo<T> implements Serializable {
 
     private static final long serialVersionUID = 430185373222528745L;

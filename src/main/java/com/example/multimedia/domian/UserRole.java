@@ -2,6 +2,7 @@ package com.example.multimedia.domian;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author CookiesEason
@@ -10,8 +11,9 @@ import javax.persistence.*;
  */
 @Entity
 @Data
-public class UserRole {
+public class UserRole implements Serializable {
 
+    private static final long serialVersionUID = -8577944768414457825L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

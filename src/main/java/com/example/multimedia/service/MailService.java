@@ -9,4 +9,6 @@ public interface MailService {
 
    ResultVo sendEmail(String email,String username,String activateCode);
 
+   ResultVo  sendPasswordUpdateEmail();
+
 }

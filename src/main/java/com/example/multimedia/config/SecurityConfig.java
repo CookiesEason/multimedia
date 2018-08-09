@@ -3,6 +3,7 @@ package com.example.multimedia.config;
 import com.example.multimedia.filter.JwtAuthenticationTokenFilter;
 import com.example.multimedia.handler.AuthenticationFailureHandler;
 import com.example.multimedia.handler.AuthenticationSuccessHandler;
+import com.example.multimedia.handler.DeniedHandler;
 import com.example.multimedia.handler.LogoutHandle;
 import com.example.multimedia.service.impl.SecurityUserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -28,12 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        http.exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
+
         http
                 .requestMatchers().anyRequest()
                 .and()
                     .authorizeRequests()
                     .antMatchers("/api/user/register","/api/user/activateEmail","/api/comment/**")
                     .permitAll()
+                .antMatchers("/api/admin/**").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -80,6 +86,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilter(){
         return new JwtAuthenticationTokenFilter();
+    }
+
+    @Bean
+    public AccessDeniedHandler getAccessDeniedHandler() {
+        return new DeniedHandler();
     }
 
 }

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @author CookiesEason
@@ -15,7 +16,9 @@ import javax.persistence.Id;
  */
 @Entity
 @Data
-public class UserInfo {
+public class UserInfo implements Serializable {
+
+    private static final long serialVersionUID = -8540974692377387195L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

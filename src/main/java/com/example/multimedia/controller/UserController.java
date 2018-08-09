@@ -3,6 +3,7 @@ package com.example.multimedia.controller;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.dto.SimpleUserDTO;
+import com.example.multimedia.service.MailService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -22,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MailService mailService;
 
     @PostMapping("/api/user/register")
     private ResultVo registerUser(@RequestBody @Validated User user){
@@ -44,6 +48,17 @@ public class UserController {
     @PostMapping("/api/user/info")
     private ResultVo updateInfo(@RequestBody @Validated UserInfo userInfo) {
         return userService.save(userInfo);
+    }
+
+    @GetMapping("/api/user/code")
+    private ResultVo getCodeForPassword(){
+        return mailService.sendPasswordUpdateEmail();
+    }
+
+    @PostMapping("/api/user/password")
+    private ResultVo updatePassword(@RequestParam String code,@RequestParam String oldPassword,
+                                    @RequestParam String newPassword){
+        return userService.updatePassword(code,oldPassword,newPassword);
     }
 
     @PostMapping("/api/user/head")

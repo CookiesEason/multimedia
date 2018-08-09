@@ -1,14 +1,22 @@
 package com.example.multimedia.service.impl;
 
+import com.example.multimedia.domian.User;
 import com.example.multimedia.service.MailService;
+import com.example.multimedia.service.UserService;
+import com.example.multimedia.util.EmailUtil;
 import com.example.multimedia.util.ResultVoUtil;
+import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author CookiesEason
@@ -18,11 +26,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MailServiceImpl implements MailService {
 
+    private static final Long CODEEXPIRETIME = 60000L;
+
     @Value("${mail.activateUrl}")
     private String activateUrl;
 
     @Autowired
+    private StringRedisTemplate template;
+
+    @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public ResultVo sendEmail(String email,String username,String activateCode) {
@@ -40,4 +56,25 @@ public class MailServiceImpl implements MailService {
         }
         return ResultVoUtil.error(0,"发送简单邮件时发生异常！");
     }
+
+    @Override
+    public ResultVo sendPasswordUpdateEmail() {
+        String email = userService.findByUsername(UserUtil.getUserName()).getEmail();
+        SimpleMailMessage message = new SimpleMailMessage();
+        String code = EmailUtil.generateCode();
+        ValueOperations<String, String> valueStr = template.opsForValue();
+        valueStr.set(email,code,CODEEXPIRETIME, TimeUnit.MILLISECONDS);
+        message.setFrom("837447352@qq.com");
+        message.setTo(email);
+        message.setSubject("密码修改");
+        message.setText("您的验证码为:" + code);
+        try {
+            mailSender.send(message);
+            return ResultVoUtil.success();
+        } catch (Exception e) {
+            log.error("发送简单邮件时发生异常！", e);
+        }
+        return ResultVoUtil.error(0,"发送简单邮件时发生异常！");
+    }
+
 }

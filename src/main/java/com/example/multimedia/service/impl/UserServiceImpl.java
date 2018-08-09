@@ -2,6 +2,7 @@ package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
+import com.example.multimedia.dto.UsersDTO;
 import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.repository.UserRoleRepository;
 import com.example.multimedia.service.FileService;
@@ -12,8 +13,13 @@ import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private StringRedisTemplate template;
 
     @Override
     @Cacheable(value = "user", key = "#id")
@@ -78,6 +87,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "user", allEntries = true)
     public ResultVo save(UserInfo userInfo) {
         // TODO: 2018/07/30 用户个人中心
         User user = findByUsername(UserUtil.getUserName());
@@ -96,6 +106,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "user", allEntries = true)
+    public ResultVo updatePassword(String code,String password,String passwordAgain) {
+        User user = userRepository.findByUsername(UserUtil.getUserName());
+        if (code.equals(getCode(user.getEmail()))){
+            if (password.length()<8){
+                return ResultVoUtil.error(0,"密码长度至少为8位");
+            }
+            if (password.equals(passwordAgain)){
+                user.setPassword(encryptPassword(password));
+                userRepository.save(user);
+                return ResultVoUtil.success();
+            }
+            return ResultVoUtil.error(0,"两次密码输入不相同");
+        }
+        return ResultVoUtil.error(0,"验证码不正确");
+    }
+
+    @Override
+    @CacheEvict(value = "user", allEntries = true)
     public ResultVo updateHead(MultipartFile multipartFile) {
         ResultVo resultVo = fileService.uploadFile(multipartFile);
         if (resultVo.getCode()==1){
@@ -135,8 +164,21 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(user.getEmail());
     }
 
+    @Override
+    public ResultVo findALL(int page) {
+        int size=10;
+        Pageable pageable = PageRequest.of(page,size);
+        Page<User> users = userRepository.findAll(pageable);
+        UsersDTO usersDTO = new UsersDTO(users.getContent(),(int) users.getTotalElements(),users.getTotalPages());
+        return ResultVoUtil.success(usersDTO);
+    }
+
     private String encryptPassword(String password){
        return new BCryptPasswordEncoder().encode(password);
+    }
+
+    private String getCode(String email){
+        return template.opsForValue().get(email);
     }
 
     private boolean checkNickName(UserInfo userInfo){

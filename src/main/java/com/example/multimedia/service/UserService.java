@@ -44,6 +44,14 @@ public interface UserService {
     User findByUserInfoNickname(String nickname);
 
     /**
+     * 修改密码
+     * @param password
+     * @param passwordAgain
+     * @return
+     */
+    ResultVo updatePassword(String code,String password,String passwordAgain);
+
+    /**
      * 头像上传
      * @param multipartFile
      * @return

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -22,8 +23,9 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public class User {
+public class User implements Serializable {
 
+    private static final long serialVersionUID = -3684325576403010777L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

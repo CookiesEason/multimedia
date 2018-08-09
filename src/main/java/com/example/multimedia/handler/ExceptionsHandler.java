@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,12 +36,20 @@ public class ExceptionsHandler {
     @ExceptionHandler(MultipartException.class)
     @ResponseBody
     public ResultVo handleAll(MultipartException e){
-        return ResultVoUtil.error(0,"发生错误,请检查你的文件,文件大小不能超过5Mb");
+        return ResultVoUtil.error(0,"发生错误,请检查你的文件,文件大小不能超过100Mb");
     }
 
     @ExceptionHandler(UserException.class)
     @ResponseBody
     public ResultVo handleUserException(UserException e){
         return ResultVoUtil.error(0,e.getMessage());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public ResultVo handleConstraintViolationException(ConstraintViolationException e){
+        List<String> messages = new ArrayList<>();
+        e.getConstraintViolations().forEach(constraintViolation -> messages.add(constraintViolation.getMessage()));
+        return ResultVoUtil.error(0,messages.toString());
     }
 }

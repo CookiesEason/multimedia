@@ -2,7 +2,6 @@ package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
-import com.example.multimedia.dto.UsersDTO;
 import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.repository.UserRoleRepository;
 import com.example.multimedia.service.FileService;
@@ -10,17 +9,16 @@ import com.example.multimedia.service.MailService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.EmailUtil;
 import com.example.multimedia.util.ResultVoUtil;
+import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
@@ -48,6 +46,12 @@ public class UserServiceImpl implements UserService {
     private MailService mailService;
 
     @Override
+    @Cacheable(value = "user", key = "#id")
+    public User findById(Long id) {
+        return userRepository.findUserById(id);
+    }
+
+    @Override
     public ResultVo save(User user) {
         if (findByUsername(user.getUsername())==null){
             if (findByEmail(user)==null){
@@ -68,6 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "user", key = "#username")
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -75,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultVo save(UserInfo userInfo) {
         // TODO: 2018/07/30 用户个人中心
-        User user = getUser();
+        User user = findByUsername(UserUtil.getUserName());
         String originalName = user.getUserInfo().getNickname();
         if (checkNickName(userInfo) || userInfo.getNickname().equals(originalName)) {
             user.setUserInfo(userInfo);
@@ -94,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public ResultVo updateHead(MultipartFile multipartFile) {
         ResultVo resultVo = fileService.uploadFile(multipartFile);
         if (resultVo.getCode()==1){
-            User user = getUser();
+            User user = findByUsername(UserUtil.getUserName());
             user.getUserInfo().setHeadImgUrl(resultVo.getData().toString());
             userRepository.save(user);
         }
@@ -130,15 +135,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(user.getEmail());
     }
 
-    @Override
-    public ResultVo findALL(int page) {
-        int size=10;
-        Pageable pageable = PageRequest.of(page,size);
-        Page<User> users = userRepository.findAll(pageable);
-        UsersDTO usersDTO = new UsersDTO(users.getContent(),(int) users.getTotalElements(),users.getTotalPages());
-        return ResultVoUtil.success(usersDTO);
-    }
-
     private String encryptPassword(String password){
        return new BCryptPasswordEncoder().encode(password);
     }
@@ -147,10 +143,4 @@ public class UserServiceImpl implements UserService {
         return findByUserInfoNickname(userInfo.getNickname()) == null;
     }
 
-    private User getUser(){
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return userRepository.findByUsername(userDetails.getUsername());
-    }
 }

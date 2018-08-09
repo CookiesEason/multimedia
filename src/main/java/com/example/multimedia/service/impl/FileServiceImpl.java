@@ -33,9 +33,6 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ResultVo uploadFile(MultipartFile multipartFile){
-        if (multipartFile.getSize()>5242880){
-            return ResultVoUtil.error(0,"文件大小不能超过5Mb");
-        }
         if (multipartFile.isEmpty()){
             return ResultVoUtil.error(0,"文件不能为空");
         }

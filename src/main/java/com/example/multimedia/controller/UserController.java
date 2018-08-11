@@ -29,7 +29,8 @@ public class UserController {
 
     @PostMapping("/api/user/register")
     private ResultVo registerUser(@RequestBody @Validated User user){
-        return userService.save(user);
+        String role = "ROLE_PRIMARY_USER";
+        return userService.save(user,role);
     }
 
     @GetMapping("/api/user/activateEmail")

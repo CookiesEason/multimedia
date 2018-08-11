@@ -2,6 +2,7 @@ package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
+import com.example.multimedia.domian.UserRole;
 import com.example.multimedia.dto.UsersDTO;
 import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.repository.UserRoleRepository;
@@ -29,8 +30,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author CookiesEason
@@ -61,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultVo save(User user) {
+    public ResultVo save(User user,String role) {
         if (findByUsername(user.getUsername())==null){
             if (findByEmail(user)==null){
                 UserInfo userInfo = new UserInfo();
@@ -71,7 +74,7 @@ public class UserServiceImpl implements UserService {
                 String activateCode = EmailUtil.generateActivateCode(user.getUsername());
                 user.setActiveCode(activateCode);
                 mailService.sendEmail(user.getEmail(),user.getUsername(),activateCode);
-                user.setRoleList(Arrays.asList(userRoleRepository.getOne(1L)));
+                user.setRoleList(Arrays.asList(userRoleRepository.findByRole(role)));
                 userRepository.save(user);
                 return ResultVoUtil.success();
             }
@@ -81,7 +84,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "user", key = "#username")
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -165,12 +167,51 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultVo findALL(int page) {
+    public ResultVo findUsers(int page,String role) {
         int size=10;
         Pageable pageable = PageRequest.of(page,size);
-        Page<User> users = userRepository.findAll(pageable);
+        List<UserRole> roles = userRoleRepository.findAllByRoleLike(role);
+        Page<User> users = userRepository.findAllByRoleListIn(pageable,roles);
         UsersDTO usersDTO = new UsersDTO(users.getContent(),(int) users.getTotalElements(),users.getTotalPages());
         return ResultVoUtil.success(usersDTO);
+    }
+
+    @Override
+    public ResultVo findByUsernameOrEmailOrUserInfoNickname(String username, String email, String nickname) {
+        return ResultVoUtil.success(userRepository.findByUsernameOrEmailOrUserInfoNickname(username,email,nickname));
+    }
+
+    @Override
+    @CacheEvict(value = "user",key = "#userId")
+    public ResultVo enableUserByUserId(Long userId) {
+        User user = userRepository.findUserById(userId);
+        user.setEnable(!user.isEnable());
+        userRepository.save(user);
+        return ResultVoUtil.success();
+    }
+
+    @Override
+    @CacheEvict(value = "user", key = "#userId")
+    public ResultVo deleteByUserId(Long userId) {
+        userRepository.deleteById(userId);
+        return ResultVoUtil.success();
+    }
+
+    @Override
+    public ResultVo getRoles() {
+        return ResultVoUtil.success(userRoleRepository.findAll());
+    }
+
+    @Override
+    @CacheEvict(value = "user", key = "#userId")
+    public ResultVo changeRole(Long userId,String role) {
+        UserRole userRole  = userRoleRepository.findByRole(role);
+        User user = userRepository.findUserById(userId);
+        List<UserRole> roles = new ArrayList<>();
+        roles.add(userRole);
+        user.setRoleList(roles);
+        userRepository.save(user);
+        return ResultVoUtil.success();
     }
 
     private String encryptPassword(String password){

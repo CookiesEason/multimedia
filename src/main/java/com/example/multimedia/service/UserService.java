@@ -20,7 +20,7 @@ public interface UserService {
      * @param user
      * @return ResultVo
      */
-    ResultVo save(User user);
+    ResultVo save(User user,String role);
 
     /**
      * 用户查询
@@ -77,6 +77,42 @@ public interface UserService {
      * 查询所有用户
      * @return
      */
-    ResultVo findALL(int page);
+    ResultVo findUsers(int page,String role);
 
+    /**
+     * 搜索用户
+     * @param username
+     * @param email
+     * @param nickname
+     * @return
+     */
+    ResultVo findByUsernameOrEmailOrUserInfoNickname(String username,String email,String nickname);
+
+    /**
+     * 禁用,启用用户
+     * @param userId
+     * @return
+     */
+    ResultVo enableUserByUserId(Long userId);
+
+    /**
+     * 删除用户
+     * @param userId
+     * @return
+     */
+    ResultVo deleteByUserId(Long userId);
+
+    /**
+     * 获取角色列表
+     * @return
+     */
+    ResultVo getRoles();
+
+    /**
+     * 改变角色
+     * @param userId
+     * @param role
+     * @return
+     */
+    ResultVo changeRole(Long userId,String role);
 }

@@ -19,6 +19,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.HTML;
 import java.util.Optional;
 
 /**
@@ -63,8 +66,34 @@ public class VideoServiceImpl implements VideoService {
     private LikeService videoLikeService;
 
     @Override
+    @Cacheable(value = "tags")
     public ResultVo getTags() {
         return ResultVoUtil.success(tagsRepository.findAll());
+    }
+
+    @Override
+    @CacheEvict(value = "tags",allEntries = true)
+    public ResultVo updateTag(String oldTag,String tag) {
+        Tags tags = tagsRepository.findByTag(oldTag);
+        tags.setTag(tag);
+        tagsRepository.save(tags);
+        return ResultVoUtil.success();
+    }
+
+    @Override
+    @CacheEvict(value = "tags",allEntries = true)
+    public ResultVo addTag(String tag) {
+        Tags tags = new Tags();
+        tags.setTag(tag);
+        tagsRepository.save(tags);
+        return ResultVoUtil.success();
+    }
+
+    @Override
+    @CacheEvict(value = "tags",allEntries = true)
+    public ResultVo deleteTag(String tag) {
+        tagsRepository.deleteByTag(tag);
+        return ResultVoUtil.success();
     }
 
     @Override

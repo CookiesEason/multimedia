@@ -2,6 +2,7 @@ package com.example.multimedia.controller;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.service.UserService;
+import com.example.multimedia.service.VideoService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private VideoService videoService;
 
     @GetMapping("users")
     private ResultVo findUsers(@RequestParam(defaultValue = "0") int page){
@@ -68,6 +72,26 @@ public class AdminController {
     @PostMapping("users/changeRole")
     private ResultVo changeRole(@RequestParam Long userId,@RequestParam String role){
         return userService.changeRole(userId,role);
+    }
+
+    @GetMapping("videos/tags")
+    private ResultVo getTags(){
+        return videoService.getTags();
+    }
+
+    @PostMapping("videos/updateTag")
+    private ResultVo updateTag(@RequestParam String oldTag,@RequestParam String tag){
+        return videoService.updateTag(oldTag, tag);
+    }
+
+    @PostMapping("videos/addTag")
+    private ResultVo addTags(@RequestParam String tag){
+        return videoService.addTag(tag);
+    }
+
+    @DeleteMapping("videos/tags/{tag}")
+    private ResultVo deleteTag(@PathVariable String tag){
+        return videoService.deleteTag(tag);
     }
 
 }

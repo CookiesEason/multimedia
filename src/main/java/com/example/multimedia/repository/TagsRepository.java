@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TagsRepository extends JpaRepository<Tags,Long> {
     Tags findByTag(String tag);
+
+    void deleteByTag(String tag);
 }

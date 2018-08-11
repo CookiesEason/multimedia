@@ -24,6 +24,11 @@ public class VideoController {
     @Qualifier(value = "VideoLikeService")
     private LikeService videoLikeService;
 
+    @GetMapping("tags")
+    private ResultVo getTags(){
+        return videoService.getTags();
+    }
+
     @PostMapping
     @ResponseBody
     private ResultVo uploadVideo(@RequestParam String title,@RequestParam String introduction,
@@ -76,12 +81,12 @@ public class VideoController {
        return videoService.findVideos(page,size,sort);
     }
 
-    @GetMapping("/tag")
+    @GetMapping("/{tag}")
     @ResponseBody
     private ResultVo findVideosByTag(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size,
                                 @RequestParam(defaultValue = "createDate") String sort,
-                                     @RequestParam String tag){
+                                     @PathVariable String tag){
         return videoService.findAllByTag(page,size,sort,tag);
     }
 

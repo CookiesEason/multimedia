@@ -15,6 +15,12 @@ import java.sql.Timestamp;
 public interface VideoService {
 
     /**
+     * 获取标签
+     * @return
+     */
+    ResultVo getTags();
+
+    /**
      * 上传视频
      * @param title;
      * @param introduction;

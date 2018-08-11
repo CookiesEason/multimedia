@@ -63,6 +63,11 @@ public class VideoServiceImpl implements VideoService {
     private LikeService videoLikeService;
 
     @Override
+    public ResultVo getTags() {
+        return ResultVoUtil.success(tagsRepository.findAll());
+    }
+
+    @Override
     public ResultVo uploadVideo(String title,String introduction,String tag,MultipartFile multipartFile) {
         Video video = new Video();
         if (multipartFile==null){

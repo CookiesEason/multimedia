@@ -3,6 +3,7 @@ package com.example.multimedia.dto;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.videodomian.VideoComment;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -30,6 +31,7 @@ public class CommentDTO {
     private Timestamp createDate;
 
     @JsonProperty(value = "replyComments")
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private List<ReplyDTO> replyDTOList;
 
     public CommentDTO(VideoComment videoComment,Long likeCount,User user, List<ReplyDTO> replyDTOList) {
@@ -39,7 +41,17 @@ public class CommentDTO {
         this.likeCount = likeCount;
         this.nickname = user.getUserInfo().getNickname();
         this.headUrl = user.getUserInfo().getHeadImgUrl();
-        this.createDate = videoComment.getDate();
+        this.createDate = videoComment.getCreateDate();
         this.replyDTOList = replyDTOList;
+    }
+
+    public CommentDTO(VideoComment videoComment,Long likeCount,User user) {
+        this.userId = user.getId();
+        this.commentId = videoComment.getId();
+        this.content = videoComment.getContent();
+        this.likeCount = likeCount;
+        this.nickname = user.getUserInfo().getNickname();
+        this.headUrl = user.getUserInfo().getHeadImgUrl();
+        this.createDate = videoComment.getCreateDate();
     }
 }

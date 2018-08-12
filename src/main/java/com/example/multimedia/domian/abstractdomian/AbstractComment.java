@@ -30,6 +30,6 @@ public abstract class AbstractComment {
     private Long fromUid;
 
     @CreatedDate
-    private Timestamp date;
+    private Timestamp createDate;
 
 }

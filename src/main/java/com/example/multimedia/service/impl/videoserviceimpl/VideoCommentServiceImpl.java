@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,6 +121,23 @@ public class VideoCommentServiceImpl implements CommentService {
         }
         videoReplyService.deleteAllByCommentIdIn(ids);
         videoCommentLikeService.deleteAllByIds(ids);
+    }
+
+    @Override
+    public ResultVo findAll(int page, int size, String order) {
+        Sort sort = new Sort(Sort.Direction.DESC,order);
+        Pageable pageable = PageRequest.of(page, size,sort);
+        Page<VideoComment> videoComments = videoCommentRepository.findAll(pageable);
+        List<CommentDTO> commentList = new ArrayList<>();
+       videoComments.getContent().forEach(videoComment -> {
+           User user = userService.findById(videoComment.getFromUid());
+           CommentDTO commentDTO = new CommentDTO(videoComment,
+                   videoCommentLikeService.countAllById(videoComment.getId()), user);
+           commentList.add(commentDTO);
+       });
+        PageDTO<CommentDTO> comments = new PageDTO<>(commentList,videoComments.getTotalElements(),
+                (long) videoComments.getTotalPages());
+        return ResultVoUtil.success(comments);
     }
 
     private Long getUid(){

@@ -45,4 +45,13 @@ public interface CommentService {
      */
     void deleteAllBycontentId(Long contentId);
 
+    /**
+     * 获取所有评论
+     * @param page
+     * @param size
+     * @param oder
+     * @return
+     */
+    ResultVo findAll(int page,int size,String order);
+
 }

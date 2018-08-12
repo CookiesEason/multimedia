@@ -60,9 +60,10 @@ public interface VideoService {
      * @param page 页数
      * @param size 每页显示数量
      * @param order 排序字段
+     * @param enable 审核通过与否
      * @return ResultVo
      */
-    ResultVo findVideos(int page, int size,String order);
+    ResultVo findVideos(int page, int size,String order,Boolean enable);
 
     /**
      * 分类查找视频
@@ -126,5 +127,12 @@ public interface VideoService {
      * @param videoId
      */
     void play(Long videoId);
+
+    /**
+     * 审核视频
+     * @param videoId
+     * @return
+     */
+    ResultVo enableVideo(Long videoId);
 
 }

@@ -33,6 +33,6 @@ public abstract class AbstractReply {
     private Long toUid;
 
     @CreatedDate
-    private Timestamp date;
+    private Timestamp createDate;
 
 }

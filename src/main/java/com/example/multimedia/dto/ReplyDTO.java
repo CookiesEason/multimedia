@@ -1,6 +1,7 @@
 package com.example.multimedia.dto;
 
 import com.example.multimedia.domian.videodomian.VideoReply;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -22,14 +23,23 @@ public class ReplyDTO {
 
     private SimpleUserDTO fromUser;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private SimpleUserDTO toUser;
 
     public ReplyDTO(VideoReply videoReply,Long likeCount, SimpleUserDTO fromUser, SimpleUserDTO toUser) {
         this.replyId = videoReply.getId();
         this.content = videoReply.getContent();
-        this.createDate = videoReply.getDate();
+        this.createDate = videoReply.getCreateDate();
         this.likeCount = likeCount;
         this.fromUser = fromUser;
         this.toUser = toUser;
+    }
+
+    public ReplyDTO(VideoReply videoReply,Long likeCount, SimpleUserDTO fromUser) {
+        this.replyId = videoReply.getId();
+        this.content = videoReply.getContent();
+        this.createDate = videoReply.getCreateDate();
+        this.likeCount = likeCount;
+        this.fromUser = fromUser;
     }
 }

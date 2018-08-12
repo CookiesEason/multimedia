@@ -1,6 +1,10 @@
 package com.example.multimedia.service.impl.videoserviceimpl;
 
+import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.videodomian.VideoReply;
+import com.example.multimedia.dto.PageDTO;
+import com.example.multimedia.dto.ReplyDTO;
+import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.repository.VideoReplyRepository;
 import com.example.multimedia.service.CommentService;
 import com.example.multimedia.service.LikeService;
@@ -11,6 +15,10 @@ import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,6 +99,23 @@ public class VideoReplyServiceImpl implements ReplyService {
             replyIds.add(id);
         }
         videoReplyLikeService.deleteAllByIds(replyIds);
+    }
+
+    @Override
+    public ResultVo findAll(int page, int size, String order) {
+        Sort sort = new Sort(Sort.Direction.DESC,order);
+        Pageable pageable = PageRequest.of(page, size,sort);
+        Page<VideoReply> videoReplies = videoReplyRepository.findAll(pageable);
+        List<ReplyDTO> replyDTOList = new ArrayList<>();
+        videoReplies.getContent().forEach(videoReply -> {
+            ReplyDTO replyDTO = new ReplyDTO(videoReply,
+                    videoReplyLikeService.countAllById(videoReply.getId()),
+                    new SimpleUserDTO(userService.findById(videoReply.getFromUid())));
+            replyDTOList.add(replyDTO);
+        });
+        PageDTO<ReplyDTO> replies = new PageDTO<>(replyDTOList,videoReplies.getTotalElements(),
+                (long)videoReplies.getTotalPages());
+        return ResultVoUtil.success(replies);
     }
 
     private Long getUid(){

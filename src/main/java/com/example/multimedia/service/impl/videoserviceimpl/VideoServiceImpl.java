@@ -32,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.text.html.HTML;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -127,17 +129,27 @@ public class VideoServiceImpl implements VideoService {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Video> videos = videoRepository.findAllByUserIdAndEnable(pageable,getUid(),isEnable);
-        VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
+        List<VideoDTO> videoDTOS = new ArrayList<>();
+        for (Video video :videos.getContent()){
+            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
+            videoDTOS.add(videoDTO);
+        }
+        VideosDTO videosDTO = new VideosDTO(videoDTOS,videos.getTotalElements(),
                 (long) videos.getTotalPages());
         return ResultVoUtil.success(videosDTO);
     }
 
     @Override
-    public ResultVo findVideos(int page,int size,String order) {
+    public ResultVo findVideos(int page,int size,String order,Boolean enable) {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
-        Page<Video> videos = videoRepository.findAllByEnable(pageable,true);
-        VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
+        Page<Video> videos = videoRepository.findAllByEnable(pageable,enable);
+        List<VideoDTO> videoDTOS = new ArrayList<>();
+        for (Video video :videos.getContent()){
+            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
+            videoDTOS.add(videoDTO);
+        }
+        VideosDTO videosDTO = new VideosDTO(videoDTOS,videos.getTotalElements(),
                 (long) videos.getTotalPages());
         return ResultVoUtil.success(videosDTO);
     }
@@ -147,7 +159,12 @@ public class VideoServiceImpl implements VideoService {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Video> videos = videoRepository.findAllByEnableAndTagsTag(pageable,true,tag);
-        VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
+        List<VideoDTO> videoDTOS = new ArrayList<>();
+        for (Video video :videos.getContent()){
+            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
+            videoDTOS.add(videoDTO);
+        }
+        VideosDTO videosDTO = new VideosDTO(videoDTOS,videos.getTotalElements(),
                 (long) videos.getTotalPages());
         return ResultVoUtil.success(videosDTO);
     }
@@ -157,7 +174,12 @@ public class VideoServiceImpl implements VideoService {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Video> videos = videoRepository.findAllByUserIdAndEnable(pageable,userId,true);
-        VideosDTO videosDTO = new VideosDTO(videos.getContent(),videos.getTotalElements(),
+        List<VideoDTO> videoDTOS = new ArrayList<>();
+        for (Video video :videos.getContent()){
+            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
+            videoDTOS.add(videoDTO);
+        }
+        VideosDTO videosDTO = new VideosDTO(videoDTOS,videos.getTotalElements(),
                 (long) videos.getTotalPages());
         return ResultVoUtil.success(videosDTO);
     }
@@ -209,6 +231,14 @@ public class VideoServiceImpl implements VideoService {
         Video video = findById(videoId);
         video.setPlayCount(video.getPlayCount()+1);
         save(video);
+    }
+
+    @Override
+    public ResultVo enableVideo(Long videoId) {
+        Video video = findById(videoId);
+        video.setEnable(true);
+        save(video);
+        return ResultVoUtil.success();
     }
 
     private ResultVo saveVideo(Video video, Tags tags) {

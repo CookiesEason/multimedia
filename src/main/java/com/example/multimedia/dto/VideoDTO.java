@@ -2,6 +2,7 @@ package com.example.multimedia.dto;
 
 import com.example.multimedia.domian.videodomian.Video;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,6 +34,7 @@ public class VideoDTO {
 
     private String tag;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private Boolean isLike;
 
     private Boolean enable;
@@ -50,6 +52,19 @@ public class VideoDTO {
         this.enable = video.isEnable();
         this.isLike = isLike;
 }
+
+    public VideoDTO(SimpleUserDTO user, Video video) {
+        this.videoId = video.getId();
+        this.user = user;
+        this.title = video.getTitle();
+        this.introduction = video.getIntroduction();
+        this.videoUrl = video.getVideoUrl();
+        this.playCount = video.getPlayCount();
+        this.likeCount = video.getLikeCount();
+        this.createDate = video.getCreateDate();
+        this.tag = video.getTags().getTag();
+        this.enable = video.isEnable();
+    }
 
     @Override
     public String toString() {

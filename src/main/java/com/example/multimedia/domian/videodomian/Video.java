@@ -1,5 +1,6 @@
 package com.example.multimedia.domian.videodomian;
 
+import com.example.multimedia.domian.videodomian.search.VideoSearch;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -44,4 +45,21 @@ public class Video {
 
     @OneToOne(fetch = FetchType.EAGER)
     private Tags tags;
+
+
+    public Video() {
+    }
+
+    public Video(VideoSearch videoSearch, Tags tags) {
+        this.id = videoSearch.getId();
+        this.userId = videoSearch.getUser_id();
+        this.title = videoSearch.getTitle();
+        this.introduction = videoSearch.getIntroduction();
+        this.videoUrl = videoSearch.getVideo_url();
+        this.playCount = videoSearch.getPlay_count();
+        this.likeCount = videoSearch.getLike_count();
+        this.createDate = videoSearch.getCreate_date();
+        this.enable = videoSearch.getEnable();
+        this.tags = tags;
+    }
 }

@@ -45,4 +45,13 @@ public interface ReplyService {
      * 批量删除
      */
     void deleteAllByCommentIdIn(List<Long> ids);
+
+    /**
+     * 获取所有回复
+     * @param page
+     * @param size
+     * @param order
+     * @return
+     */
+    ResultVo findAll(int page,int size,String order);
 }

@@ -12,14 +12,14 @@ import java.util.List;
 @Getter
 public class VideosDTO {
 
-    private List<Video> videoList;
+    private List<VideoDTO> videos;
 
     private Long totalElements;
 
     private Long totalPages;
 
-    public VideosDTO(List<Video> videoList, Long totalElements, Long totalPages) {
-        this.videoList = videoList;
+    public VideosDTO(List<VideoDTO> videoDTOS, Long totalElements, Long totalPages) {
+        this.videos = videoDTOS;
         this.totalElements = totalElements;
         this.totalPages = totalPages;
     }
@@ -27,7 +27,7 @@ public class VideosDTO {
     @Override
     public String toString() {
         return "VideosDTO{" +
-                "videoList=" + videoList +
+                "videoDTOS=" + videos +
                 ", totalElements=" + totalElements +
                 ", totalPages=" + totalPages +
                 '}';

@@ -10,6 +10,10 @@ spring:
       ddl-auto: update
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  data:
+    elasticsearch:
+      cluster-name: master
+      cluster-nodes: 127.0.0.1:9300
   servlet:
     multipart:
       max-file-size: 100Mb

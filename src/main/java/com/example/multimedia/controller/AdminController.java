@@ -111,9 +111,10 @@ public class AdminController {
     @GetMapping("videos")
     private ResultVo getVideos(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size,
+                               @RequestParam(defaultValue = "asc") String order,
                                @RequestParam(defaultValue = "createDate") String sort,
                                @RequestParam Boolean enable){
-        return videoService.findVideos(page,size,sort,enable);
+        return videoService.findVideos(page,size,order,sort,enable);
     }
 
     @GetMapping("videos/search")

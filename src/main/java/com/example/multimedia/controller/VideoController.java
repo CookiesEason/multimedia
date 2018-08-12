@@ -77,8 +77,9 @@ public class VideoController {
     @ResponseBody
     private ResultVo findVideos(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "desc") String order,
                                 @RequestParam(defaultValue = "createDate") String sort){
-       return videoService.findVideos(page,size,sort,true);
+       return videoService.findVideos(page,size,order,sort,true);
     }
 
     @GetMapping("/tag")

@@ -63,7 +63,7 @@ public interface VideoService {
      * @param enable 审核通过与否
      * @return ResultVo
      */
-    ResultVo findVideos(int page, int size,String order,Boolean enable);
+    ResultVo findVideos(int page, int size,String order,String sort,Boolean enable);
 
     /**
      * 分类查找视频

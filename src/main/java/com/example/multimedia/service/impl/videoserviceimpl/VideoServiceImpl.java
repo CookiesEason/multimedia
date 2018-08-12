@@ -140,9 +140,8 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public ResultVo findVideos(int page,int size,String order,Boolean enable) {
-        Sort sort = new Sort(Sort.Direction.DESC,order);
-        Pageable pageable = PageRequest.of(page,size,sort);
+    public ResultVo findVideos(int page, int size,String order,String sort,Boolean enable) {
+        Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<Video> videos = videoRepository.findAllByEnable(pageable,enable);
         List<VideoDTO> videoDTOS = new ArrayList<>();
         for (Video video :videos.getContent()){
@@ -251,12 +250,22 @@ public class VideoServiceImpl implements VideoService {
         }
     }
 
-    public User getUser(String username){
+    private User getUser(String username){
         return userService.findByUsername(username);
     }
 
     private Long getUid(){
         return userService.findByUsername(UserUtil.getUserName()).getId();
+    }
+
+    private Sort sort(String order,String sort){
+        Sort st;
+        if ("asc".equals(order)){
+            st = new Sort(Sort.Direction.ASC,sort);
+        }else {
+            st = new Sort(Sort.Direction.DESC,sort);
+        }
+        return st;
     }
 
 }

@@ -15,6 +15,8 @@ public class VideoReplySearch {
 
     private Long id;
 
+    private Long comment_id;
+
     private String content;
 
     private Long from_uid;

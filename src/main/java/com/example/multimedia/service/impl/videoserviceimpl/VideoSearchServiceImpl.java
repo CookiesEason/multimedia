@@ -128,6 +128,37 @@ public class VideoSearchServiceImpl implements VideoSearchService {
         return ResultVoUtil.success(replies);
     }
 
+    @Override
+    public void deleteVideoById(Long id) {
+        videoSearchRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllByVideoId(Long id) {
+        commentSearchRepository.deleteAllByVideo_id(id);
+    }
+
+    @Override
+    public void deleteReplyAllByComment_idIn(List<Long> ids) {
+        replySearchRepository.deleteAllByComment_idIn(ids);
+    }
+
+    @Override
+    public void deleteCommentById(Long id) {
+        commentSearchRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteReplyAllByCommentId(Long id) {
+        replySearchRepository.deleteAllByComment_id(id);
+    }
+
+    @Override
+    public void deleteReplyById(Long id) {
+        replySearchRepository.deleteById(id);
+    }
+
+
     private SearchQuery getVideoSearchQuery(int page,int size,String order,String sort,String searchContent){
         FunctionScoreQueryBuilder.FilterFunctionBuilder [] functionBuilders  = new FunctionScoreQueryBuilder.FilterFunctionBuilder[2];
         functionBuilders[0] = new FunctionScoreQueryBuilder

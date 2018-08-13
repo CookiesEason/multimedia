@@ -10,6 +10,7 @@ import com.example.multimedia.domian.videodomian.Tags;
 import com.example.multimedia.domian.videodomian.Video;
 import com.example.multimedia.repository.TagsRepository;
 import com.example.multimedia.repository.VideoRepository;
+import com.example.multimedia.repository.search.VideoSearchRepository;
 import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
@@ -58,6 +59,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private VideoRepository videoRepository;
+
+    @Autowired
+    private VideoSearchService videoSearchService;
 
     @Autowired
     @Qualifier(value = "VideoCommentService")
@@ -186,6 +190,7 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public ResultVo deleteById(long id) {
         videoRepository.deleteByIdAndUserId(id,getUid());
+        videoSearchService.deleteVideoById(id);
         videoCommentService.deleteAllBycontentId(id);
         videoLikeService.deleteAllById(id);
         return ResultVoUtil.success();

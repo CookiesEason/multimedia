@@ -40,6 +40,9 @@ public class VideoCommentServiceImpl implements CommentService {
     private VideoService videoService;
 
     @Autowired
+    private VideoSearchService videoSearchService;
+
+    @Autowired
     @Qualifier(value = "VideoReplyService")
     private ReplyService replyService;
 
@@ -105,6 +108,7 @@ public class VideoCommentServiceImpl implements CommentService {
     @Override
     public void deleteById(Long id) {
         Long deleteId = videoCommentRepository.deleteByIdAndFromUid(id,getUid());
+        videoSearchService.deleteCommentById(id);
         if (deleteId!=0){
             replyService.deleteAllByCommentId(id);
         }
@@ -113,6 +117,7 @@ public class VideoCommentServiceImpl implements CommentService {
 
     @Override
     public void deleteAllBycontentId(Long videoId) {
+        videoSearchService.deleteAllByVideoId(videoId);
         List<VideoComment> videoComments = videoCommentRepository.deleteAllByVideoId(videoId);
         List<Long> ids= new ArrayList<>();
         for (VideoComment videoComment : videoComments){

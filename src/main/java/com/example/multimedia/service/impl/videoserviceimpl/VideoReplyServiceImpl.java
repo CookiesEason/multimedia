@@ -6,10 +6,7 @@ import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.ReplyDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.repository.VideoReplyRepository;
-import com.example.multimedia.service.CommentService;
-import com.example.multimedia.service.LikeService;
-import com.example.multimedia.service.ReplyService;
-import com.example.multimedia.service.UserService;
+import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -36,6 +33,9 @@ public class VideoReplyServiceImpl implements ReplyService {
 
     @Autowired
     private VideoReplyRepository videoReplyRepository;
+
+    @Autowired
+    private VideoSearchService videoSearchService;
 
     @Autowired
     @Qualifier(value = "VideoCommentService")
@@ -76,12 +76,14 @@ public class VideoReplyServiceImpl implements ReplyService {
     @Override
     public void deleteById(Long id) {
         videoReplyRepository.deleteByIdAndFromUid(id,getUid());
+        videoSearchService.deleteReplyById(id);
         videoReplyLikeService.deleteAllById(id);
     }
 
     @Override
     public void deleteAllByCommentId(Long commentId) {
         List<VideoReply> videoReplies = videoReplyRepository.deleteAllByCommentId(commentId);
+        videoSearchService.deleteReplyAllByCommentId(commentId);
         List<Long> ids = new ArrayList<>();
         for (VideoReply videoReply : videoReplies){
             Long id = videoReply.getId();
@@ -93,6 +95,7 @@ public class VideoReplyServiceImpl implements ReplyService {
     @Override
     public void deleteAllByCommentIdIn(List<Long> ids) {
         List<VideoReply> videoReplies = videoReplyRepository.deleteAllByCommentIdIn(ids);
+        videoSearchService.deleteReplyAllByComment_idIn(ids);
         List<Long> replyIds = new ArrayList<>();
         for (VideoReply videoReply : videoReplies){
             Long id = videoReply.getId();

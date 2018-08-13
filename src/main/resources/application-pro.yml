@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    username: root
+    password: '123456789a'
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://115.159.6.45:3306/media?characterEncoding=utf-8&useSSL=false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  data:
+    elasticsearch:
+      cluster-name: master
+      cluster-nodes: 127.0.0.1:9300
+  servlet:
+    multipart:
+      max-file-size: 100Mb
+      max-request-size: 100MB
+  mail:
+    host: smtp.qq.com
+    username: 837447352@qq.com
+    password: tbtshyehhponbbfa
+    default-encoding: UTF-8
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  redis:
+    host: 115.159.6.45
+    password: justdoit
+    port: 6379
+tengxun:
+  accessKey: AKIDELHhzAodcP1Yu76yFNOF6qOkuseOwlOv
+  secretKey: SimXFtQmyzufHjFiicKrYAg1Pm0iLtGR
+  bucket: ap-shanghai
+  bucketName: zone-1253231183
+  path: https://zone-1253231183.cos.ap-shanghai.myqcloud.com
+mail:
+  activateUrl: http://localhost:8080/api/user/activateEmail?

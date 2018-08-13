@@ -11,4 +11,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  */
 public interface VideoCommentSearchRepository extends ElasticsearchRepository<VideoCommentSearch,Long> {
     Page<VideoCommentSearch> findAllByContent(String content, Pageable pageable);
+
+    void deleteAllByVideo_id(Long videoId);
+
 }

@@ -70,14 +70,16 @@ public class VideoSearchServiceImpl implements VideoSearchService {
     private UserService userService;
 
     @Override
-    public ResultVo searchVideo(int page,String order,String sort,String searchContent) {
+    public ResultVo searchVideo(int page,String order,String sort,String searchContent,Boolean enable) {
         SearchQuery searchQuery = getVideoSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
         Page<VideoSearch> videoSearchPage = videoSearchRepository.search(searchQuery);
         List<VideoDTO> videoDTOS = new ArrayList<>();
         videoSearchPage.getContent().forEach(videoSearch -> {
-            Video video = new Video(videoSearch,tagsRepository.findById(videoSearch.getTags_id()).get());
-            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
-            videoDTOS.add(videoDTO);
+            if (enable.equals(videoSearch.getEnable())){
+                Video video = new Video(videoSearch,tagsRepository.findById(videoSearch.getTags_id()).get());
+                VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
+                videoDTOS.add(videoDTO);
+            }
         });
         VideosDTO videosDTO = new VideosDTO(videoDTOS,videoSearchPage.getTotalElements(),
                 (long) videoSearchPage.getTotalPages());
@@ -91,13 +93,14 @@ public class VideoSearchServiceImpl implements VideoSearchService {
                 findAllByContent(searchContent,pageable);
         List<CommentDTO> commentList = new ArrayList<>();
         commentSearches.getContent().forEach(videoCommentSearch -> {
-            User user = userService.findById(videoCommentSearch.getFrom_uid());
+            User user = userService.findById(videoCommentSearch.getFromuid());
             VideoComment videoComment = new VideoComment();
             videoComment.setId(videoCommentSearch.getId());
+            videoComment.setVideoId(videoCommentSearch.getVideoid());
             videoComment.setVideoId(videoCommentSearch.getId());
             videoComment.setContent(videoCommentSearch.getContent());
-            videoComment.setFromUid(videoCommentSearch.getFrom_uid());
-            videoComment.setCreateDate(videoCommentSearch.getCreate_date());
+            videoComment.setFromUid(videoCommentSearch.getFromuid());
+            videoComment.setCreateDate(videoCommentSearch.getCreatedate());
             CommentDTO commentDTO = new CommentDTO(videoComment,
                     videoCommentLikeService.countAllById(videoComment.getId())
                     ,user);
@@ -116,11 +119,11 @@ public class VideoSearchServiceImpl implements VideoSearchService {
         videoReplySearches.getContent().forEach(videoReplySearch -> {
             VideoReply videoReply = new VideoReply();
             videoReply.setContent(videoReplySearch.getContent());
-            videoReply.setCreateDate(videoReplySearch.getCreate_date());
+            videoReply.setCreateDate(videoReplySearch.getCreatedate());
             videoReply.setId(videoReplySearch.getId());
             ReplyDTO replyDTO = new ReplyDTO(videoReply,
                     videoReplyLikeService.countAllById(videoReply.getId()),
-                    new SimpleUserDTO(userService.findById(videoReplySearch.getFrom_uid())));
+                    new SimpleUserDTO(userService.findById(videoReplySearch.getFromuid())));
             replyDTOList.add(replyDTO);
         });
         PageDTO<ReplyDTO> replies = new PageDTO<>(replyDTOList,videoReplySearches.getTotalElements(),
@@ -135,12 +138,12 @@ public class VideoSearchServiceImpl implements VideoSearchService {
 
     @Override
     public void deleteAllByVideoId(Long id) {
-        commentSearchRepository.deleteAllByVideo_id(id);
+        commentSearchRepository.deleteAllByVideoid(id);
     }
 
     @Override
     public void deleteReplyAllByComment_idIn(List<Long> ids) {
-        replySearchRepository.deleteAllByComment_idIn(ids);
+        replySearchRepository.deleteAllByCommentidIn(ids);
     }
 
     @Override
@@ -150,7 +153,7 @@ public class VideoSearchServiceImpl implements VideoSearchService {
 
     @Override
     public void deleteReplyAllByCommentId(Long id) {
-        replySearchRepository.deleteAllByComment_id(id);
+        replySearchRepository.deleteAllByCommentid(id);
     }
 
     @Override

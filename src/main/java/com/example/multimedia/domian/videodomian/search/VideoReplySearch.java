@@ -15,11 +15,11 @@ public class VideoReplySearch {
 
     private Long id;
 
-    private Long comment_id;
+    private Long commentid;
 
     private String content;
 
-    private Long from_uid;
+    private Long fromuid;
 
-    private Timestamp create_date;
+    private Timestamp createdate;
 }

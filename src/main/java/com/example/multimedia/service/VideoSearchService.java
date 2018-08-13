@@ -18,7 +18,7 @@ public interface VideoSearchService {
      * @param searchContent
      * @return
      */
-    ResultVo searchVideo(int page,String order,String sort,String searchContent);
+    ResultVo searchVideo(int page,String order,String sort,String searchContent,Boolean enable);
 
     /**
      *搜索评论

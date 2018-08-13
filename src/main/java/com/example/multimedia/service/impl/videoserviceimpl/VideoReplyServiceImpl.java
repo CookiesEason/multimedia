@@ -95,7 +95,9 @@ public class VideoReplyServiceImpl implements ReplyService {
     @Override
     public void deleteAllByCommentIdIn(List<Long> ids) {
         List<VideoReply> videoReplies = videoReplyRepository.deleteAllByCommentIdIn(ids);
-        videoSearchService.deleteReplyAllByComment_idIn(ids);
+        if (ids.size()>0){
+            videoSearchService.deleteReplyAllByComment_idIn(ids);
+        }
         List<Long> replyIds = new ArrayList<>();
         for (VideoReply videoReply : videoReplies){
             Long id = videoReply.getId();
@@ -105,9 +107,8 @@ public class VideoReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public ResultVo findAll(int page, int size, String order) {
-        Sort sort = new Sort(Sort.Direction.DESC,order);
-        Pageable pageable = PageRequest.of(page, size,sort);
+    public ResultVo findAll(int page, int size, String order,String sort) {
+        Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<VideoReply> videoReplies = videoReplyRepository.findAll(pageable);
         List<ReplyDTO> replyDTOList = new ArrayList<>();
         videoReplies.getContent().forEach(videoReply -> {
@@ -123,6 +124,16 @@ public class VideoReplyServiceImpl implements ReplyService {
 
     private Long getUid(){
         return userService.findByUsername(UserUtil.getUserName()).getId();
+    }
+
+    private Sort sort(String order,String sort){
+        Sort st;
+        if ("asc".equals(order)){
+            st = new Sort(Sort.Direction.ASC,sort);
+        }else {
+            st = new Sort(Sort.Direction.DESC,sort);
+        }
+        return st;
     }
 
 }

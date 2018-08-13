@@ -129,9 +129,8 @@ public class VideoCommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResultVo findAll(int page, int size, String order) {
-        Sort sort = new Sort(Sort.Direction.DESC,order);
-        Pageable pageable = PageRequest.of(page, size,sort);
+    public ResultVo findAll(int page, int size, String order,String sort) {
+        Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<VideoComment> videoComments = videoCommentRepository.findAll(pageable);
         List<CommentDTO> commentList = new ArrayList<>();
        videoComments.getContent().forEach(videoComment -> {
@@ -149,5 +148,14 @@ public class VideoCommentServiceImpl implements CommentService {
         return userService.findByUsername(UserUtil.getUserName()).getId();
     }
 
+    private Sort sort(String order,String sort){
+        Sort st;
+        if ("asc".equals(order)){
+            st = new Sort(Sort.Direction.ASC,sort);
+        }else {
+            st = new Sort(Sort.Direction.DESC,sort);
+        }
+        return st;
+    }
 
 }

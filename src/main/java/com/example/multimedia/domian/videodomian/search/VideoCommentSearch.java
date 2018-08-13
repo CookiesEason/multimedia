@@ -16,11 +16,11 @@ public class VideoCommentSearch implements Serializable {
     private static final long serialVersionUID = -6445216549881349503L;
     private Long id;
 
-    private Long video_id;
+    private Long videoid;
 
     private String content;
 
-    private Long from_uid;
+    private Long fromuid;
 
-    private Timestamp create_date;
+    private Timestamp createdate;
 }

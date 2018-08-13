@@ -15,7 +15,7 @@ public interface VideoReplySearchRepository extends ElasticsearchRepository<Vide
 
     Page<VideoReplySearch> findAllByContent(String content, Pageable pageable);
 
-    void deleteAllByComment_idIn(List<Long> ids);
+    void deleteAllByCommentidIn(List<Long> ids);
 
-    void deleteAllByComment_id(Long id);
+    void deleteAllByCommentid(Long id);
 }

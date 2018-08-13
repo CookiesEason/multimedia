@@ -53,5 +53,5 @@ public interface ReplyService {
      * @param order
      * @return
      */
-    ResultVo findAll(int page,int size,String order);
+    ResultVo findAll(int page,int size,String order,String sort);
 }

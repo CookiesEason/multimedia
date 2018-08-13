@@ -49,9 +49,10 @@ public interface CommentService {
      * 获取所有评论
      * @param page
      * @param size
-     * @param oder
+     * @param order
+     * @param sort
      * @return
      */
-    ResultVo findAll(int page,int size,String order);
+    ResultVo findAll(int page,int size,String order,String sort);
 
 }

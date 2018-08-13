@@ -89,6 +89,9 @@ public class VideoServiceImpl implements VideoService {
     @Override
     @CacheEvict(value = "tags",allEntries = true)
     public ResultVo addTag(String tag) {
+        if (tagsRepository.findByTag(tag)!=null){
+            return ResultVoUtil.error(0,"标签已存在");
+        }
         Tags tags = new Tags();
         tags.setTag(tag);
         tagsRepository.save(tags);
@@ -199,6 +202,9 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public ResultVo updateVideo(long id,String title, String introduction, String tag) {
         Video video = videoRepository.findByIdAndUserId(id,getUid());
+        if (introduction.length()<10){
+            return ResultVoUtil.error(0,"请输入介绍信息不少于10个字");
+        }
         video.setTitle(title);
         video.setIntroduction(introduction);
         Tags tags = tagsRepository.findByTag(tag);

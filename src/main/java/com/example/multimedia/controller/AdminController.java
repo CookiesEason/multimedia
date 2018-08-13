@@ -103,8 +103,8 @@ public class AdminController {
         return videoService.addTag(tag);
     }
 
-    @DeleteMapping("videos/tags/{tag}")
-    private ResultVo deleteTag(@PathVariable String tag){
+    @PostMapping("videos/deleteTag")
+    private ResultVo deleteTag(@RequestParam String tag){
         return videoService.deleteTag(tag);
     }
 
@@ -121,8 +121,9 @@ public class AdminController {
     private ResultVo searchVideo(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "asc") String order,
                                  @RequestParam(defaultValue = "create_date") String sort,
+                                 @RequestParam Boolean enable,
                                  @RequestParam String searchContent){
-        return videoSearchService.searchVideo(page,order,sort,searchContent);
+        return videoSearchService.searchVideo(page,order,sort,searchContent,enable);
     }
 
     @PostMapping("videos/updateVideo/{videoId}")
@@ -146,14 +147,15 @@ public class AdminController {
    @GetMapping("videos/comments")
     private ResultVo getComments(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size,
+                                 @RequestParam(defaultValue = "asc") String order,
                                  @RequestParam(defaultValue = "createDate") String sort){
-        return videoCommentService.findAll(page,size,sort);
+        return videoCommentService.findAll(page,size,order,sort);
    }
 
    @GetMapping("videos/comments/search")
    private ResultVo searchComment(@RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "asc") String order,
-                                  @RequestParam(defaultValue = "create_date") String sort,
+                                  @RequestParam(defaultValue = "createdate") String sort,
                                   @RequestParam String searchContent){
         return videoSearchService.searchVideoComment(page,order,sort,searchContent);
    }
@@ -167,14 +169,15 @@ public class AdminController {
     @GetMapping("videos/replies")
     private ResultVo getreplies(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "asc") String order,
                                  @RequestParam(defaultValue = "createDate") String sort){
-        return videoReplyService.findAll(page,size,sort);
+        return videoReplyService.findAll(page,size,order,sort);
     }
 
     @GetMapping("videos/replies/search")
     private ResultVo searchReply(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "asc") String order,
-                                 @RequestParam(defaultValue = "create_date") String sort,
+                                 @RequestParam(defaultValue = "createdate") String sort,
                                  @RequestParam String searchContent){
         return videoSearchService.searchVideoReply(page, order, sort, searchContent);
     }

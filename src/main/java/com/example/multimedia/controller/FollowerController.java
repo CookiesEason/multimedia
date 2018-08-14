@@ -27,12 +27,12 @@ public class FollowerController {
     }
 
     @GetMapping("/followers")
-    private ResultVo getFollowers(@RequestParam int page){
+    private ResultVo getFollowers(@RequestParam(defaultValue = "0")int page){
         return followerService.getFollowers(page);
     }
 
     @GetMapping("/fans")
-    private ResultVo getFans(@RequestParam int page){
+    private ResultVo getFans(@RequestParam(defaultValue = "0") int page){
         return followerService.getFans(page);
     }
 

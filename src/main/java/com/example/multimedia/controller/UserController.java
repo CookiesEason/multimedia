@@ -4,6 +4,7 @@ import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.service.MailService;
+import com.example.multimedia.service.NoticeService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -26,6 +27,9 @@ public class UserController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private NoticeService noticeService;
 
     @PostMapping("/api/user/register")
     private ResultVo registerUser(@RequestBody @Validated User user){
@@ -74,6 +78,11 @@ public class UserController {
             return ResultVoUtil.success(new SimpleUserDTO(user));
         }
         return ResultVoUtil.error(0,"不存在该用户");
+    }
+
+    @GetMapping("/api/user/messages")
+    private ResultVo getMessages(@RequestParam(defaultValue = "0") int page){
+        return noticeService.getNotices(page);
     }
 
 }

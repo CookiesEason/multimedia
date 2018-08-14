@@ -2,10 +2,12 @@ package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.Follower;
 import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.repository.FollowerRepository;
 import com.example.multimedia.service.FollowerService;
+import com.example.multimedia.service.NoticeService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
@@ -34,6 +36,9 @@ public class FollowerServiceImpl implements FollowerService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NoticeService noticeService;
+
     @Override
     public ResultVo followUser(Long followerId) {
         Long userId = getUid();
@@ -45,6 +50,9 @@ public class FollowerServiceImpl implements FollowerService {
             follower.setUserId(userId);
             follower.setFollowerId(followerId);
             follower.setStatus(true);
+        }
+        if (follower.getStatus()){
+            noticeService.saveNotice(Topic.FOLLOW,null,userId,followerId,"follow");
         }
         followerRepository.save(follower);
         return ResultVoUtil.success();

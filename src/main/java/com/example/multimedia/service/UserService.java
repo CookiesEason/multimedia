@@ -119,5 +119,10 @@ public interface UserService {
      */
     ResultVo changeRole(Long userId,String role);
 
+    /**
+     * 根据ids获取批量用户
+     * @param ids
+     * @return
+     */
     List<User> findAllByIdIn(List<Long> ids);
 }

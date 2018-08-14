@@ -5,7 +5,10 @@ import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author CookiesEason
@@ -115,4 +118,6 @@ public interface UserService {
      * @return
      */
     ResultVo changeRole(Long userId,String role);
+
+    List<User> findAllByIdIn(List<Long> ids);
 }

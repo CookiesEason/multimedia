@@ -214,6 +214,11 @@ public class UserServiceImpl implements UserService {
         return ResultVoUtil.success();
     }
 
+    @Override
+    public List<User> findAllByIdIn(List<Long> ids) {
+        return userRepository.findUsersByIdIn(ids);
+    }
+
     private String encryptPassword(String password){
        return new BCryptPasswordEncoder().encode(password);
     }

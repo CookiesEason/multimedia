@@ -1,10 +1,10 @@
 package com.example.multimedia.service.impl.videoserviceimpl;
 
+import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.videodomian.VideoComment;
 import com.example.multimedia.domian.videodomian.VideoReplyLike;
 import com.example.multimedia.repository.VideoReplyLikeRepository;
-import com.example.multimedia.service.LikeService;
-import com.example.multimedia.service.ReplyService;
-import com.example.multimedia.service.UserService;
+import com.example.multimedia.service.*;
 import com.example.multimedia.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,11 +23,18 @@ public class VideoReplyLikeServiceImpl implements LikeService {
     private UserService userService;
 
     @Autowired
+    @Qualifier(value = "VideoCommentService")
+    private CommentService commentService;
+
+    @Autowired
     @Qualifier(value = "VideoReplyService")
     private ReplyService replyService;
 
     @Autowired
     private VideoReplyLikeRepository videoReplyLikeRepository;
+
+    @Autowired
+    private NoticeService noticeService;
 
     @Override
     public void like(Long replyId) {
@@ -44,6 +51,13 @@ public class VideoReplyLikeServiceImpl implements LikeService {
             videoReplyLike.setStatus(!videoReplyLike.isStatus());
         }
         videoReplyLikeRepository.save(videoReplyLike);
+        if (videoReplyLike.isStatus()){
+            VideoComment videoComment = (VideoComment) commentService.findById(
+                    replyService.findById(videoReplyLike.getReplyId()).getCommentId());
+            noticeService.saveNotice(Topic.VIDEO,videoComment.getVideoId(),videoComment.getId(),
+                    videoReplyLike.getReplyId(),videoReplyLike.getUserId(),
+                    replyService.findById(videoReplyLike.getReplyId()).getFromUid(),"replyPraise");
+        }
     }
 
     @Override

@@ -1,4 +1,8 @@
 spring:
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1800000ms
   datasource:
     username: root
     password: '123456789a'
@@ -20,8 +24,8 @@ spring:
     password: tbtshyehhponbbfa
     default-encoding: UTF-8
   jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+    date-format: java.text.SimpleDateFormat
   redis:
     host: 115.159.6.45
     password: justdoit

@@ -1,6 +1,8 @@
 package com.example.multimedia.service.impl.videoserviceimpl;
 
+import com.example.multimedia.domian.Notice;
 import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.videodomian.VideoComment;
 import com.example.multimedia.domian.videodomian.VideoReply;
 import com.example.multimedia.domian.abstractdomian.AbstractComment;
@@ -55,6 +57,9 @@ public class VideoCommentServiceImpl implements CommentService {
     private ReplyService videoReplyService;
 
     @Autowired
+    private NoticeService noticeService;
+
+    @Autowired
     private UserService userService;
 
     @Override
@@ -63,10 +68,15 @@ public class VideoCommentServiceImpl implements CommentService {
         if (videoService.findById(videoId)==null){
             return ResultVoUtil.error(0,"视频不存在,无法进行评论");
         }
+        Long fromUid = userService.findByUsername(UserUtil.getUserName()).getId();
         videoComment.setVideoId(videoId);
         videoComment.setContent(content);
-        videoComment.setFromUid(userService.findByUsername(UserUtil.getUserName()).getId());
+        videoComment.setFromUid(fromUid);
         videoCommentRepository.save(videoComment);
+        Long toUid = videoService.findById(videoId).getUserId();
+        if (!fromUid.equals(toUid)){
+            noticeService.saveNotice(Topic.VIDEO,videoId,videoComment.getId(),null,fromUid,toUid,"comment");
+        }
         return ResultVoUtil.success();
     }
 

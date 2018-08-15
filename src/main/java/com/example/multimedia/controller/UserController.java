@@ -85,4 +85,15 @@ public class UserController {
         return noticeService.getNotices(page);
     }
 
+    @GetMapping("/api/user/messages/count")
+    private ResultVo countMessages(){
+        return noticeService.unRead();
+    }
+
+    @DeleteMapping("/api/user/messages/{messageId}")
+    private ResultVo deleteMessage(@PathVariable Long messageId){
+        noticeService.deleteById(messageId);
+        return ResultVoUtil.success();
+    }
+
 }

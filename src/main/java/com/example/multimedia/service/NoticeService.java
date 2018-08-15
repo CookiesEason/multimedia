@@ -9,8 +9,12 @@ import com.example.multimedia.vo.ResultVo;
  */
 public interface NoticeService {
 
-    ResultVo saveNotice(Topic topic,Long contentId,Long fromUid,Long toUid,String type);
+    ResultVo saveNotice(Topic topic,Long topicId,Long commentId,Long replyId,Long fromUid,Long toUid,String type);
 
     ResultVo getNotices(int page);
+
+    void deleteById(Long messageId);
+
+    ResultVo unRead();
 
 }

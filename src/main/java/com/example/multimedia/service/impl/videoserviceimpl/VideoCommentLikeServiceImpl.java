@@ -1,9 +1,12 @@
 package com.example.multimedia.service.impl.videoserviceimpl;
 
+import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.videodomian.VideoComment;
 import com.example.multimedia.domian.videodomian.VideoCommentLike;
 import com.example.multimedia.repository.VideoCommentLikeRepository;
 import com.example.multimedia.service.CommentService;
 import com.example.multimedia.service.LikeService;
+import com.example.multimedia.service.NoticeService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +32,14 @@ public class VideoCommentLikeServiceImpl implements LikeService {
     @Autowired
     private VideoCommentLikeRepository videoCommentLikeRepository;
 
+    @Autowired
+    private NoticeService noticeService;
+
     @Override
     public void like(Long commentId) {
-        if (commentService.findById(commentId)==null){
+        VideoComment videoComment = (VideoComment) commentService.findById(commentId);
+        System.out.println(videoComment);
+        if (videoComment==null){
             return;
         }
         VideoCommentLike videoCommentLike = status(commentId);
@@ -44,6 +52,11 @@ public class VideoCommentLikeServiceImpl implements LikeService {
             videoCommentLike.setStatus(!videoCommentLike.isStatus());
         }
         videoCommentLikeRepository.save(videoCommentLike);
+        if (videoCommentLike.isStatus()){
+            noticeService.saveNotice(Topic.VIDEO,videoComment.getVideoId(),commentId,null,getUid()
+                    ,videoComment.getFromUid(),"commentPraise");
+        }
+
     }
 
     @Override

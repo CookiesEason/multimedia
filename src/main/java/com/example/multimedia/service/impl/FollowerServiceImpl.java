@@ -52,7 +52,7 @@ public class FollowerServiceImpl implements FollowerService {
             follower.setStatus(true);
         }
         if (follower.getStatus()){
-            noticeService.saveNotice(Topic.FOLLOW,null,userId,followerId,"follow");
+            noticeService.saveNotice(Topic.FOLLOW,null,null,null,userId,followerId,"follow");
         }
         followerRepository.save(follower);
         return ResultVoUtil.success();

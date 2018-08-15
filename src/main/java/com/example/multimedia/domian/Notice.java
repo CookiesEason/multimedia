@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -15,8 +16,9 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class Notice {
+public class Notice implements Serializable {
 
+    private static final long serialVersionUID = 3152688780865392972L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +30,11 @@ public class Notice {
     @Enumerated(EnumType.STRING)
     private Topic topic;
 
+    private Long topicId;
+
     private Long contentId;
+
+    private Long replyId;
 
     private String type;
 

@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
                 userInfo.setNickname(user.getUsername());
                 user.setUserInfo(userInfo);
                 String activateCode = EmailUtil.generateActivateCode(user.getUsername());
-                user.setActiveCode(activateCode);
                 mailService.sendEmail(user.getEmail(),user.getUsername(),activateCode);
                 user.setRoleList(Arrays.asList(userRoleRepository.findByRole(role)));
                 userRepository.save(user);
@@ -144,19 +143,17 @@ public class UserServiceImpl implements UserService {
             if (user.isActive()){
                 return ResultVoUtil.error(1,"已激活成功");
             }
-            if ((System.currentTimeMillis()-user.getDate().getTime())>EmailUtil.DAY){
-                String activateCode = EmailUtil.generateActivateCode(user.getUsername());
-                user.setActiveCode(activateCode);
-                user.setDate(new Timestamp(System.currentTimeMillis()));
-                userRepository.save(user);
-                mailService.sendEmail(user.getEmail(),username,activateCode);
-                return ResultVoUtil.error(0,"激活邮件已经过期,稍后重新发送新的激活邮件");
-            }else if (user.getActiveCode().equals(activeCode)){
+            String code = template.opsForValue().get(user.getEmail());
+            if (code!=null&&code.equals(activeCode)){
                 user.setActive(true);
                 userRepository.save(user);
+                template.opsForValue().getOperations().delete(user.getEmail());
                 return ResultVoUtil.success();
+            }else {
+                String activateCode = EmailUtil.generateActivateCode(user.getUsername());
+                mailService.sendEmail(user.getEmail(),user.getUsername(),activateCode);
+                return ResultVoUtil.error(0,"激活失败,链接已经失效,已重新发送邮件");
             }
-            return ResultVoUtil.error(0,"激活失败,请确认邮箱信息");
         }
         return ResultVoUtil.error(0,"激活失败,请确认邮箱信息");
     }

@@ -102,4 +102,20 @@ public interface VideoService {
      */
     void play(Long videoId);
 
+    /**
+     * 记录观看历史
+     * @param videoId
+     */
+    void saveHistory(Long videoId);
+
+    /**
+     * 获取观看历史
+     * @return
+     */
+    ResultVo getHistory(int page);
+
+    /**
+     * 删除3天前的历史记录
+     */
+    void  deleteHistory();
 }

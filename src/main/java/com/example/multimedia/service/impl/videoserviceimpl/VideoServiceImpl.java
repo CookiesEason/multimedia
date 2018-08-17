@@ -1,16 +1,17 @@
 package com.example.multimedia.service.impl.videoserviceimpl;
 
 import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.VideoHistory;
 import com.example.multimedia.domian.videodomian.VideoComment;
 import com.example.multimedia.domian.videodomian.VideoLike;
-import com.example.multimedia.dto.SimpleUserDTO;
-import com.example.multimedia.dto.VideoDTO;
-import com.example.multimedia.dto.VideosDTO;
+import com.example.multimedia.dto.*;
 import com.example.multimedia.domian.videodomian.Tags;
 import com.example.multimedia.domian.videodomian.Video;
 import com.example.multimedia.repository.TagsRepository;
+import com.example.multimedia.repository.VideoHistoryRepository;
 import com.example.multimedia.repository.VideoRepository;
 import com.example.multimedia.service.*;
+import com.example.multimedia.util.CookieUtil;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -29,6 +30,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -53,6 +58,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private VideoRepository videoRepository;
+
+    @Autowired
+    private VideoHistoryRepository videoHistoryRepository;
 
     @Autowired
     @Qualifier(value = "VideoCommentService")
@@ -175,6 +183,45 @@ public class VideoServiceImpl implements VideoService {
         Video video = findById(videoId);
         video.setPlayCount(video.getPlayCount()+1);
         save(video);
+        saveHistory(videoId);
+    }
+
+    @Override
+    public void saveHistory(Long videoId) {
+        Long userId = getUid();
+        VideoHistory videoHistory = videoHistoryRepository.findByUserIdAndVideoId(userId,videoId);
+        if (videoHistory==null){
+            videoHistory = new VideoHistory();
+            videoHistory.setUserId(getUid());
+            videoHistory.setVideoId(videoId);
+        }else {
+            videoHistory.setWatchTime(new Timestamp(System.currentTimeMillis()));
+        }
+        videoHistoryRepository.save(videoHistory);
+    }
+
+    @Override
+    public ResultVo getHistory(int page) {
+        int size = 10;
+        Sort sort = new Sort(Sort.Direction.DESC,"watchTime");
+        Pageable pageable = PageRequest.of(page,size,sort);
+        Page<VideoHistory> videoHistories = videoHistoryRepository.findAllByUserId(getUid(),pageable);
+        List<VideoHistoryDTO> videoHistoryDTOS = new ArrayList<>();
+        videoHistories.forEach(videoHistory -> {
+            VideoHistoryDTO videoHistoryDTO = new VideoHistoryDTO();
+            videoHistoryDTO.setVideoId(videoHistory.getVideoId());
+            videoHistoryDTO.setTitle(findById(videoHistory.getVideoId()).getTitle());
+            videoHistoryDTO.setWatchTime(videoHistory.getWatchTime());
+            videoHistoryDTOS.add(videoHistoryDTO);
+        });
+        PageDTO<VideoHistoryDTO> videoHistoryPageDTO = new PageDTO<>(videoHistoryDTOS,videoHistories.getTotalElements(),
+                (long)videoHistories.getTotalPages());
+        return ResultVoUtil.success(videoHistoryPageDTO);
+    }
+
+    @Override
+    public void deleteHistory() {
+        videoHistoryRepository.deleteAllByWatchTimeBefore(new Timestamp(System.currentTimeMillis()-259200000));
     }
 
     private ResultVo saveVideo(Video video, Tags tags) {

@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Page<User> findAllByRoleListIn(Pageable pageable, List<UserRole> userRoles);
 
     List<User> findByUsernameOrEmailOrUserInfoNickname(String username, String email, String nickname);
+
+    List<User> findUsersByIdIn(List<Long> ids);
 }

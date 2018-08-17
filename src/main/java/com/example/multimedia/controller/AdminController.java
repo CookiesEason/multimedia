@@ -1,9 +1,12 @@
 package com.example.multimedia.controller;
 
+import com.example.multimedia.domian.Question;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.videodomian.search.VideoSearch;
 import com.example.multimedia.repository.search.VideoSearchRepository;
 import com.example.multimedia.service.*;
+import com.example.multimedia.service.QuestionService;
+import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import com.sun.org.apache.regexp.internal.RE;
@@ -11,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author CookiesEason
@@ -36,6 +41,9 @@ public class AdminController {
 
     @Autowired
     private VideoSearchService videoSearchService;
+
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("users")
     private ResultVo findUsers(@RequestParam(defaultValue = "0") int page){
@@ -188,5 +196,20 @@ public class AdminController {
         return ResultVoUtil.success();
     }
 
+
+    @PostMapping("question")
+    private ResultVo addQuestion(@RequestBody List<Question> question){
+        return questionService.save(question);
+    }
+
+    @PostMapping("question/update")
+    private ResultVo updateQuestion(@RequestBody Question question){
+        return questionService.update(question);
+    }
+
+    @DeleteMapping("question/{questionId}")
+    private ResultVo deleteQuestion(@PathVariable Long questionId){
+        return questionService.delete(questionId);
+    }
 
 }

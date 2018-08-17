@@ -1,9 +1,11 @@
 package com.example.multimedia.service.impl.videoserviceimpl;
 
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.videodomian.Video;
 import com.example.multimedia.domian.videodomian.VideoLike;
 import com.example.multimedia.repository.VideoLikeRepository;
 import com.example.multimedia.service.LikeService;
+import com.example.multimedia.service.NoticeService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.service.VideoService;
 import com.example.multimedia.util.UserUtil;
@@ -28,6 +30,9 @@ public class VideoLikeServiceImpl implements LikeService {
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private NoticeService noticeService;
+
     @Override
     public void like(Long videoId) {
         if (videoService.findById(videoId)==null){
@@ -51,6 +56,10 @@ public class VideoLikeServiceImpl implements LikeService {
         }
         videoService.save(video);
         videoLikeRepository.save(videoLike);
+        if (videoLike.isStatus()){
+            noticeService.saveNotice(Topic.VIDEO,videoId,null,null,getUid(),
+                    videoService.findById(videoId).getUserId(),"videoPraise");
+        }
     }
 
     @Override

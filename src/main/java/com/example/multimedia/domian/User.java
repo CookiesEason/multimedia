@@ -40,9 +40,6 @@ public class User implements Serializable {
     @NotBlank(message = "邮箱不能为空")
     private String email;
 
-    @JsonIgnore
-    private String activeCode;
-
     @CreatedDate
     private Timestamp date;
 

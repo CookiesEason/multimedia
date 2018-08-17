@@ -1,6 +1,8 @@
 package com.example.multimedia.service.impl.videoserviceimpl;
 
 import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.videodomian.VideoComment;
 import com.example.multimedia.domian.videodomian.VideoReply;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.ReplyDTO;
@@ -48,6 +50,9 @@ public class VideoReplyServiceImpl implements ReplyService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NoticeService noticeService;
+
     @Override
     public VideoReply findById(Long id) {
         Optional<VideoReply> videoReply = videoReplyRepository.findById(id);
@@ -57,6 +62,7 @@ public class VideoReplyServiceImpl implements ReplyService {
     @Override
     public ResultVo reply(Long commentId, String content, Long toUid) {
         VideoReply videoReply = new VideoReply();
+        VideoComment videoComment = (VideoComment) commentService.findById(commentId);
         if (commentService.findById(commentId)==null){
             return ResultVoUtil.error(0,"评论不存在,无法进行回复");
         }
@@ -65,6 +71,8 @@ public class VideoReplyServiceImpl implements ReplyService {
         videoReply.setToUid(toUid);
         videoReply.setContent(content);
         videoReplyRepository.save(videoReply);
+        noticeService.saveNotice(Topic.VIDEO,videoComment.getVideoId(),commentId,videoReply.getId(),getUid(),
+                toUid,"reply");
         return ResultVoUtil.success();
     }
 

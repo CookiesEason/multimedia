@@ -29,6 +29,11 @@ public class VideoController {
         return videoService.getTags();
     }
 
+    @GetMapping("/watchHistory")
+    private ResultVo watchHistory(@RequestParam(defaultValue = "0")int page){
+        return videoService.getHistory(page);
+    }
+
     @PostMapping
     @ResponseBody
     private ResultVo uploadVideo(@RequestParam String title,@RequestParam String introduction,

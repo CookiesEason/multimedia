@@ -18,6 +18,7 @@ public class DeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
         httpServletResponse.setStatus(403);
+        httpServletResponse.setContentType("application/json; charset=utf-8");
         httpServletResponse.getWriter().print(JSON.toJSON(ResultVoUtil.error(403,e.getMessage())));
     }
 }

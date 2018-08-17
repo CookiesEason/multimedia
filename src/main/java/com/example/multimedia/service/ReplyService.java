@@ -2,6 +2,7 @@ package com.example.multimedia.service;
 
 import com.example.multimedia.domian.videodomian.VideoReply;
 import com.example.multimedia.vo.ResultVo;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public interface ReplyService {
      * @param toUid
      * @return
      */
+    @PreAuthorize(value = "hasRole('ROLE_SENIOR_USER') or hasRole('ADMIN')")
     ResultVo reply(Long commentId,String content,Long toUid);
 
     /**

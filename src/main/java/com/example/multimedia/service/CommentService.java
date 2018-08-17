@@ -2,6 +2,7 @@ package com.example.multimedia.service;
 
 import com.example.multimedia.domian.abstractdomian.AbstractComment;
 import com.example.multimedia.vo.ResultVo;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * @author CookiesEason
@@ -15,6 +16,7 @@ public interface CommentService {
      * @param content
      * @return
      */
+    @PreAuthorize(value = "hasRole('ROLE_SENIOR_USER') or hasRole('ADMIN')")
     ResultVo createComment(Long videoId,String content);
 
     /**

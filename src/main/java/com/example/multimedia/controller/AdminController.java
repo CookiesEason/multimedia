@@ -1,12 +1,16 @@
 package com.example.multimedia.controller;
 
+import com.example.multimedia.domian.Question;
 import com.example.multimedia.domian.User;
+import com.example.multimedia.service.QuestionService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author CookiesEason
@@ -18,6 +22,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("users")
     private ResultVo findUsers(@RequestParam(defaultValue = "0") int page){
@@ -68,6 +75,11 @@ public class AdminController {
     @PostMapping("users/changeRole")
     private ResultVo changeRole(@RequestParam Long userId,@RequestParam String role){
         return userService.changeRole(userId,role);
+    }
+
+    @PostMapping("question")
+    private ResultVo addQuestion(@RequestBody List<Question> question){
+        return questionService.save(question);
     }
 
 }

@@ -9,6 +9,7 @@ import com.example.multimedia.service.impl.SecurityUserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * Security配置
  */
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -37,7 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers().anyRequest()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/user/register","/api/user/activateEmail","/api/comment/**")
+                    .antMatchers("/api/user/register","/api/user/activateEmail",
+                            "/api/comment/video/{videoId}")
                     .permitAll()
                 .antMatchers("/api/admin/**").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()

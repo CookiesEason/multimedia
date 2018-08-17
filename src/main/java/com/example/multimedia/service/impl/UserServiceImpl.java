@@ -216,6 +216,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUsersByIdIn(ids);
     }
 
+    @Override
+    public ResultVo checkAccessComment() {
+        List<UserRole> roles  = userRepository.findByUsername(UserUtil.getUserName()).getRoleList();
+        boolean isAccess = false;
+        for (UserRole role : roles) {
+            if (!"ROLE_PRIMARY_USER".equals(role.getRole())) {
+                isAccess = true;
+            }
+        }
+        return ResultVoUtil.success(isAccess);
+    }
+
     private String encryptPassword(String password){
        return new BCryptPasswordEncoder().encode(password);
     }

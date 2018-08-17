@@ -125,4 +125,10 @@ public interface UserService {
      * @return
      */
     List<User> findAllByIdIn(List<Long> ids);
+
+    /**
+     * 确认是否具有评论权限
+     * @return
+     */
+    ResultVo checkAccessComment();
 }

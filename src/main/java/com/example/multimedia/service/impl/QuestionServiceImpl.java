@@ -50,6 +50,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public ResultVo checkAnswer(List<Character> answers) {
         if (answers.size()<10){
             return ResultVoUtil.error(0,"您还有未作答的题目");
@@ -78,6 +79,7 @@ public class QuestionServiceImpl implements QuestionService {
             userService.changeRole(getUid(),"ROLE_SENIOR_USER");
         }
         TestDTO test = new TestDTO((long)questionList.size(),(long)correctNum,questionDTOS);
+        redisTemplate.delete("Q"+UserUtil.getUserName());
         return ResultVoUtil.success(test);
     }
 

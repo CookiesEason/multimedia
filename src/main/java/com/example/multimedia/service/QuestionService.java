@@ -19,6 +19,20 @@ public interface QuestionService {
     ResultVo save(List<Question> questionList);
 
     /**
+     * 更新题目
+     * @param question
+     * @return
+     */
+    ResultVo update(Question question);
+
+    /**
+     * 删除题目
+     * @param id
+     * @return
+     */
+    ResultVo delete(Long id);
+
+    /**
      * 获取10道题目
      * @return
      */

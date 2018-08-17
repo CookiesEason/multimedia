@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -23,23 +25,23 @@ public class Question implements Serializable {
     private Long id;
 
     @Lob
-    @NotNull(message = "问题不能为空")
+    @NotBlank(message = "问题不能为空")
     private String text;
 
-    @NotNull(message = "A选项不能为空")
+    @NotBlank(message = "A选项不能为空")
     private String optionA;
 
-    @NotNull(message = "B选项不能为空")
+    @NotBlank(message = "B选项不能为空")
     private String optionB;
 
-    @NotNull(message = "C选项不能为空")
+    @NotBlank(message = "C选项不能为空")
     private String optionC;
 
-    @NotNull(message = "D选项不能为空")
+    @NotBlank(message = "D选项不能为空")
     private String optionD;
 
     @NotNull(message = "答案不能为空")
-    private char answer;
+    private Character answer;
 
     @JsonIgnore
     public char getAnswer() {

@@ -42,6 +42,18 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public ResultVo update(Question question) {
+        questionRepository.save(question);
+        return ResultVoUtil.success();
+    }
+
+    @Override
+    public ResultVo delete(Long id) {
+         questionRepository.deleteById(id);
+         return ResultVoUtil.success();
+    }
+
+    @Override
     public ResultVo getTest() {
         List<Question> questionList = questionRepository.findByRand();
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
@@ -58,7 +70,7 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questionList = (List<Question>) redisTemplate.opsForValue().get("Q"+UserUtil.getUserName());
         List<QuestionDTO> questionDTOS = new ArrayList<>();
         int correctNum = 0;
-        if (questionList!=null){
+        if (questionList==null){
             return ResultVoUtil.error(0,"发生异常，请稍后重试");
         }
         questionList.forEach(question -> {

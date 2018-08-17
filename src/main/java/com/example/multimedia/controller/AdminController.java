@@ -82,4 +82,14 @@ public class AdminController {
         return questionService.save(question);
     }
 
+    @PostMapping("question/update")
+    private ResultVo updateQuestion(@RequestBody Question question){
+        return questionService.update(question);
+    }
+
+    @DeleteMapping("question/{questionId}")
+    private ResultVo deleteQuestion(@PathVariable Long questionId){
+        return questionService.delete(questionId);
+    }
+
 }

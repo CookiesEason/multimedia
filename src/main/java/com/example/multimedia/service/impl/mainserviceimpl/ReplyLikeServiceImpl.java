@@ -45,17 +45,15 @@ public class ReplyLikeServiceImpl implements LikeService {
             replyLike.setStatus(true);
             replyLike.setReplyId(replyId);
             replyLike.setUserId(getUid());
+            Comment comment = (Comment) commentService.findById(
+                    replyService.findById(replyLike.getReplyId()).getCommentId());
+            noticeService.saveNotice(comment.getTopic(), comment.getTopId(), comment.getId(),
+                    replyLike.getReplyId(),userId,
+                    replyService.findById(replyLike.getReplyId()).getFromUid(),"replyPraise");
         }else {
             replyLike.setStatus(!replyLike.isStatus());
         }
         replyLikeRepository.save(replyLike);
-        if (replyLike.isStatus()){
-            Comment comment = (Comment) commentService.findById(
-                    replyService.findById(replyLike.getReplyId()).getCommentId());
-            noticeService.saveNotice(Topic.VIDEO, comment.getTopId(), comment.getId(),
-                    replyLike.getReplyId(),userId,
-                    replyService.findById(replyLike.getReplyId()).getFromUid(),"replyPraise");
-        }
     }
 
     @Override

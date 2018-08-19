@@ -36,7 +36,6 @@ public class CommentLikeServiceImpl implements LikeService {
     @Override
     public void like(Long commentId,Topic topic) {
         Comment comment = (Comment) commentService.findById(commentId);
-        System.out.println(comment);
         if (comment ==null){
             return;
         }
@@ -47,15 +46,12 @@ public class CommentLikeServiceImpl implements LikeService {
             commentLike.setStatus(true);
             commentLike.setUserId(getUid());
             commentLike.setCommentId(commentId);
+            noticeService.saveNotice(comment.getTopic(), comment.getTopId(),commentId,null,userId
+                    , comment.getFromUid(),"commentPraise");
         }else {
             commentLike.setStatus(!commentLike.isStatus());
         }
         commentLikeRepository.save(commentLike);
-        if (commentLike.isStatus()){
-            noticeService.saveNotice(Topic.VIDEO, comment.getTopId(),commentId,null,userId
-                    , comment.getFromUid(),"commentPraise");
-        }
-
     }
 
 

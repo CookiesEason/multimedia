@@ -29,6 +29,9 @@ public class AdminController {
     private UserService userService;
 
     @Autowired
+    private TagsService tagsService;
+
+    @Autowired
     private VideoService videoService;
 
     @Autowired
@@ -98,22 +101,22 @@ public class AdminController {
 
     @GetMapping("videos/tags")
     private ResultVo getTags(){
-        return videoService.getTags();
+        return tagsService.getTags();
     }
 
     @PostMapping("videos/updateTag")
     private ResultVo updateTag(@RequestParam String oldTag,@RequestParam String tag){
-        return videoService.updateTag(oldTag, tag);
+        return tagsService.updateTag(oldTag, tag);
     }
 
     @PostMapping("videos/addTag")
     private ResultVo addTags(@RequestParam String tag){
-        return videoService.addTag(tag);
+        return tagsService.addTag(tag);
     }
 
     @PostMapping("videos/deleteTag")
     private ResultVo deleteTag(@RequestParam String tag){
-        return videoService.deleteTag(tag);
+        return tagsService.deleteTag(tag);
     }
 
     @GetMapping("videos")

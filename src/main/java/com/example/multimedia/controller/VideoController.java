@@ -1,6 +1,7 @@
 package com.example.multimedia.controller;
 
 import com.example.multimedia.service.LikeService;
+import com.example.multimedia.service.TagsService;
 import com.example.multimedia.service.VideoService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
@@ -24,9 +25,12 @@ public class VideoController {
     @Qualifier(value = "VideoLikeService")
     private LikeService videoLikeService;
 
+    @Autowired
+    private TagsService tagsService;
+
     @GetMapping("tags")
     private ResultVo getTags(){
-        return videoService.getTags();
+        return tagsService.getTags();
     }
 
     @GetMapping("/watchHistory")

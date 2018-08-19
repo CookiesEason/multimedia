@@ -53,9 +53,6 @@ public class VideoServiceImpl implements VideoService {
     private final static String PREFIX_VIDEO="video/";
 
     @Autowired
-    private TagsRepository tagsRepository;
-
-    @Autowired
     private FileService fileService;
 
     @Autowired
@@ -78,39 +75,8 @@ public class VideoServiceImpl implements VideoService {
     @Qualifier(value = "VideoLikeService")
     private LikeService videoLikeService;
 
-    @Override
-    @Cacheable(value = "tags")
-    public ResultVo getTags() {
-        return ResultVoUtil.success(tagsRepository.findAll());
-    }
-
-    @Override
-    @CacheEvict(value = "tags",allEntries = true)
-    public ResultVo updateTag(String oldTag,String tag) {
-        Tags tags = tagsRepository.findByTag(oldTag);
-        tags.setTag(tag);
-        tagsRepository.save(tags);
-        return ResultVoUtil.success();
-    }
-
-    @Override
-    @CacheEvict(value = "tags",allEntries = true)
-    public ResultVo addTag(String tag) {
-        if (tagsRepository.findByTag(tag)!=null){
-            return ResultVoUtil.error(0,"标签已存在");
-        }
-        Tags tags = new Tags();
-        tags.setTag(tag);
-        tagsRepository.save(tags);
-        return ResultVoUtil.success();
-    }
-
-    @Override
-    @CacheEvict(value = "tags",allEntries = true)
-    public ResultVo deleteTag(String tag) {
-        tagsRepository.deleteByTag(tag);
-        return ResultVoUtil.success();
-    }
+    @Autowired
+    private TagsService tagsService;
 
     @Override
     public ResultVo uploadVideo(String title,String introduction,String tag,MultipartFile multipartFile) {
@@ -119,7 +85,7 @@ public class VideoServiceImpl implements VideoService {
             video.setTitle(title);
             video.setIntroduction(introduction);
             video.setUserId(getUid());
-            return saveVideo(video, tagsRepository.findByTag(tag));
+            return saveVideo(video, tagsService.findByTag(tag));
         }
         if (!multipartFile.getOriginalFilename().contains(PREFIX_VIDEO)){
             ResultVo resultVo = fileService.uploadFile(multipartFile);
@@ -130,7 +96,7 @@ public class VideoServiceImpl implements VideoService {
             video.setIntroduction(introduction);
             video.setUserId(getUid());
             video.setVideoUrl(resultVo.getData().toString());
-            return saveVideo(video, tagsRepository.findByTag(tag));
+            return saveVideo(video, tagsService.findByTag(tag));
         }else {
             return ResultVoUtil.error(0,"请注意上传的文件为视频");
         }
@@ -214,7 +180,7 @@ public class VideoServiceImpl implements VideoService {
         }
         video.setTitle(title);
         video.setIntroduction(introduction);
-        Tags tags = tagsRepository.findByTag(tag);
+        Tags tags = tagsService.findByTag(tag);
         return saveVideo(video,tags);
     }
 

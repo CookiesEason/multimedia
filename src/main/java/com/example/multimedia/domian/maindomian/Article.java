@@ -1,6 +1,5 @@
-package com.example.multimedia.domian.articledomian;
+package com.example.multimedia.domian.maindomian;
 
-import com.example.multimedia.domian.videodomian.Tags;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

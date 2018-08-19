@@ -1,6 +1,6 @@
 package com.example.multimedia.repository;
 
-import com.example.multimedia.domian.videodomian.Tags;
+import com.example.multimedia.domian.maindomian.Tags;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

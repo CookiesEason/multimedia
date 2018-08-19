@@ -1,7 +1,7 @@
 package com.example.multimedia.service;
 
 import com.example.multimedia.domian.abstractdomian.AbstractLike;
-import com.example.multimedia.domian.videodomian.VideoLike;
+import com.example.multimedia.domian.enums.Topic;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface LikeService {
 
-    void like(Long id);
+    void like(Long id,Topic topic);
 
     Long countAllById(Long id);
 
@@ -20,6 +20,8 @@ public interface LikeService {
 
     void deleteAllById(Long id);
 
-   AbstractLike status(Long videoId);
+    void deleteAllById(Long id,Topic topic);
+
+   AbstractLike status(Long id,Long userId,Topic topic);
 
 }

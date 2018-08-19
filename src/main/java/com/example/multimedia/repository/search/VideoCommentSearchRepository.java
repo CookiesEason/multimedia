@@ -1,6 +1,6 @@
 package com.example.multimedia.repository.search;
 
-import com.example.multimedia.domian.videodomian.search.VideoCommentSearch;
+import com.example.multimedia.domian.maindomian.search.VideoCommentSearch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

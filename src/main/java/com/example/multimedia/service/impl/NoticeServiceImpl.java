@@ -43,11 +43,9 @@ public class NoticeServiceImpl implements NoticeService {
     private VideoService videoService;
 
     @Autowired
-    @Qualifier(value = "VideoCommentService")
     private CommentService videoCommentService;
 
     @Autowired
-    @Qualifier(value = "VideoReplyService")
     private ReplyService videoReplyService;
 
     @Override

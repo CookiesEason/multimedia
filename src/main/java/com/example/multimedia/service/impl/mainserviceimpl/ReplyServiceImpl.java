@@ -1,13 +1,11 @@
-package com.example.multimedia.service.impl.videoserviceimpl;
+package com.example.multimedia.service.impl.mainserviceimpl;
 
-import com.example.multimedia.domian.User;
-import com.example.multimedia.domian.enums.Topic;
-import com.example.multimedia.domian.videodomian.VideoComment;
-import com.example.multimedia.domian.videodomian.VideoReply;
+import com.example.multimedia.domian.maindomian.Comment;
+import com.example.multimedia.domian.maindomian.Reply;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.ReplyDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
-import com.example.multimedia.repository.VideoReplyRepository;
+import com.example.multimedia.repository.ReplyRepository;
 import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
@@ -29,23 +27,22 @@ import java.util.Optional;
  * @author CookiesEason
  * 2018/08/05 20:03
  */
-@Service(value ="VideoReplyService")
+@Service
 @Transactional(rollbackFor = Exception.class)
-public class VideoReplyServiceImpl implements ReplyService {
+public class ReplyServiceImpl implements ReplyService {
 
     @Autowired
-    private VideoReplyRepository videoReplyRepository;
+    private ReplyRepository replyRepository;
 
     @Autowired
     private VideoSearchService videoSearchService;
 
     @Autowired
-    @Qualifier(value = "VideoCommentService")
     private CommentService commentService;
 
     @Autowired
-    @Qualifier(value = "VideoReplyLikeService")
-    private LikeService videoReplyLikeService;
+    @Qualifier(value = "ReplyLikeService")
+    private LikeService replyLikeService;
 
     @Autowired
     private UserService userService;
@@ -54,74 +51,74 @@ public class VideoReplyServiceImpl implements ReplyService {
     private NoticeService noticeService;
 
     @Override
-    public VideoReply findById(Long id) {
-        Optional<VideoReply> videoReply = videoReplyRepository.findById(id);
+    public Reply findById(Long id) {
+        Optional<Reply> videoReply = replyRepository.findById(id);
         return videoReply.orElse(null);
     }
 
     @Override
     public ResultVo reply(Long commentId, String content, Long toUid) {
-        VideoReply videoReply = new VideoReply();
-        VideoComment videoComment = (VideoComment) commentService.findById(commentId);
+        Reply reply = new Reply();
+        Comment comment = (Comment) commentService.findById(commentId);
         if (commentService.findById(commentId)==null){
             return ResultVoUtil.error(0,"评论不存在,无法进行回复");
         }
-        videoReply.setCommentId(commentId);
-        videoReply.setFromUid(getUid());
-        videoReply.setToUid(toUid);
-        videoReply.setContent(content);
-        videoReplyRepository.save(videoReply);
-        noticeService.saveNotice(Topic.VIDEO,videoComment.getVideoId(),commentId,videoReply.getId(),getUid(),
+        reply.setCommentId(commentId);
+        reply.setFromUid(getUid());
+        reply.setToUid(toUid);
+        reply.setContent(content);
+        replyRepository.save(reply);
+        noticeService.saveNotice(comment.getTopic(), comment.getTopId(),commentId, reply.getId(),getUid(),
                 toUid,"reply");
         return ResultVoUtil.success();
     }
 
     @Override
-    public List<VideoReply> findAllByCommentId(Long id) {
-        return videoReplyRepository.findAllByCommentId(id);
+    public List<Reply> findAllByCommentId(Long id) {
+        return replyRepository.findAllByCommentId(id);
     }
 
     @Override
     public void deleteById(Long id) {
-        videoReplyRepository.deleteByIdAndFromUid(id,getUid());
+        replyRepository.deleteByIdAndFromUid(id,getUid());
         videoSearchService.deleteReplyById(id);
-        videoReplyLikeService.deleteAllById(id);
+        replyLikeService.deleteAllById(id);
     }
 
     @Override
     public void deleteAllByCommentId(Long commentId) {
-        List<VideoReply> videoReplies = videoReplyRepository.deleteAllByCommentId(commentId);
+        List<Reply> videoReplies = replyRepository.deleteAllByCommentId(commentId);
         videoSearchService.deleteReplyAllByCommentId(commentId);
         List<Long> ids = new ArrayList<>();
-        for (VideoReply videoReply : videoReplies){
-            Long id = videoReply.getId();
+        for (Reply reply : videoReplies){
+            Long id = reply.getId();
             ids.add(id);
         }
-        videoReplyLikeService.deleteAllByIds(ids);
+        replyLikeService.deleteAllByIds(ids);
     }
 
     @Override
     public void deleteAllByCommentIdIn(List<Long> ids) {
-        List<VideoReply> videoReplies = videoReplyRepository.deleteAllByCommentIdIn(ids);
+        List<Reply> videoReplies = replyRepository.deleteAllByCommentIdIn(ids);
         if (ids.size()>0){
             videoSearchService.deleteReplyAllByComment_idIn(ids);
         }
         List<Long> replyIds = new ArrayList<>();
-        for (VideoReply videoReply : videoReplies){
-            Long id = videoReply.getId();
+        for (Reply reply : videoReplies){
+            Long id = reply.getId();
             replyIds.add(id);
         }
-        videoReplyLikeService.deleteAllByIds(replyIds);
+        replyLikeService.deleteAllByIds(replyIds);
     }
 
     @Override
     public ResultVo findAll(int page, int size, String order,String sort) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
-        Page<VideoReply> videoReplies = videoReplyRepository.findAll(pageable);
+        Page<Reply> videoReplies = replyRepository.findAll(pageable);
         List<ReplyDTO> replyDTOList = new ArrayList<>();
         videoReplies.getContent().forEach(videoReply -> {
             ReplyDTO replyDTO = new ReplyDTO(videoReply,
-                    videoReplyLikeService.countAllById(videoReply.getId()),
+                    replyLikeService.countAllById(videoReply.getId()),
                     new SimpleUserDTO(userService.findById(videoReply.getFromUid())));
             replyDTOList.add(replyDTO);
         });

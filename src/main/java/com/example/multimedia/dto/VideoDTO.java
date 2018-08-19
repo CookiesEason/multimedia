@@ -1,13 +1,10 @@
 package com.example.multimedia.dto;
 
-import com.example.multimedia.domian.videodomian.Video;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.multimedia.domian.maindomian.Video;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * @author CookiesEason

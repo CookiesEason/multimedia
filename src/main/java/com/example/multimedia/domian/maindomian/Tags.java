@@ -1,4 +1,4 @@
-package com.example.multimedia.domian.videodomian;
+package com.example.multimedia.domian.maindomian;
 
 import lombok.Data;
 

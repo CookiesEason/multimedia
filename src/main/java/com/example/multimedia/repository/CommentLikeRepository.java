@@ -1,6 +1,6 @@
 package com.example.multimedia.repository;
 
-import com.example.multimedia.domian.videodomian.VideoCommentLike;
+import com.example.multimedia.domian.maindomian.CommentLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
  * @author CookiesEason
  * 2018/08/07 13:58
  */
-public interface VideoCommentLikeRepository extends JpaRepository<VideoCommentLike,Long> {
+public interface CommentLikeRepository extends JpaRepository<CommentLike,Long> {
 
-    VideoCommentLike findByUserIdAndCommentId(Long userId, Long commentId);
+    CommentLike findByUserIdAndCommentId(Long userId, Long commentId);
 
     Long countAllBycommentIdAndStatus(Long commentId, boolean status);
 

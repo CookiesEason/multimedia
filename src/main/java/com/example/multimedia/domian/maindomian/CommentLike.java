@@ -1,4 +1,4 @@
-package com.example.multimedia.domian.videodomian;
+package com.example.multimedia.domian.maindomian;
 
 import com.example.multimedia.domian.abstractdomian.AbstractLike;
 
@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * 2018/08/07 13:55
  */
 @Entity
-public class VideoCommentLike extends AbstractLike {
+public class CommentLike extends AbstractLike {
 
     private Long commentId;
 

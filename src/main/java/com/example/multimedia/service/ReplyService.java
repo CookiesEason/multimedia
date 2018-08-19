@@ -1,6 +1,6 @@
 package com.example.multimedia.service;
 
-import com.example.multimedia.domian.videodomian.VideoReply;
+import com.example.multimedia.domian.maindomian.Reply;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ReplyService {
 
-    VideoReply findById(Long id);
+    Reply findById(Long id);
 
 
     /**
@@ -30,7 +30,7 @@ public interface ReplyService {
      * @param id
      * @return
      */
-    List<VideoReply> findAllByCommentId(Long id);
+    List<Reply> findAllByCommentId(Long id);
 
     /**
      * 删除回复

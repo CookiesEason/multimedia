@@ -1,44 +1,32 @@
-package com.example.multimedia.service.impl.videoserviceimpl;
+package com.example.multimedia.service.impl.mainserviceimpl;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.VideoHistory;
-import com.example.multimedia.domian.videodomian.VideoComment;
-import com.example.multimedia.domian.videodomian.VideoLike;
+import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.maindomian.TopicLike;
 import com.example.multimedia.dto.*;
-import com.example.multimedia.domian.videodomian.Tags;
-import com.example.multimedia.domian.videodomian.Video;
-import com.example.multimedia.repository.TagsRepository;
+import com.example.multimedia.domian.maindomian.Tags;
+import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.repository.VideoHistoryRepository;
 import com.example.multimedia.repository.VideoRepository;
-import com.example.multimedia.repository.search.VideoSearchRepository;
 import com.example.multimedia.service.*;
-import com.example.multimedia.util.CookieUtil;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -68,12 +56,11 @@ public class VideoServiceImpl implements VideoService {
     private VideoHistoryRepository videoHistoryRepository;
 
     @Autowired
-    @Qualifier(value = "VideoCommentService")
-    private CommentService videoCommentService;
+    private CommentService commentService;
 
     @Autowired
-    @Qualifier(value = "VideoLikeService")
-    private LikeService videoLikeService;
+    @Qualifier(value = "LikeService")
+    private LikeService likeService;
 
     @Autowired
     private TagsService tagsService;
@@ -167,8 +154,8 @@ public class VideoServiceImpl implements VideoService {
     public ResultVo deleteById(long id) {
         videoRepository.deleteByIdAndUserId(id,getUid());
         videoSearchService.deleteVideoById(id);
-        videoCommentService.deleteAllBycontentId(id);
-        videoLikeService.deleteAllById(id);
+        commentService.deleteAllBycontentId(id, Topic.VIDEO);
+        likeService.deleteAllById(id,Topic.VIDEO);
         return ResultVoUtil.success();
     }
 
@@ -187,9 +174,10 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public ResultVo findById(long id) {
         boolean isLike = false;
-        VideoLike videoLike = (VideoLike) videoLikeService.status(id);
-        if (videoLike!=null){
-            isLike = videoLike.isStatus();
+        Long userId = getUid();
+        TopicLike topicLike = (TopicLike) likeService.status(id,userId,Topic.VIDEO);
+        if (topicLike !=null){
+            isLike = topicLike.isStatus();
         }
         VideoDTO videoDTO = new VideoDTO(
                 new SimpleUserDTO(getUser(UserUtil.getUserName())),

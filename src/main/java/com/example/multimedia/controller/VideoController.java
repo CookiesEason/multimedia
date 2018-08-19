@@ -1,5 +1,6 @@
 package com.example.multimedia.controller;
 
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.TagsService;
 import com.example.multimedia.service.VideoService;
@@ -22,7 +23,7 @@ public class VideoController {
     private VideoService videoService;
 
     @Autowired
-    @Qualifier(value = "VideoLikeService")
+    @Qualifier(value = "LikeService")
     private LikeService videoLikeService;
 
     @Autowired
@@ -102,7 +103,7 @@ public class VideoController {
 
     @PostMapping("/like/{videoId}")
     private void videoLike(@PathVariable Long videoId){
-        videoLikeService.like(videoId);
+        videoLikeService.like(videoId, Topic.VIDEO);
     }
 
     @PostMapping("/play/{videoId}")

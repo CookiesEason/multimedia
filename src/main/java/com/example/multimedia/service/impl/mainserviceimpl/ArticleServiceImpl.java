@@ -1,18 +1,19 @@
-package com.example.multimedia.service.impl.articleserviceimpl;
+package com.example.multimedia.service.impl.mainserviceimpl;
 
-import com.example.multimedia.domian.articledomian.Article;
-import com.example.multimedia.domian.videodomian.Tags;
+import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.maindomian.Article;
+import com.example.multimedia.domian.maindomian.Tags;
+import com.example.multimedia.domian.maindomian.TopicLike;
 import com.example.multimedia.dto.ArticleDTO;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.repository.ArticleRepository;
-import com.example.multimedia.service.ArticleService;
-import com.example.multimedia.service.TagsService;
-import com.example.multimedia.service.UserService;
+import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    @Qualifier(value = "LikeService")
+    private LikeService likeService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private TagsService tagsService;
@@ -77,6 +85,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ResultVo delete(Long articleId) {
         articleRepository.deleteByIdAndUserId(articleId,getUid());
+        commentService.deleteAllBycontentId(articleId, Topic.ARTICLE);
+        likeService.deleteAllById(articleId,Topic.ARTICLE);
         return ResultVoUtil.success();
     }
 
@@ -112,11 +122,28 @@ public class ArticleServiceImpl implements ArticleService {
     public ResultVo findById(Long id) {
         Optional<Article> articleOptional = articleRepository.findById(id);
         if (articleOptional.isPresent()){
+            boolean isLike = false;
+            Long userId = getUid();
+            TopicLike topicLike = (TopicLike) likeService.status(id,userId,Topic.ARTICLE);
+            if (topicLike !=null){
+                isLike = topicLike.isStatus();
+            }
             Article article = articleOptional.get();
             return ResultVoUtil.success(new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
-                    article));
+                    article,isLike));
         }
         return ResultVoUtil.error(404,"发生未知的错误");
+    }
+
+    @Override
+    public Article findById(long id) {
+        Optional<Article> video = articleRepository.findById(id);
+        return video.orElse(null);
+    }
+
+    @Override
+    public void save(Article article) {
+        articleRepository.save(article);
     }
 
 

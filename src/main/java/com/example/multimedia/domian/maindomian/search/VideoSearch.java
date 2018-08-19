@@ -1,4 +1,4 @@
-package com.example.multimedia.domian.videodomian.search;
+package com.example.multimedia.domian.maindomian.search;
 
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Document;

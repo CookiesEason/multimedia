@@ -1,8 +1,11 @@
 package com.example.multimedia.controller;
 
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.service.ArticleService;
+import com.example.multimedia.service.LikeService;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,6 +18,10 @@ public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    @Qualifier(value = "LikeService")
+    private LikeService likeService;
 
     @GetMapping
     public ResultVo getArticles(@RequestParam(defaultValue = "0") int page,
@@ -71,6 +78,11 @@ public class ArticleController {
     @DeleteMapping("/{articleId}")
     public ResultVo deleteArticle(@PathVariable Long articleId){
         return articleService.delete(articleId);
+    }
+
+    @PostMapping("/like/{articleId}")
+    public void likeArticle(@PathVariable Long articleId){
+        likeService.like(articleId, Topic.ARTICLE);
     }
 
 }

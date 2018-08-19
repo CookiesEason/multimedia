@@ -1,16 +1,15 @@
-package com.example.multimedia.service.impl.videoserviceimpl;
+package com.example.multimedia.service.impl.mainserviceimpl;
 
-import com.example.multimedia.domian.Notice;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.enums.Topic;
-import com.example.multimedia.domian.videodomian.VideoComment;
-import com.example.multimedia.domian.videodomian.VideoReply;
+import com.example.multimedia.domian.maindomian.Comment;
 import com.example.multimedia.domian.abstractdomian.AbstractComment;
+import com.example.multimedia.domian.maindomian.Reply;
 import com.example.multimedia.dto.CommentDTO;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.ReplyDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
-import com.example.multimedia.repository.VideoCommentRepository;
+import com.example.multimedia.repository.CommentRepository;
 import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
@@ -31,34 +30,32 @@ import java.util.List;
  * @author CookiesEason
  * 2018/08/05 19:37
  */
-@Service(value = "VideoCommentService")
+@Service
 @Transactional(rollbackFor = Exception.class)
-public class VideoCommentServiceImpl implements CommentService {
+public class CommentServiceImpl implements CommentService {
 
     @Autowired
-    private VideoCommentRepository videoCommentRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
     private VideoService videoService;
 
     @Autowired
+    private ArticleService articleService;
+
+    @Autowired
     private VideoSearchService videoSearchService;
 
     @Autowired
-    @Qualifier(value = "VideoReplyService")
     private ReplyService replyService;
 
     @Autowired
-    @Qualifier(value = "VideoCommentLikeService")
-    private LikeService videoCommentLikeService;
+    @Qualifier(value = "CommentLikeService")
+    private LikeService commentLikeService;
 
     @Autowired
-    @Qualifier(value = "VideoReplyLikeService")
-    private LikeService videoReplyLikeService;
-
-    @Autowired
-    @Qualifier(value = "VideoReplyService")
-    private ReplyService videoReplyService;
+    @Qualifier(value = "ReplyLikeService")
+    private LikeService replyLikeService;
 
     @Autowired
     private NoticeService noticeService;
@@ -67,86 +64,95 @@ public class VideoCommentServiceImpl implements CommentService {
     private UserService userService;
 
     @Override
-    public ResultVo createComment(Long videoId,String content) {
-        VideoComment videoComment = new VideoComment();
-        if (videoService.findById(videoId)==null){
+    public ResultVo createComment(Long topicId,String content,Topic topic) {
+        Comment comment = new Comment();
+        if (videoService.findById(topicId)==null&&topic.equals(Topic.VIDEO)){
             return ResultVoUtil.error(0,"视频不存在,无法进行评论");
         }
+        if (articleService.findById((long)topicId)==null&&topic.equals(Topic.ARTICLE)){
+            return ResultVoUtil.error(0,"文章不存在,无法进行评论");
+        }
         Long fromUid = userService.findByUsername(UserUtil.getUserName()).getId();
-        videoComment.setVideoId(videoId);
-        videoComment.setContent(content);
-        videoComment.setFromUid(fromUid);
-        videoCommentRepository.save(videoComment);
-        Long toUid = videoService.findById(videoId).getUserId();
+        comment.setTopId(topicId);
+        comment.setContent(content);
+        comment.setFromUid(fromUid);
+        comment.setTopic(topic);
+        commentRepository.save(comment);
+        Long toUid;
+        if (topic.equals(Topic.VIDEO)){
+            toUid = videoService.findById(topicId).getUserId();
+        }else {
+            toUid = articleService.findById((long)topicId).getUserId();
+        }
         if (!fromUid.equals(toUid)){
-            noticeService.saveNotice(Topic.VIDEO,videoId,videoComment.getId(),null,fromUid,toUid,"comment");
+            noticeService.saveNotice(topic,topicId, comment.getId(),null,fromUid,toUid,"comment");
         }
         return ResultVoUtil.success();
     }
 
     @Override
-    public ResultVo getComments(Long videoId,int commentPage) {
+    public ResultVo getComments(Long topId,Topic topic,int commentPage) {
         int size=10;
         Pageable pageable = PageRequest.of(commentPage,size);
-        Page<VideoComment> videoComments = videoCommentRepository.findAllByVideoId(pageable,videoId);
+        Page<Comment> c = commentRepository.findAllByTopIdAndTopic(pageable,topId,topic);
         List<CommentDTO> commentList = new ArrayList<>();
-        videoComments.getContent().forEach(comment -> {
+        c.getContent().forEach(comment -> {
             User user = userService.findById(comment.getFromUid());
-            List<VideoReply> replyList = replyService.findAllByCommentId(comment.getId());
+            List<Reply> replyList = replyService.findAllByCommentId(comment.getId());
             List<ReplyDTO> replyDTOList = new ArrayList<>();
-            replyList.forEach(videoReply -> {
-                ReplyDTO replyDTO = new ReplyDTO(videoReply,
-                        videoReplyLikeService.countAllById(videoReply.getId()),
-                        new SimpleUserDTO(userService.findById(videoReply.getFromUid())),
-                        new SimpleUserDTO(userService.findById(videoReply.getToUid())));
+            replyList.forEach(reply -> {
+                ReplyDTO replyDTO = new ReplyDTO(reply,
+                        replyLikeService.countAllById(reply.getId()),
+                        new SimpleUserDTO(userService.findById(reply.getFromUid())),
+                        new SimpleUserDTO(userService.findById(reply.getToUid())));
                 replyDTOList.add(replyDTO);
             });
-            CommentDTO commentDTO = new CommentDTO(comment,videoCommentLikeService.countAllById(comment.getId()),
+            CommentDTO commentDTO = new CommentDTO(comment, commentLikeService.countAllById(comment.getId()),
                     user,replyDTOList);
             commentList.add(commentDTO);
         });
-        PageDTO<CommentDTO> comments = new PageDTO<>(commentList,videoComments.getTotalElements(),
-                (long) videoComments.getTotalPages());
+        PageDTO<CommentDTO> comments = new PageDTO<>(commentList,c.getTotalElements(),
+                (long) c.getTotalPages());
         return ResultVoUtil.success(comments);
     }
 
     @Override
     public AbstractComment findById(Long id) {
-        return videoCommentRepository.findVideoCommentById(id);
+        return commentRepository.findCommentById(id);
     }
 
     @Override
     public void deleteById(Long id) {
-        Long deleteId = videoCommentRepository.deleteByIdAndFromUid(id,getUid());
+        Long deleteId = commentRepository.deleteByIdAndFromUid(id,getUid());
         videoSearchService.deleteCommentById(id);
         if (deleteId!=0){
             replyService.deleteAllByCommentId(id);
         }
-        videoCommentLikeService.deleteAllById(id);
+        commentLikeService.deleteAllById(id);
     }
 
     @Override
-    public void deleteAllBycontentId(Long videoId) {
-        videoSearchService.deleteAllByVideoId(videoId);
-        List<VideoComment> videoComments = videoCommentRepository.deleteAllByVideoId(videoId);
+    public void deleteAllBycontentId(Long topId,Topic topic) {
+        videoSearchService.deleteAllByVideoId(topId);
+        List<Comment> comments = commentRepository.deleteAllByTopIdAndTopic(topId,topic);
         List<Long> ids= new ArrayList<>();
-        for (VideoComment videoComment : videoComments){
-           Long id =  videoComment.getId();
+        for (Comment comment : comments){
+           Long id =  comment.getId();
            ids.add(id);
         }
-        videoReplyService.deleteAllByCommentIdIn(ids);
-        videoCommentLikeService.deleteAllByIds(ids);
+        replyService.deleteAllByCommentIdIn(ids);
+        commentLikeService.deleteAllByIds(ids);
     }
 
     @Override
     public ResultVo findAll(int page, int size, String order,String sort) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
-        Page<VideoComment> videoComments = videoCommentRepository.findAll(pageable);
+        Page<Comment> videoComments = commentRepository.findAll(pageable);
         List<CommentDTO> commentList = new ArrayList<>();
        videoComments.getContent().forEach(videoComment -> {
            User user = userService.findById(videoComment.getFromUid());
            CommentDTO commentDTO = new CommentDTO(videoComment,
-                   videoCommentLikeService.countAllById(videoComment.getId()), user);
+                   commentLikeService.countAllById(videoComment.getId()), user);
            commentList.add(commentDTO);
        });
         PageDTO<CommentDTO> comments = new PageDTO<>(commentList,videoComments.getTotalElements(),

@@ -1,7 +1,6 @@
-package com.example.multimedia.domian.videodomian;
+package com.example.multimedia.domian.maindomian;
 
-import com.example.multimedia.domian.videodomian.search.VideoSearch;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.example.multimedia.domian.maindomian.search.VideoSearch;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;

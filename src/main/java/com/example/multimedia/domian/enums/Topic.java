@@ -13,6 +13,10 @@ public enum  Topic {
     /**
      * 关注
      */
-    FOLLOW
+    FOLLOW,
+    /**
+     * 文章
+     */
+    ARTICLE
 
 }

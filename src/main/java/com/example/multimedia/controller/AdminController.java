@@ -2,16 +2,12 @@ package com.example.multimedia.controller;
 
 import com.example.multimedia.domian.Question;
 import com.example.multimedia.domian.User;
-import com.example.multimedia.domian.videodomian.search.VideoSearch;
-import com.example.multimedia.repository.search.VideoSearchRepository;
 import com.example.multimedia.service.*;
 import com.example.multimedia.service.QuestionService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,12 +31,10 @@ public class AdminController {
     private VideoService videoService;
 
     @Autowired
-    @Qualifier(value = "VideoCommentService")
-    private CommentService videoCommentService;
+    private CommentService commentService;
 
     @Autowired
-    @Qualifier(value = "VideoReplyService")
-    private ReplyService videoReplyService;
+    private ReplyService replyService;
 
     @Autowired
     private VideoSearchService videoSearchService;
@@ -160,7 +154,7 @@ public class AdminController {
                                  @RequestParam(defaultValue = "10") int size,
                                  @RequestParam(defaultValue = "asc") String order,
                                  @RequestParam(defaultValue = "createDate") String sort){
-        return videoCommentService.findAll(page,size,order,sort);
+        return commentService.findAll(page,size,order,sort);
    }
 
    @GetMapping("videos/comments/search")
@@ -173,7 +167,7 @@ public class AdminController {
 
    @DeleteMapping("videos/comments/{commentId}")
     private ResultVo deleteComment(@PathVariable Long commentId){
-       videoCommentService.deleteById(commentId);
+       commentService.deleteById(commentId);
        return ResultVoUtil.success();
    }
 
@@ -182,7 +176,7 @@ public class AdminController {
                                  @RequestParam(defaultValue = "10") int size,
                                 @RequestParam(defaultValue = "asc") String order,
                                  @RequestParam(defaultValue = "createDate") String sort){
-        return videoReplyService.findAll(page,size,order,sort);
+        return replyService.findAll(page,size,order,sort);
     }
 
     @GetMapping("videos/replies/search")
@@ -195,7 +189,7 @@ public class AdminController {
 
     @DeleteMapping("videos/replies/{replyId}")
     private ResultVo deleteReply(@PathVariable Long replyId){
-        videoReplyService.deleteById(replyId);
+        replyService.deleteById(replyId);
         return ResultVoUtil.success();
     }
 

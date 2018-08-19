@@ -1,12 +1,12 @@
-package com.example.multimedia.service.impl.videoserviceimpl;
+package com.example.multimedia.service.impl.mainserviceimpl;
 
 import com.example.multimedia.domian.User;
-import com.example.multimedia.domian.videodomian.Video;
-import com.example.multimedia.domian.videodomian.VideoComment;
-import com.example.multimedia.domian.videodomian.VideoReply;
-import com.example.multimedia.domian.videodomian.search.VideoCommentSearch;
-import com.example.multimedia.domian.videodomian.search.VideoReplySearch;
-import com.example.multimedia.domian.videodomian.search.VideoSearch;
+import com.example.multimedia.domian.maindomian.Video;
+import com.example.multimedia.domian.maindomian.Comment;
+import com.example.multimedia.domian.maindomian.Reply;
+import com.example.multimedia.domian.maindomian.search.VideoCommentSearch;
+import com.example.multimedia.domian.maindomian.search.VideoReplySearch;
+import com.example.multimedia.domian.maindomian.search.VideoSearch;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.repository.TagsRepository;
 import com.example.multimedia.repository.search.VideoCommentSearchRepository;
@@ -32,7 +32,6 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,11 +55,11 @@ public class VideoSearchServiceImpl implements VideoSearchService {
     private VideoReplySearchRepository replySearchRepository;
 
     @Autowired
-    @Qualifier(value = "VideoCommentLikeService")
+    @Qualifier(value = "CommentLikeService")
     private LikeService videoCommentLikeService;
 
     @Autowired
-    @Qualifier(value = "VideoReplyLikeService")
+    @Qualifier(value = "ReplyLikeService")
     private LikeService videoReplyLikeService;
 
     @Autowired
@@ -94,15 +93,15 @@ public class VideoSearchServiceImpl implements VideoSearchService {
         List<CommentDTO> commentList = new ArrayList<>();
         commentSearches.getContent().forEach(videoCommentSearch -> {
             User user = userService.findById(videoCommentSearch.getFromuid());
-            VideoComment videoComment = new VideoComment();
-            videoComment.setId(videoCommentSearch.getId());
-            videoComment.setVideoId(videoCommentSearch.getVideoid());
-            videoComment.setVideoId(videoCommentSearch.getId());
-            videoComment.setContent(videoCommentSearch.getContent());
-            videoComment.setFromUid(videoCommentSearch.getFromuid());
-            videoComment.setCreateDate(videoCommentSearch.getCreatedate());
-            CommentDTO commentDTO = new CommentDTO(videoComment,
-                    videoCommentLikeService.countAllById(videoComment.getId())
+            Comment comment = new Comment();
+            comment.setId(videoCommentSearch.getId());
+            comment.setTopId(videoCommentSearch.getVideoid());
+            comment.setTopId(videoCommentSearch.getId());
+            comment.setContent(videoCommentSearch.getContent());
+            comment.setFromUid(videoCommentSearch.getFromuid());
+            comment.setCreateDate(videoCommentSearch.getCreatedate());
+            CommentDTO commentDTO = new CommentDTO(comment,
+                    videoCommentLikeService.countAllById(comment.getId())
                     ,user);
             commentList.add(commentDTO);
         });
@@ -117,12 +116,12 @@ public class VideoSearchServiceImpl implements VideoSearchService {
         Page<VideoReplySearch> videoReplySearches = replySearchRepository.findAllByContent(searchContent,pageable);
         List<ReplyDTO> replyDTOList = new ArrayList<>();
         videoReplySearches.getContent().forEach(videoReplySearch -> {
-            VideoReply videoReply = new VideoReply();
-            videoReply.setContent(videoReplySearch.getContent());
-            videoReply.setCreateDate(videoReplySearch.getCreatedate());
-            videoReply.setId(videoReplySearch.getId());
-            ReplyDTO replyDTO = new ReplyDTO(videoReply,
-                    videoReplyLikeService.countAllById(videoReply.getId()),
+            Reply reply = new Reply();
+            reply.setContent(videoReplySearch.getContent());
+            reply.setCreateDate(videoReplySearch.getCreatedate());
+            reply.setId(videoReplySearch.getId());
+            ReplyDTO replyDTO = new ReplyDTO(reply,
+                    videoReplyLikeService.countAllById(reply.getId()),
                     new SimpleUserDTO(userService.findById(videoReplySearch.getFromuid())));
             replyDTOList.add(replyDTO);
         });

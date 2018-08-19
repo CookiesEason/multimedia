@@ -1,5 +1,6 @@
 package com.example.multimedia.service;
 
+import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.vo.ResultVo;
 
 /**
@@ -85,5 +86,14 @@ public interface ArticleService {
      * @return
      */
     ResultVo findById(Long id);
+
+    /**
+     * 查找某文章
+     * @param id
+     * @return
+     */
+    Article findById(long id);
+
+    void save(Article article);
 
 }

@@ -1,6 +1,6 @@
 package com.example.multimedia.service;
 
-import com.example.multimedia.domian.videodomian.Tags;
+import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.vo.ResultVo;
 
 /**

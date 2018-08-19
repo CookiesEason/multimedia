@@ -1,5 +1,6 @@
 package com.example.multimedia.controller;
 
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.service.CommentService;
 import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.ReplyService;
@@ -22,20 +23,18 @@ public class CommentController {
     private UserService userService;
 
     @Autowired
-    @Qualifier(value = "VideoCommentService")
-    private CommentService videoCommentService;
+    private CommentService commentService;
 
     @Autowired
-    @Qualifier(value = "VideoReplyService")
-    private ReplyService videoReplyService;
+    private ReplyService replyService;
 
     @Autowired
-    @Qualifier(value = "VideoCommentLikeService")
-    private LikeService videoCommentLikeService;
+    @Qualifier(value = "CommentLikeService")
+    private LikeService commentLikeService;
 
     @Autowired
-    @Qualifier(value = "VideoReplyLikeService")
-    private LikeService videoReplyLikeService;
+    @Qualifier(value = "ReplyLikeService")
+    private LikeService replyLikeService;
 
     @GetMapping("/access")
     private ResultVo checkAccessComment(){
@@ -44,40 +43,51 @@ public class CommentController {
 
     @GetMapping("/video/{videoId}")
     private ResultVo getComments(@PathVariable Long videoId,@RequestParam(defaultValue = "0") int page){
-        return videoCommentService.getComments(videoId,page);
+        return commentService.getComments(videoId,Topic.VIDEO,page);
     }
+
+    @GetMapping("/article/{articleId}")
+    private ResultVo getArticleComments(@PathVariable Long articleId,@RequestParam(defaultValue = "0") int page){
+        return commentService.getComments(articleId,Topic.ARTICLE,page);
+    }
+
 
     @PostMapping("/video/add")
     private ResultVo createComment(@RequestParam Long videoId,@RequestParam String content){
-        return videoCommentService.createComment(videoId,content);
+        return commentService.createComment(videoId,content, Topic.VIDEO);
     }
 
-    @PostMapping("/video/reply")
+    @PostMapping("/article/add")
+    private ResultVo createArticleComment(@RequestParam Long articleId,@RequestParam String content){
+        return commentService.createComment(articleId,content, Topic.ARTICLE);
+    }
+
+    @PostMapping("/reply")
     private ResultVo replyComment(@RequestParam Long commentId,@RequestParam String content,
                                   @RequestParam Long toUid){
-        return videoReplyService.reply(commentId,content,toUid);
+        return replyService.reply(commentId,content,toUid);
     }
 
-    @DeleteMapping("/video/{commendId}")
+    @DeleteMapping("/{commendId}")
     private ResultVo deleteComment(@PathVariable Long commendId){
-        videoCommentService.deleteById(commendId);
+        commentService.deleteById(commendId);
         return ResultVoUtil.success();
     }
 
-    @DeleteMapping("/video/reply/{replyId}")
+    @DeleteMapping("/reply/{replyId}")
     private ResultVo deleteReply(@PathVariable Long replyId){
-        videoReplyService.deleteById(replyId);
+        replyService.deleteById(replyId);
         return ResultVoUtil.success();
     }
 
-    @PostMapping("/video/replyLike/{replyId}")
-    private void videoReplyLike(@PathVariable Long replyId){
-        videoReplyLikeService.like(replyId);
+    @PostMapping("/replyLike/{replyId}")
+    private void replyLike(@PathVariable Long replyId){
+        replyLikeService.like(replyId,null);
     }
 
-    @PostMapping("/video/commentLike/{commentId}")
-    private void videoCommentLike(@PathVariable Long commentId){
-        videoCommentLikeService.like(commentId);
+    @PostMapping("/commentLike/{commentId}")
+    private void commentLike(@PathVariable Long commentId){
+        commentLikeService.like(commentId,null);
     }
 
 }

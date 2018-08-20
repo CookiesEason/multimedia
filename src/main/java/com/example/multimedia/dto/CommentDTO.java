@@ -26,6 +26,9 @@ public class CommentDTO {
 
     private String headUrl;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+    private Boolean isLike;
+
     private Long likeCount;
 
     private Timestamp createDate;
@@ -34,7 +37,7 @@ public class CommentDTO {
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private List<ReplyDTO> replyDTOList;
 
-    public CommentDTO(Comment comment, Long likeCount, User user, List<ReplyDTO> replyDTOList) {
+    public CommentDTO(Comment comment, Boolean isLike,Long likeCount, User user, List<ReplyDTO> replyDTOList) {
         this.userId = user.getId();
         this.commentId = comment.getId();
         this.content = comment.getContent();
@@ -42,6 +45,7 @@ public class CommentDTO {
         this.nickname = user.getUserInfo().getNickname();
         this.headUrl = user.getUserInfo().getHeadImgUrl();
         this.createDate = comment.getCreateDate();
+        this.isLike = isLike;
         this.replyDTOList = replyDTOList;
     }
 

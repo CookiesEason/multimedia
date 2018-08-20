@@ -4,7 +4,9 @@ import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Comment;
 import com.example.multimedia.domian.abstractdomian.AbstractComment;
+import com.example.multimedia.domian.maindomian.CommentLike;
 import com.example.multimedia.domian.maindomian.Reply;
+import com.example.multimedia.domian.maindomian.ReplyLike;
 import com.example.multimedia.dto.CommentDTO;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.ReplyDTO;
@@ -97,17 +99,27 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> c = commentRepository.findAllByTopIdAndTopic(pageable,topId,topic);
         List<CommentDTO> commentList = new ArrayList<>();
         c.getContent().forEach(comment -> {
+            boolean isLike = false;
+            CommentLike commentLike = (CommentLike) commentLikeService.status(comment.getId(),getUid(),null);
+            if (commentLike!=null&&commentLike.isStatus()){
+                isLike = true;
+            }
             User user = userService.findById(comment.getFromUid());
             List<Reply> replyList = replyService.findAllByCommentId(comment.getId());
             List<ReplyDTO> replyDTOList = new ArrayList<>();
             replyList.forEach(reply -> {
-                ReplyDTO replyDTO = new ReplyDTO(reply,
+                boolean replyLike = false;
+                ReplyLike replyLike1 = (ReplyLike) replyLikeService.status(reply.getId(),getUid(),null);
+                if (replyLike1!=null&&replyLike1.isStatus()){
+                    replyLike = true;
+                }
+                ReplyDTO replyDTO = new ReplyDTO(reply,replyLike,
                         replyLikeService.countAllById(reply.getId()),
                         new SimpleUserDTO(userService.findById(reply.getFromUid())),
                         new SimpleUserDTO(userService.findById(reply.getToUid())));
                 replyDTOList.add(replyDTO);
             });
-            CommentDTO commentDTO = new CommentDTO(comment, commentLikeService.countAllById(comment.getId()),
+            CommentDTO commentDTO = new CommentDTO(comment, isLike,commentLikeService.countAllById(comment.getId()),
                     user,replyDTOList);
             commentList.add(commentDTO);
         });

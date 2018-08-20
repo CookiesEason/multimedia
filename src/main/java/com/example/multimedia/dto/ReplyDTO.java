@@ -19,6 +19,9 @@ public class ReplyDTO {
 
     private Timestamp createDate;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+    private Boolean isLike;
+
     private Long likeCount;
 
     private SimpleUserDTO fromUser;
@@ -26,10 +29,11 @@ public class ReplyDTO {
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private SimpleUserDTO toUser;
 
-    public ReplyDTO(Reply reply, Long likeCount, SimpleUserDTO fromUser, SimpleUserDTO toUser) {
+    public ReplyDTO(Reply reply, Boolean isLike, Long likeCount, SimpleUserDTO fromUser, SimpleUserDTO toUser) {
         this.replyId = reply.getId();
         this.content = reply.getContent();
         this.createDate = reply.getCreateDate();
+        this.isLike = isLike;
         this.likeCount = likeCount;
         this.fromUser = fromUser;
         this.toUser = toUser;

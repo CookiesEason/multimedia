@@ -2,11 +2,8 @@ package com.example.multimedia.service.impl.mainserviceimpl;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.enums.Topic;
-import com.example.multimedia.domian.maindomian.Comment;
+import com.example.multimedia.domian.maindomian.*;
 import com.example.multimedia.domian.abstractdomian.AbstractComment;
-import com.example.multimedia.domian.maindomian.CommentLike;
-import com.example.multimedia.domian.maindomian.Reply;
-import com.example.multimedia.domian.maindomian.ReplyLike;
 import com.example.multimedia.dto.CommentDTO;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.ReplyDTO;
@@ -81,13 +78,19 @@ public class CommentServiceImpl implements CommentService {
         comment.setTopic(topic);
         commentRepository.save(comment);
         Long toUid;
+        String title;
         if (topic.equals(Topic.VIDEO)){
-            toUid = videoService.findById(topicId).getUserId();
+            Video video = videoService.findById(topicId);
+            toUid = video.getUserId();
+            title = video.getTitle();
         }else {
-            toUid = articleService.findById((long)topicId).getUserId();
+            Article article = articleService.findById((long)topicId);
+            toUid = article.getUserId();
+            title = article.getTitle();
         }
         if (!fromUid.equals(toUid)){
-            noticeService.saveNotice(topic,topicId, comment.getId(),null,fromUid,toUid,"comment");
+            noticeService.saveNotice(topic,topicId, title,comment.getId(),comment.getContent(),
+                    null,fromUid,toUid,"comment");
         }
         return ResultVoUtil.success();
     }

@@ -76,8 +76,18 @@ public class LikeServiceImpl implements LikeService {
             topicLike.setTopId(topId);
             topicLike.setUserId(getUid());
             topicLike.setTopic(topic);
-            noticeService.saveNotice(topic, topId, null, null, userId,
-                    videoService.findById(topId).getUserId(), topic.toString().toLowerCase() + "Praise");
+            String title;
+            if (topic.equals(Topic.VIDEO)){
+                Video video = videoService.findById(topicLike.getTopId());
+                title = video.getTitle();
+                noticeService.saveNotice(topic, topId, title,null,null, null,
+                        userId, video.getUserId(), topic.toString().toLowerCase() + "Praise");
+            }else {
+                Article article = articleService.findById((long)topicLike.getTopId());
+                title = article.getTitle();
+                noticeService.saveNotice(topic, topId, title,null,null, null,
+                        userId, article.getUserId(), topic.toString().toLowerCase() + "Praise");
+            }
         } else {
             topicLike.setStatus(!topicLike.isStatus());
         }

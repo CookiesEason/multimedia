@@ -1,5 +1,6 @@
 package com.example.multimedia.service.impl.mainserviceimpl;
 
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Comment;
 import com.example.multimedia.domian.maindomian.Reply;
 import com.example.multimedia.dto.PageDTO;
@@ -38,6 +39,12 @@ public class ReplyServiceImpl implements ReplyService {
     private VideoSearchService videoSearchService;
 
     @Autowired
+    private ArticleService articleService;
+
+    @Autowired
+    private VideoService videoService;
+
+    @Autowired
     private CommentService commentService;
 
     @Autowired
@@ -63,13 +70,20 @@ public class ReplyServiceImpl implements ReplyService {
         if (commentService.findById(commentId)==null){
             return ResultVoUtil.error(0,"评论不存在,无法进行回复");
         }
+        Long userId = getUid();
         reply.setCommentId(commentId);
-        reply.setFromUid(getUid());
+        reply.setFromUid(userId);
         reply.setToUid(toUid);
         reply.setContent(content);
         replyRepository.save(reply);
-        noticeService.saveNotice(comment.getTopic(), comment.getTopId(),commentId, reply.getId(),getUid(),
-                toUid,"reply");
+        String title;
+        if (comment.getTopic().equals(Topic.VIDEO)){
+            title = videoService.findById(comment.getTopId()).getTitle();
+        }else {
+            title = articleService.findById((long)comment.getTopId()).getTitle();
+        }
+        noticeService.saveNotice(comment.getTopic(), comment.getTopId(),title,commentId,comment.getContent(),
+                reply.getContent(),userId, toUid,"reply");
         return ResultVoUtil.success();
     }
 

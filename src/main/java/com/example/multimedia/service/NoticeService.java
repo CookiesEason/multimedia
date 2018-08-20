@@ -9,7 +9,8 @@ import com.example.multimedia.vo.ResultVo;
  */
 public interface NoticeService {
 
-    ResultVo saveNotice(Topic topic,Long topicId,Long commentId,Long replyId,Long fromUid,Long toUid,String type);
+    ResultVo saveNotice(Topic topic,Long topicId,String title,Long commentId,String comment,
+                        String reply,Long fromUid,Long toUid,String type);
 
     ResultVo getNotices(int page);
 

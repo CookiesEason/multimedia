@@ -4,10 +4,7 @@ import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Comment;
 import com.example.multimedia.domian.maindomian.CommentLike;
 import com.example.multimedia.repository.CommentLikeRepository;
-import com.example.multimedia.service.CommentService;
-import com.example.multimedia.service.LikeService;
-import com.example.multimedia.service.NoticeService;
-import com.example.multimedia.service.UserService;
+import com.example.multimedia.service.*;
 import com.example.multimedia.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +25,12 @@ public class CommentLikeServiceImpl implements LikeService {
     private CommentService commentService;
 
     @Autowired
+    private ArticleService articleService;
+
+    @Autowired
+    private VideoService videoService;
+
+    @Autowired
     private CommentLikeRepository commentLikeRepository;
 
     @Autowired
@@ -46,8 +49,14 @@ public class CommentLikeServiceImpl implements LikeService {
             commentLike.setStatus(true);
             commentLike.setUserId(getUid());
             commentLike.setCommentId(commentId);
-            noticeService.saveNotice(comment.getTopic(), comment.getTopId(),commentId,null,userId
-                    , comment.getFromUid(),"commentPraise");
+            String title;
+            if (comment.getTopic().equals(Topic.VIDEO)){
+                 title = videoService.findById(comment.getTopId()).getTitle();
+            }else {
+                title = articleService.findById((long)comment.getTopId()).getTitle();
+            }
+            noticeService.saveNotice(comment.getTopic(), comment.getTopId(),title,commentId,
+                    comment.getContent(),null,userId, comment.getFromUid(),"commentPraise");
         }else {
             commentLike.setStatus(!commentLike.isStatus());
         }

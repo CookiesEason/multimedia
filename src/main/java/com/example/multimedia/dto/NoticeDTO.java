@@ -37,36 +37,33 @@ public class NoticeDTO implements Serializable {
     private String comment;
 
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
-    private Long replyId;
-
-    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private String reply;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy年MM月dd日 HH:mm:ss")
     private Timestamp date;
 
-    public NoticeDTO(Long messageId,String username, String useUrl, String content,Timestamp date) {
+    public NoticeDTO(Long messageId,String username, String userUrl, String content,Timestamp date) {
         this.messageId = messageId;
         this.username = username;
-        this.userUrl = useUrl;
+        this.userUrl = userUrl;
         this.content = content;
         this.date = date;
     }
 
-    public NoticeDTO(Long messageId,String username, String useUrl, String content, String topicTitle, String topicUrl,Timestamp date) {
+    public NoticeDTO(Long messageId, String username, String userUrl, String content, String topicTitle, String topicUrl, Timestamp date) {
         this.messageId = messageId;
         this.username = username;
-        this.userUrl = useUrl;
+        this.userUrl = userUrl;
         this.content = content;
         this.topicTitle = topicTitle;
         this.topicUrl = topicUrl;
         this.date = date;
     }
 
-    public NoticeDTO(Long messageId,String username, String useUrl, String content, String topicTitle, String topicUrl,Long commentId,String comment,Timestamp date) {
+    public NoticeDTO(Long messageId, String username, String userUrl, String content, String topicTitle, String topicUrl, Long commentId, String comment, Timestamp date) {
         this.messageId = messageId;
         this.username = username;
-        this.userUrl = useUrl;
+        this.userUrl = userUrl;
         this.content = content;
         this.topicTitle = topicTitle;
         this.topicUrl = topicUrl;
@@ -75,15 +72,15 @@ public class NoticeDTO implements Serializable {
         this.date = date;
     }
 
-    public NoticeDTO(Long messageId,String username, String useUrl, String content, String topicTitle, String topicUrl, Long commentId, Long replyId, String reply,Timestamp date) {
+    public NoticeDTO(Long messageId, String username, String userUrl, String content, String topicTitle, String topicUrl, Long commentId, String comment, String reply, Timestamp date) {
         this.messageId = messageId;
         this.username = username;
-        this.userUrl = useUrl;
+        this.userUrl = userUrl;
         this.content = content;
         this.topicTitle = topicTitle;
         this.topicUrl = topicUrl;
         this.commentId = commentId;
-        this.replyId = replyId;
+        this.comment = comment;
         this.reply = reply;
         this.date = date;
     }

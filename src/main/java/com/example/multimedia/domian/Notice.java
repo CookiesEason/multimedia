@@ -30,11 +30,15 @@ public class Notice implements Serializable {
     @Enumerated(EnumType.STRING)
     private Topic topic;
 
+    private String title;
+
     private Long topicId;
 
-    private Long contentId;
+    private Long commentId;
 
-    private Long replyId;
+    private String comment;
+
+    private String reply;
 
     private String type;
 

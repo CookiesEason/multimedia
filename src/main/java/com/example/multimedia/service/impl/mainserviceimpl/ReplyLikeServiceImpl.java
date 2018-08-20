@@ -2,6 +2,7 @@ package com.example.multimedia.service.impl.mainserviceimpl;
 
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Comment;
+import com.example.multimedia.domian.maindomian.Reply;
 import com.example.multimedia.domian.maindomian.ReplyLike;
 import com.example.multimedia.repository.ReplyLikeRepository;
 import com.example.multimedia.service.*;
@@ -20,6 +21,12 @@ public class ReplyLikeServiceImpl implements LikeService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ArticleService articleService;
+
+    @Autowired
+    private VideoService videoService;
 
     @Autowired
     private CommentService commentService;
@@ -47,9 +54,16 @@ public class ReplyLikeServiceImpl implements LikeService {
             replyLike.setUserId(getUid());
             Comment comment = (Comment) commentService.findById(
                     replyService.findById(replyLike.getReplyId()).getCommentId());
-            noticeService.saveNotice(comment.getTopic(), comment.getTopId(), comment.getId(),
-                    replyLike.getReplyId(),userId,
-                    replyService.findById(replyLike.getReplyId()).getFromUid(),"replyPraise");
+            Reply reply = replyService.findById(replyLike.getReplyId());
+            String title;
+            if (comment.getTopic().equals(Topic.VIDEO)){
+                title = videoService.findById(comment.getTopId()).getTitle();
+            }else {
+                title = articleService.findById((long)comment.getTopId()).getTitle();
+            }
+            noticeService.saveNotice(comment.getTopic(), comment.getTopId(), title,comment.getId(),comment.getContent(),
+                    reply.getContent(),userId,
+                    reply.getFromUid(),"replyPraise");
         }else {
             replyLike.setStatus(!replyLike.isStatus());
         }

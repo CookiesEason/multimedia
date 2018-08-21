@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     .antMatchers("/api/user/register","/api/user/activateEmail",
-                            "/api/comment/video/{videoId}")
+                            "/api/comment/video/{videoId}","/api/search/**")
                     .permitAll()
                 .antMatchers("/api/admin/**").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()

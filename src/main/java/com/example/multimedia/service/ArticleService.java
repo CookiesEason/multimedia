@@ -33,7 +33,7 @@ public interface ArticleService {
      * @param articleId
      * @return
      */
-    ResultVo delete(Long articleId);
+    ResultVo deleteById(Long articleId);
 
 
     /**
@@ -95,5 +95,13 @@ public interface ArticleService {
     Article findById(long id);
 
     void save(Article article);
+
+    /**
+     * 审核文章
+     * @param articleId
+     * @param enable
+     * @return
+     */
+    ResultVo enableArticle(Long articleId, Boolean enable);
 
 }

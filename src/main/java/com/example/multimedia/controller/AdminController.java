@@ -31,6 +31,9 @@ public class AdminController {
     private VideoService videoService;
 
     @Autowired
+    private ArticleService articleService;
+
+    @Autowired
     private CommentService commentService;
 
     @Autowired
@@ -194,6 +197,38 @@ public class AdminController {
     private ResultVo deleteReply(@PathVariable Long replyId){
         replyService.deleteById(replyId);
         return ResultVoUtil.success();
+    }
+
+    @GetMapping("articles")
+    public ResultVo getArticles(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "asc") String order,
+                                @RequestParam(defaultValue = "createDate") String sort,
+                                @RequestParam Boolean enable){
+        return articleService.findAllByEnable(page,size,order,sort,enable);
+    }
+
+    @GetMapping("/articles/search")
+    public ResultVo searchArticle(){
+        return null;
+    }
+
+    @PostMapping("articles/update/{articleId}")
+    public ResultVo updateArticle(@PathVariable Long articleId,
+                                  @RequestParam String title,
+                                  @RequestParam String text,
+                                  @RequestParam String tag){
+        return articleService.update(articleId, title, text, tag);
+    }
+
+    @PostMapping("articles/enable/{articleId}")
+    public ResultVo enableArticle(@PathVariable Long articleId,@RequestParam Boolean enable){
+        return articleService.enableArticle(articleId,enable);
+    }
+
+    @DeleteMapping("articles/{articleId}")
+    public ResultVo deleteArticle(@PathVariable Long articleId){
+        return articleService.deleteById(articleId);
     }
 
 

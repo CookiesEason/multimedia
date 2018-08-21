@@ -49,6 +49,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NoticeService noticeService;
+
     @Override
     public ResultVo save(String title, String text, String tag) {
         Article article = new Article();
@@ -83,7 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResultVo delete(Long articleId) {
+    public ResultVo deleteById(Long articleId) {
         articleRepository.deleteByIdAndUserId(articleId,getUid());
         commentService.deleteAllBycontentId(articleId, Topic.ARTICLE);
         likeService.deleteAllById(articleId,Topic.ARTICLE);
@@ -144,6 +147,22 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void save(Article article) {
         articleRepository.save(article);
+    }
+
+    @Override
+    public ResultVo enableArticle(Long articleId, Boolean enable) {
+        Article article = articleRepository.findById(articleId).get();
+        article.setEnable(enable);
+        save(article);
+        if (enable){
+            noticeService.saveNotice(Topic.ARTICLE,articleId,article.getTitle(),null,null,null,
+                    null,article.getUserId(),"enable");
+        }else {
+            deleteById(articleId);
+            noticeService.saveNotice(Topic.ARTICLE,articleId,article.getTitle(),null,null,null,
+                    null,article.getUserId(),"unEnable");
+        }
+        return ResultVoUtil.success();
     }
 
 

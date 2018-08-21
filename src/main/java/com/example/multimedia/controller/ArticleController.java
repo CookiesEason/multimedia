@@ -77,7 +77,7 @@ public class ArticleController {
 
     @DeleteMapping("/{articleId}")
     public ResultVo deleteArticle(@PathVariable Long articleId){
-        return articleService.delete(articleId);
+        return articleService.deleteById(articleId);
     }
 
     @PostMapping("/like/{articleId}")

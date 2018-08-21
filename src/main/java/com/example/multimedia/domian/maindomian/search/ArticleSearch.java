@@ -2,36 +2,35 @@ package com.example.multimedia.domian.maindomian.search;
 
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Document;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * @author CookiesEason
- * 2018/08/12 12:52
+ * 2018/08/21 14:52
  */
-@Document(indexName = "happy_index",type = "video")
+@Document(indexName = "happy_index",type = "article")
 @Data
-public class VideoSearch implements Serializable {
+public class ArticleSearch implements Serializable {
 
-    private static final long serialVersionUID = -7176399469751266972L;
+    private static final long serialVersionUID = -2502846892306950159L;
 
     private Long id;
-
-    private String title;
-
-    private String introduction;
-
-    private String video_url;
 
     private Long user_id;
 
     private Long tags_id;
 
-    private Boolean enable;
+    private String title;
+
+    private String text;
+
+    private Long read_count;
 
     private Long like_count;
 
-    private Long play_count;
+    private Boolean enable;
 
     private Timestamp create_date;
 

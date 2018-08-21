@@ -1,5 +1,6 @@
 package com.example.multimedia.service;
 
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.vo.ResultVo;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * @author CookiesEason
  * 2018/08/12 15:41
  */
-public interface VideoSearchService {
+public interface SearchService {
 
     /**
      *搜索视频
@@ -21,6 +22,17 @@ public interface VideoSearchService {
     ResultVo searchVideo(int page,String order,String sort,String searchContent,Boolean enable);
 
     /**
+     * 搜索文章
+     * @param page
+     * @param order
+     * @param sort
+     * @param searchContent
+     * @param enable
+     * @return
+     */
+    ResultVo searchArticle(int page,String order,String sort,String searchContent,Boolean enable);
+
+    /**
      *搜索评论
      * @param page
      * @param order
@@ -28,7 +40,7 @@ public interface VideoSearchService {
      * @param searchContent
      * @return
      */
-    ResultVo searchVideoComment(int page,String order,String sort,String searchContent);
+    ResultVo searchComment(int page, String order, String sort, String searchContent);
 
     /**
      * 搜索回复
@@ -38,7 +50,7 @@ public interface VideoSearchService {
      * @param searchContent
      * @return
      */
-    ResultVo searchVideoReply(int page,String order,String sort,String searchContent);
+    ResultVo searchReply(int page, String order, String sort, String searchContent);
 
     /**
      * 删除视频
@@ -47,10 +59,10 @@ public interface VideoSearchService {
     void  deleteVideoById(Long id);
 
     /**
-     * 删除视频下的评论
+     * 删除某主题下的评论
      * @param id
      */
-    void deleteAllByVideoId(Long id);
+    void deleteAllByTopicId(Long id, Topic topic);
 
     /**
      * 删除视频下的回复

@@ -9,9 +9,9 @@ import java.sql.Timestamp;
  * @author CookiesEason
  * 2018/08/12 19:04
  */
-@Document(indexName = "video_index",type = "reply")
+@Document(indexName = "happy_index",type = "reply")
 @Data
-public class VideoReplySearch {
+public class ReplySearch {
 
     private Long id;
 

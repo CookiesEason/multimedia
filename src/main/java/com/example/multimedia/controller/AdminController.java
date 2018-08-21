@@ -40,7 +40,7 @@ public class AdminController {
     private ReplyService replyService;
 
     @Autowired
-    private VideoSearchService videoSearchService;
+    private SearchService searchService;
 
     @Autowired
     private QuestionService questionService;
@@ -134,7 +134,7 @@ public class AdminController {
                                  @RequestParam(defaultValue = "create_date") String sort,
                                  @RequestParam Boolean enable,
                                  @RequestParam String searchContent){
-        return videoSearchService.searchVideo(page,order,sort,searchContent,enable);
+        return searchService.searchVideo(page,order,sort,searchContent,enable);
     }
 
     @PostMapping("videos/updateVideo/{videoId}")
@@ -165,8 +165,12 @@ public class AdminController {
     }
 
     @GetMapping("/articles/search")
-    public ResultVo searchArticle(){
-        return null;
+    public ResultVo searchArticle(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "asc") String order,
+                                  @RequestParam(defaultValue = "create_date") String sort,
+                                  @RequestParam Boolean enable,
+                                  @RequestParam String searchContent){
+        return searchService.searchArticle(page, order, sort, searchContent, enable);
     }
 
     @PostMapping("articles/update/{articleId}")
@@ -200,7 +204,7 @@ public class AdminController {
                                    @RequestParam(defaultValue = "asc") String order,
                                    @RequestParam(defaultValue = "createdate") String sort,
                                    @RequestParam String searchContent){
-        return videoSearchService.searchVideoComment(page,order,sort,searchContent);
+        return searchService.searchComment(page,order,sort,searchContent);
     }
 
     @DeleteMapping("comments/{commentId}")
@@ -222,7 +226,7 @@ public class AdminController {
                                  @RequestParam(defaultValue = "asc") String order,
                                  @RequestParam(defaultValue = "createdate") String sort,
                                  @RequestParam String searchContent){
-        return videoSearchService.searchVideoReply(page, order, sort, searchContent);
+        return searchService.searchReply(page, order, sort, searchContent);
     }
 
     @DeleteMapping("replies/{replyId}")

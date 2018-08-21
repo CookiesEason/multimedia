@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     private ArticleService articleService;
 
     @Autowired
-    private VideoSearchService videoSearchService;
+    private SearchService searchService;
 
     @Autowired
     private ReplyService replyService;
@@ -139,7 +139,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteById(Long id) {
         Long deleteId = commentRepository.deleteByIdAndFromUid(id,getUid());
-        videoSearchService.deleteCommentById(id);
+        searchService.deleteCommentById(id);
         if (deleteId!=0){
             replyService.deleteAllByCommentId(id);
         }
@@ -148,7 +148,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteAllBycontentId(Long topId,Topic topic) {
-        videoSearchService.deleteAllByVideoId(topId);
+        searchService.deleteAllByTopicId(topId,topic);
         List<Comment> comments = commentRepository.deleteAllByTopIdAndTopic(topId,topic);
         List<Long> ids= new ArrayList<>();
         for (Comment comment : comments){

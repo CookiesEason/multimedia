@@ -50,7 +50,7 @@ public class VideoServiceImpl implements VideoService {
     private VideoRepository videoRepository;
 
     @Autowired
-    private VideoSearchService videoSearchService;
+    private SearchService searchService;
 
     @Autowired
     private VideoHistoryRepository videoHistoryRepository;
@@ -159,7 +159,7 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public ResultVo deleteById(long id) {
         videoRepository.deleteByIdAndUserId(id,getUid());
-        videoSearchService.deleteVideoById(id);
+        searchService.deleteVideoById(id);
         commentService.deleteAllBycontentId(id, Topic.VIDEO);
         likeService.deleteAllById(id,Topic.VIDEO);
         return ResultVoUtil.success();

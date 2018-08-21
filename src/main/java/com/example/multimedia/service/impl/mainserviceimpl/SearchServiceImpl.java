@@ -1,20 +1,24 @@
 package com.example.multimedia.service.impl.mainserviceimpl;
 
 import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.domian.maindomian.Comment;
 import com.example.multimedia.domian.maindomian.Reply;
-import com.example.multimedia.domian.maindomian.search.VideoCommentSearch;
-import com.example.multimedia.domian.maindomian.search.VideoReplySearch;
+import com.example.multimedia.domian.maindomian.search.ArticleSearch;
+import com.example.multimedia.domian.maindomian.search.CommentSearch;
+import com.example.multimedia.domian.maindomian.search.ReplySearch;
 import com.example.multimedia.domian.maindomian.search.VideoSearch;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.repository.TagsRepository;
-import com.example.multimedia.repository.search.VideoCommentSearchRepository;
-import com.example.multimedia.repository.search.VideoReplySearchRepository;
+import com.example.multimedia.repository.search.ArticleSearchRepository;
+import com.example.multimedia.repository.search.CommentSearchRepository;
+import com.example.multimedia.repository.search.ReplySearchRepository;
 import com.example.multimedia.repository.search.VideoSearchRepository;
 import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.UserService;
-import com.example.multimedia.service.VideoSearchService;
+import com.example.multimedia.service.SearchService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.elasticsearch.common.lucene.search.function.FiltersFunctionScoreQuery;
@@ -39,7 +43,7 @@ import java.util.List;
  * 2018/08/12 15:44
  */
 @Service
-public class VideoSearchServiceImpl implements VideoSearchService {
+public class SearchServiceImpl implements SearchService {
 
     String SCORE_MODE_SUM = "sum";
     int PAGE_SIZE = 10;
@@ -49,10 +53,13 @@ public class VideoSearchServiceImpl implements VideoSearchService {
     private VideoSearchRepository videoSearchRepository;
 
     @Autowired
-    private VideoCommentSearchRepository commentSearchRepository;
+    private ArticleSearchRepository articleSearchRepository;
 
     @Autowired
-    private VideoReplySearchRepository replySearchRepository;
+    private CommentSearchRepository commentSearchRepository;
+
+    @Autowired
+    private ReplySearchRepository replySearchRepository;
 
     @Autowired
     @Qualifier(value = "CommentLikeService")
@@ -86,20 +93,38 @@ public class VideoSearchServiceImpl implements VideoSearchService {
     }
 
     @Override
-    public ResultVo searchVideoComment(int page, String order, String sort, String searchContent) {
+    public ResultVo searchArticle(int page, String order, String sort, String searchContent, Boolean enable) {
+        SearchQuery searchQuery = getArticleSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
+        Page<ArticleSearch> articleSearchPage = articleSearchRepository.search(searchQuery);
+        List<ArticleDTO> articleDTOList = new ArrayList<>();
+        articleSearchPage.getContent().forEach(articleSearch -> {
+            if (enable.equals(articleSearch.getEnable())){
+                Article article = new Article(articleSearch,tagsRepository.findById(articleSearch.getTags_id()).get());
+                ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
+                        article);
+                articleDTOList.add(articleDTO);
+            }
+        });
+        PageDTO<ArticleDTO> articleDTOPageDTO = new PageDTO<>(articleDTOList,articleSearchPage.getTotalElements(),
+                articleSearchPage.getTotalElements());
+        return ResultVoUtil.success(articleDTOPageDTO);
+    }
+
+    @Override
+    public ResultVo searchComment(int page, String order, String sort, String searchContent) {
         Pageable pageable = PageRequest.of(page,PAGE_SIZE,sort(order, sort));
-        Page<VideoCommentSearch> commentSearches = commentSearchRepository.
+        Page<CommentSearch> commentSearches = commentSearchRepository.
                 findAllByContent(searchContent,pageable);
         List<CommentDTO> commentList = new ArrayList<>();
-        commentSearches.getContent().forEach(videoCommentSearch -> {
-            User user = userService.findById(videoCommentSearch.getFromuid());
+        commentSearches.getContent().forEach(commentSearch -> {
+            User user = userService.findById(commentSearch.getFromuid());
             Comment comment = new Comment();
-            comment.setId(videoCommentSearch.getId());
-            comment.setTopId(videoCommentSearch.getVideoid());
-            comment.setTopId(videoCommentSearch.getId());
-            comment.setContent(videoCommentSearch.getContent());
-            comment.setFromUid(videoCommentSearch.getFromuid());
-            comment.setCreateDate(videoCommentSearch.getCreatedate());
+            comment.setId(commentSearch.getId());
+            comment.setTopId(commentSearch.getTopid());
+            comment.setTopId(commentSearch.getId());
+            comment.setContent(commentSearch.getContent());
+            comment.setFromUid(commentSearch.getFromuid());
+            comment.setCreateDate(commentSearch.getCreatedate());
             CommentDTO commentDTO = new CommentDTO(comment,
                     videoCommentLikeService.countAllById(comment.getId())
                     ,user);
@@ -111,18 +136,18 @@ public class VideoSearchServiceImpl implements VideoSearchService {
     }
 
     @Override
-    public ResultVo searchVideoReply(int page, String order, String sort, String searchContent) {
+    public ResultVo searchReply(int page, String order, String sort, String searchContent) {
         Pageable pageable = PageRequest.of(page,PAGE_SIZE,sort(order, sort));
-        Page<VideoReplySearch> videoReplySearches = replySearchRepository.findAllByContent(searchContent,pageable);
+        Page<ReplySearch> videoReplySearches = replySearchRepository.findAllByContent(searchContent,pageable);
         List<ReplyDTO> replyDTOList = new ArrayList<>();
-        videoReplySearches.getContent().forEach(videoReplySearch -> {
+        videoReplySearches.getContent().forEach(replySearch -> {
             Reply reply = new Reply();
-            reply.setContent(videoReplySearch.getContent());
-            reply.setCreateDate(videoReplySearch.getCreatedate());
-            reply.setId(videoReplySearch.getId());
+            reply.setContent(replySearch.getContent());
+            reply.setCreateDate(replySearch.getCreatedate());
+            reply.setId(replySearch.getId());
             ReplyDTO replyDTO = new ReplyDTO(reply,
                     videoReplyLikeService.countAllById(reply.getId()),
-                    new SimpleUserDTO(userService.findById(videoReplySearch.getFromuid())));
+                    new SimpleUserDTO(userService.findById(replySearch.getFromuid())));
             replyDTOList.add(replyDTO);
         });
         PageDTO<ReplyDTO> replies = new PageDTO<>(replyDTOList,videoReplySearches.getTotalElements(),
@@ -136,8 +161,8 @@ public class VideoSearchServiceImpl implements VideoSearchService {
     }
 
     @Override
-    public void deleteAllByVideoId(Long id) {
-        commentSearchRepository.deleteAllByVideoid(id);
+    public void deleteAllByTopicId(Long id, Topic topic) {
+        commentSearchRepository.deleteAllByTopidAndTopic(id,topic);
     }
 
     @Override
@@ -162,12 +187,20 @@ public class VideoSearchServiceImpl implements VideoSearchService {
 
 
     private SearchQuery getVideoSearchQuery(int page,int size,String order,String sort,String searchContent){
+        return getSearchQuery(page, size, order, sort, searchContent, "introduction");
+    }
+
+    private SearchQuery getArticleSearchQuery(int page,int size,String order,String sort,String searchContent){
+        return getSearchQuery(page, size, order, sort, searchContent, "text");
+    }
+
+    private SearchQuery getSearchQuery(int page, int size, String order, String sort, String searchContent, String filed) {
         FunctionScoreQueryBuilder.FilterFunctionBuilder [] functionBuilders  = new FunctionScoreQueryBuilder.FilterFunctionBuilder[2];
         functionBuilders[0] = new FunctionScoreQueryBuilder
                 .FilterFunctionBuilder( QueryBuilders.matchPhraseQuery("title",searchContent),
                 ScoreFunctionBuilders.weightFactorFunction(1000));
         functionBuilders[1]=new FunctionScoreQueryBuilder
-                .FilterFunctionBuilder( QueryBuilders.matchPhraseQuery("introduction",searchContent),
+                .FilterFunctionBuilder( QueryBuilders.matchPhraseQuery(filed,searchContent),
                 ScoreFunctionBuilders.weightFactorFunction(500));
 
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(

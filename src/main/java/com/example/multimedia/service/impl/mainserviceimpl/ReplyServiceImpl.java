@@ -36,7 +36,7 @@ public class ReplyServiceImpl implements ReplyService {
     private ReplyRepository replyRepository;
 
     @Autowired
-    private VideoSearchService videoSearchService;
+    private SearchService searchService;
 
     @Autowired
     private ArticleService articleService;
@@ -95,14 +95,14 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void deleteById(Long id) {
         replyRepository.deleteByIdAndFromUid(id,getUid());
-        videoSearchService.deleteReplyById(id);
+        searchService.deleteReplyById(id);
         replyLikeService.deleteAllById(id);
     }
 
     @Override
     public void deleteAllByCommentId(Long commentId) {
         List<Reply> videoReplies = replyRepository.deleteAllByCommentId(commentId);
-        videoSearchService.deleteReplyAllByCommentId(commentId);
+        searchService.deleteReplyAllByCommentId(commentId);
         List<Long> ids = new ArrayList<>();
         for (Reply reply : videoReplies){
             Long id = reply.getId();
@@ -115,7 +115,7 @@ public class ReplyServiceImpl implements ReplyService {
     public void deleteAllByCommentIdIn(List<Long> ids) {
         List<Reply> videoReplies = replyRepository.deleteAllByCommentIdIn(ids);
         if (ids.size()>0){
-            videoSearchService.deleteReplyAllByComment_idIn(ids);
+            searchService.deleteReplyAllByComment_idIn(ids);
         }
         List<Long> replyIds = new ArrayList<>();
         for (Reply reply : videoReplies){

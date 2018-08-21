@@ -1,5 +1,6 @@
 package com.example.multimedia.domian.maindomian;
 
+import com.example.multimedia.domian.maindomian.search.ArticleSearch;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,4 +43,18 @@ public class Article {
     @CreatedDate
     private Timestamp createDate;
 
+
+    public Article() {
+    }
+
+    public Article(ArticleSearch articleSearch, Tags tags) {
+        this.userId = articleSearch.getUser_id();
+        this.tags = tags;
+        this.title = articleSearch.getTitle();
+        this.text = articleSearch.getText();
+        this.readCount = articleSearch.getRead_count();
+        this.likeCount = articleSearch.getLike_count();
+        this.enable = articleSearch.getEnable();
+        this.createDate = articleSearch.getCreate_date();
+    }
 }

@@ -125,6 +125,7 @@ public class ArticleServiceImpl implements ArticleService {
     public ResultVo findById(Long id) {
         Optional<Article> articleOptional = articleRepository.findById(id);
         if (articleOptional.isPresent()){
+
             boolean isLike = false;
             Long userId = getUid();
             TopicLike topicLike = (TopicLike) likeService.status(id,userId,Topic.ARTICLE);
@@ -132,6 +133,8 @@ public class ArticleServiceImpl implements ArticleService {
                 isLike = topicLike.isStatus();
             }
             Article article = articleOptional.get();
+            article.setReadCount(article.getReadCount()+1);
+            save(article);
             return ResultVoUtil.success(new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
                     article,isLike));
         }

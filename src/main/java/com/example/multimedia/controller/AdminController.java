@@ -155,50 +155,6 @@ public class AdminController {
        return videoService.deleteById(videoId);
    }
 
-   @GetMapping("videos/comments")
-    private ResultVo getComments(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int size,
-                                 @RequestParam(defaultValue = "asc") String order,
-                                 @RequestParam(defaultValue = "createDate") String sort){
-        return commentService.findAll(page,size,order,sort);
-   }
-
-   @GetMapping("videos/comments/search")
-   private ResultVo searchComment(@RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "asc") String order,
-                                  @RequestParam(defaultValue = "createdate") String sort,
-                                  @RequestParam String searchContent){
-        return videoSearchService.searchVideoComment(page,order,sort,searchContent);
-   }
-
-   @DeleteMapping("videos/comments/{commentId}")
-    private ResultVo deleteComment(@PathVariable Long commentId){
-       commentService.deleteById(commentId);
-       return ResultVoUtil.success();
-   }
-
-    @GetMapping("videos/replies")
-    private ResultVo getreplies(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int size,
-                                @RequestParam(defaultValue = "asc") String order,
-                                 @RequestParam(defaultValue = "createDate") String sort){
-        return replyService.findAll(page,size,order,sort);
-    }
-
-    @GetMapping("videos/replies/search")
-    private ResultVo searchReply(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "asc") String order,
-                                 @RequestParam(defaultValue = "createdate") String sort,
-                                 @RequestParam String searchContent){
-        return videoSearchService.searchVideoReply(page, order, sort, searchContent);
-    }
-
-    @DeleteMapping("videos/replies/{replyId}")
-    private ResultVo deleteReply(@PathVariable Long replyId){
-        replyService.deleteById(replyId);
-        return ResultVoUtil.success();
-    }
-
     @GetMapping("articles")
     public ResultVo getArticles(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
@@ -229,6 +185,50 @@ public class AdminController {
     @DeleteMapping("articles/{articleId}")
     public ResultVo deleteArticle(@PathVariable Long articleId){
         return articleService.deleteById(articleId);
+    }
+
+    @GetMapping("comments")
+    private ResultVo getComments(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size,
+                                 @RequestParam(defaultValue = "asc") String order,
+                                 @RequestParam(defaultValue = "createDate") String sort){
+        return commentService.findAll(page,size,order,sort);
+    }
+
+    @GetMapping("comments/search")
+    private ResultVo searchComment(@RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "asc") String order,
+                                   @RequestParam(defaultValue = "createdate") String sort,
+                                   @RequestParam String searchContent){
+        return videoSearchService.searchVideoComment(page,order,sort,searchContent);
+    }
+
+    @DeleteMapping("comments/{commentId}")
+    private ResultVo deleteComment(@PathVariable Long commentId){
+        commentService.deleteById(commentId);
+        return ResultVoUtil.success();
+    }
+
+    @GetMapping("replies")
+    private ResultVo getreplies(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "asc") String order,
+                                @RequestParam(defaultValue = "createDate") String sort){
+        return replyService.findAll(page,size,order,sort);
+    }
+
+    @GetMapping("replies/search")
+    private ResultVo searchReply(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "asc") String order,
+                                 @RequestParam(defaultValue = "createdate") String sort,
+                                 @RequestParam String searchContent){
+        return videoSearchService.searchVideoReply(page, order, sort, searchContent);
+    }
+
+    @DeleteMapping("replies/{replyId}")
+    private ResultVo deleteReply(@PathVariable Long replyId){
+        replyService.deleteById(replyId);
+        return ResultVoUtil.success();
     }
 
 

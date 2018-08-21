@@ -1,6 +1,7 @@
 package com.example.multimedia.dto;
 
 import com.example.multimedia.domian.User;
+import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Comment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

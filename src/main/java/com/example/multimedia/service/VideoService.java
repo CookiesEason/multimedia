@@ -106,7 +106,7 @@ public interface VideoService {
      * @param videoId
      * @return
      */
-    ResultVo enableVideo(Long videoId);
+    ResultVo enableVideo(Long videoId,Boolean enable);
 
     /**
      * 记录观看历史

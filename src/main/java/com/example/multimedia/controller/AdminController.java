@@ -42,6 +42,9 @@ public class AdminController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private AdminNoticeService adminNoticeService;
+
     @GetMapping("users")
     private ResultVo findUsers(@RequestParam(defaultValue = "0") int page){
         String role = "%USER%";
@@ -140,8 +143,8 @@ public class AdminController {
     }
 
     @PostMapping("videos/enable/{videoId}")
-    private ResultVo enableVideo(@PathVariable Long videoId){
-        return videoService.enableVideo(videoId);
+    private ResultVo enableVideo(@PathVariable Long videoId,@RequestParam Boolean enable){
+        return videoService.enableVideo(videoId,enable);
     }
 
    @DeleteMapping("videos/{videoId}")
@@ -207,6 +210,21 @@ public class AdminController {
     @DeleteMapping("question/{questionId}")
     private ResultVo deleteQuestion(@PathVariable Long questionId){
         return questionService.delete(questionId);
+    }
+
+    @GetMapping("messages")
+    private ResultVo getMessages(@RequestParam(defaultValue = "0") int page){
+        return adminNoticeService.getAdminNotice(page);
+    }
+
+    @GetMapping("messages/count")
+    private ResultVo countMessages(){
+        return adminNoticeService.unRead();
+    }
+
+    @DeleteMapping("messages/{messageId}")
+    private void deleteMessage(@PathVariable Long messageId){
+        adminNoticeService.deleteById(messageId);
     }
 
 }

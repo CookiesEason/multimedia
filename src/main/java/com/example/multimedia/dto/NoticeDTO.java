@@ -18,8 +18,10 @@ public class NoticeDTO implements Serializable {
 
     private Long messageId;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private String username;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private String userUrl;
 
     private String content;
@@ -41,6 +43,8 @@ public class NoticeDTO implements Serializable {
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy年MM月dd日 HH:mm:ss")
     private Timestamp date;
+
+
 
     public NoticeDTO(Long messageId,String username, String userUrl, String content,Timestamp date) {
         this.messageId = messageId;

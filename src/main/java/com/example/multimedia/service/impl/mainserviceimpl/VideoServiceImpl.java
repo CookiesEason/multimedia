@@ -59,6 +59,12 @@ public class VideoServiceImpl implements VideoService {
     private CommentService commentService;
 
     @Autowired
+    private AdminNoticeService adminNoticeService;
+
+    @Autowired
+    private NoticeService noticeService;
+
+    @Autowired
     @Qualifier(value = "LikeService")
     private LikeService likeService;
 
@@ -221,10 +227,18 @@ public class VideoServiceImpl implements VideoService {
 
 
     @Override
-    public ResultVo enableVideo(Long videoId) {
+    public ResultVo enableVideo(Long videoId,Boolean enable) {
         Video video = findById(videoId);
-        video.setEnable(true);
+        video.setEnable(enable);
         save(video);
+        if (enable){
+            noticeService.saveNotice(Topic.VIDEO,videoId,video.getTitle(),null,null,null,
+                    null,video.getUserId(),"enable");
+        }else {
+            deleteById(videoId);
+            noticeService.saveNotice(Topic.VIDEO,videoId,video.getTitle(),null,null,null,
+                    null,video.getUserId(),"unEnable");
+        }
         return ResultVoUtil.success();
     }
 
@@ -256,6 +270,7 @@ public class VideoServiceImpl implements VideoService {
         if (tags!=null){
             video.setTags(tags);
             save(video);
+            adminNoticeService.save(video.getId(),Topic.VIDEO,video.getTitle());
             return ResultVoUtil.success();
         }else {
             return ResultVoUtil.error(0,"分类不存在,请检查你选择的分类");

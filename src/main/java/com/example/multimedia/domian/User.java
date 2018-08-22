@@ -30,15 +30,12 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Length(min = 6,max = 12, message = "用户名长度为6-12位")
+    @Email(message = "请输入正确的邮箱格式")
+    @NotBlank(message = "邮箱不能为空")
     private String username;
 
     @Length(min = 8,message = "密码长度至少为8位")
     private String password;
-
-    @Email(message = "请输入正确的邮箱格式")
-    @NotBlank(message = "邮箱不能为空")
-    private String email;
 
     @CreatedDate
     private Timestamp date;

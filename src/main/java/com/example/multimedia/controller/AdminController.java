@@ -72,9 +72,8 @@ public class AdminController {
 
     @GetMapping("users/search")
     private ResultVo findUser(@RequestParam(required = false) String username,
-                              @RequestParam(required = false) String nickname,
-                              @RequestParam(required = false) String email){
-        return userService.findByUsernameOrEmailOrUserInfoNickname(username,email,nickname);
+                              @RequestParam(required = false) String nickname){
+        return userService.findByUsernameOrUserInfoNickname(username,nickname);
     }
 
     @GetMapping("users/admins")

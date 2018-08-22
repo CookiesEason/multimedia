@@ -30,4 +30,12 @@ public class ResultVoUtil {
         return resultVo;
     }
 
+    public static ResultVo error(Integer code, Object msg){
+        ResultVo resultVo = new ResultVo();
+        resultVo.setCode(code);
+        resultVo.setMsg("失败");
+        resultVo.setData(msg);
+        return resultVo;
+    }
+
 }

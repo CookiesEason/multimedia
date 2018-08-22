@@ -66,20 +66,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultVo save(User user,String role) {
         if (findByUsername(user.getUsername())==null){
-            if (findByEmail(user)==null){
-                UserInfo userInfo = new UserInfo();
-                user.setPassword(encryptPassword(user.getPassword()));
-                userInfo.setNickname(user.getUsername());
-                user.setUserInfo(userInfo);
-                String activateCode = EmailUtil.generateActivateCode(user.getUsername());
-                mailService.sendEmail(user.getEmail(),user.getUsername(),activateCode);
-                user.setRoleList(Arrays.asList(userRoleRepository.findByRole(role)));
-                userRepository.save(user);
-                return ResultVoUtil.success();
-            }
-            return ResultVoUtil.error(0,"邮箱已被注册");
+            UserInfo userInfo = new UserInfo();
+            user.setPassword(encryptPassword(user.getPassword()));
+            userInfo.setNickname(user.getUsername());
+            user.setUserInfo(userInfo);
+            String activateCode = EmailUtil.generateActivateCode(user.getUsername());
+            user.setRoleList(Arrays.asList(userRoleRepository.findByRole(role)));
+            userRepository.save(user);
+            mailService.sendEmail(user.getUsername(),activateCode);
+            return ResultVoUtil.success();
         }
-        return ResultVoUtil.error(0,"账号已经存在");
+        return ResultVoUtil.error(0,"邮箱已经存在");
     }
 
     @Override
@@ -110,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(value = "user", allEntries = true)
     public ResultVo updatePassword(String code,String password,String passwordAgain) {
         User user = userRepository.findByUsername(UserUtil.getUserName());
-        if (code.equals(getCode(user.getEmail()))){
+        if (code.equals(getCode(user.getUsername()))){
             if (password.length()<8){
                 return ResultVoUtil.error(0,"密码长度至少为8位");
             }
@@ -143,25 +140,22 @@ public class UserServiceImpl implements UserService {
             if (user.isActive()){
                 return ResultVoUtil.error(1,"已激活成功");
             }
-            String code = template.opsForValue().get(user.getEmail());
+            String code = template.opsForValue().get(user.getUsername());
             if (code!=null&&code.equals(activeCode)){
                 user.setActive(true);
                 userRepository.save(user);
-                template.opsForValue().getOperations().delete(user.getEmail());
+                template.opsForValue().getOperations().delete(user.getUsername());
                 return ResultVoUtil.success();
             }else {
                 String activateCode = EmailUtil.generateActivateCode(user.getUsername());
-                mailService.sendEmail(user.getEmail(),user.getUsername(),activateCode);
+                mailService.sendEmail(user.getUsername(),activateCode);
                 return ResultVoUtil.error(0,"激活失败,链接已经失效,已重新发送邮件");
             }
         }
         return ResultVoUtil.error(0,"激活失败,请确认邮箱信息");
     }
 
-    @Override
-    public User findByEmail(User user) {
-        return userRepository.findByEmail(user.getEmail());
-    }
+
 
     @Override
     public ResultVo findUsers(int page,String role) {
@@ -174,8 +168,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultVo findByUsernameOrEmailOrUserInfoNickname(String username, String email, String nickname) {
-        return ResultVoUtil.success(userRepository.findByUsernameOrEmailOrUserInfoNickname(username,email,nickname));
+    public ResultVo findByUsernameOrUserInfoNickname(String username,String nickname) {
+        return ResultVoUtil.success(userRepository.findByUsernameOrUserInfoNickname(username,nickname));
     }
 
     @Override

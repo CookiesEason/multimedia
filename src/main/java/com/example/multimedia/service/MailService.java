@@ -7,7 +7,7 @@ import com.example.multimedia.vo.ResultVo;
  */
 public interface MailService {
 
-   ResultVo sendEmail(String email,String username,String activateCode);
+   ResultVo sendEmail(String username,String activateCode);
 
    ResultVo  sendPasswordUpdateEmail();
 

@@ -11,9 +11,14 @@ import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author CookiesEason
@@ -32,7 +37,14 @@ public class UserController {
     private NoticeService noticeService;
 
     @PostMapping("/api/user/register")
-    private ResultVo registerUser(@RequestBody @Validated User user){
+    private ResultVo registerUser(@Validated User user, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            List<String> errors = new ArrayList<>();
+            bindingResult.getAllErrors().forEach(objectError -> {
+                errors.add(objectError.getDefaultMessage());
+            });
+            return ResultVoUtil.error(0,errors);
+        }
         String role = "ROLE_PRIMARY_USER";
         return userService.save(user,role);
     }

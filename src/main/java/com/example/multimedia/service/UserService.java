@@ -69,12 +69,6 @@ public interface UserService {
      */
     ResultVo activateEmail(String username, String activeCode);
 
-    /**
-     * 查找邮箱
-     * @param user
-     * @return
-     */
-    User findByEmail(User user);
 
     /**
      * 查询所有用户
@@ -85,11 +79,10 @@ public interface UserService {
     /**
      * 搜索用户
      * @param username
-     * @param email
      * @param nickname
      * @return
      */
-    ResultVo findByUsernameOrEmailOrUserInfoNickname(String username,String email,String nickname);
+    ResultVo findByUsernameOrUserInfoNickname(String username, String nickname);
 
     /**
      * 禁用,启用用户

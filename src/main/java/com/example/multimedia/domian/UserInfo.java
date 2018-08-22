@@ -24,7 +24,7 @@ public class UserInfo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Length(min = 4,max = 14)
+    @Length(min = 4,max = 20)
     private String nickname;
 
     private String headImgUrl;

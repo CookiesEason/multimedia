@@ -41,14 +41,14 @@ public class MailServiceImpl implements MailService {
     private UserService userService;
 
     @Override
-    public ResultVo sendEmail(String email,String username,String activateCode) {
+    public ResultVo sendEmail(String username,String activateCode) {
         // TODO: 2018/08/02 应该要写一个邮件模板html来进行发送
         SimpleMailMessage message = new SimpleMailMessage();
         ValueOperations<String, String> valueStr = template.opsForValue();
         message.setFrom("837447352@qq.com");
-        message.setTo(email);
+        message.setTo(username);
         message.setSubject("激活邮件");
-        valueStr.set(email,activateCode,1400,TimeUnit.MINUTES);
+        valueStr.set(username,activateCode,1400,TimeUnit.MINUTES);
         message.setText(activateUrl+"username="+username+"&activeCode="+activateCode);
         try {
             mailSender.send(message);
@@ -61,7 +61,7 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public ResultVo sendPasswordUpdateEmail() {
-        String email = userService.findByUsername(UserUtil.getUserName()).getEmail();
+        String email = UserUtil.getUserName();
         SimpleMailMessage message = new SimpleMailMessage();
         String code = EmailUtil.generateCode();
         ValueOperations<String, String> valueStr = template.opsForValue();

@@ -91,9 +91,8 @@ public class UserController {
     }
 
     @DeleteMapping("/api/user/messages/{messageId}")
-    private ResultVo deleteMessage(@PathVariable Long messageId){
+    private void deleteMessage(@PathVariable Long messageId){
         noticeService.deleteById(messageId);
-        return ResultVoUtil.success();
     }
 
 }

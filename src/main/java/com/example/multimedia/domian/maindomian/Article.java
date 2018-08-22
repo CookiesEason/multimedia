@@ -48,6 +48,7 @@ public class Article {
     }
 
     public Article(ArticleSearch articleSearch, Tags tags) {
+        this.id = articleSearch.getId();
         this.userId = articleSearch.getUser_id();
         this.tags = tags;
         this.title = articleSearch.getTitle();

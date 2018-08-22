@@ -1,6 +1,7 @@
 package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.Notice;
+import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.dto.NoticeDTO;
 import com.example.multimedia.dto.PageDTO;
@@ -191,7 +192,11 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     private Long getUid(){
-        return userService.findByUsername(UserUtil.getUserName()).getId();
+        User user = userService.findByUsername(UserUtil.getUserName());
+        if (user!=null){
+            return user.getId();
+        }
+        return null;
     }
 
 }

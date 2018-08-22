@@ -1,5 +1,6 @@
 package com.example.multimedia.service.impl.mainserviceimpl;
 
+import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Comment;
 import com.example.multimedia.domian.maindomian.CommentLike;
@@ -91,7 +92,11 @@ public class CommentLikeServiceImpl implements LikeService {
 
 
     private Long getUid(){
-        return userService.findByUsername(UserUtil.getUserName()).getId();
+        User user = userService.findByUsername(UserUtil.getUserName());
+        if (user!=null){
+            return user.getId();
+        }
+        return null;
     }
 
 }

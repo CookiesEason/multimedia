@@ -1,5 +1,6 @@
 package com.example.multimedia.service.impl.mainserviceimpl;
 
+import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Video;
@@ -120,7 +121,11 @@ public class LikeServiceImpl implements LikeService {
     }
 
     private Long getUid(){
-        return userService.findByUsername(UserUtil.getUserName()).getId();
+        User user = userService.findByUsername(UserUtil.getUserName());
+        if (user!=null){
+            return user.getId();
+        }
+        return null;
     }
 
 }

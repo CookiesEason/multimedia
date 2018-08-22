@@ -10,10 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserUtil {
 
     public static String getUserName(){
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return userDetails.getUsername();
+        try {
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getPrincipal();
+            return userDetails.getUsername();
+        }catch (Exception e){
+            return null;
+        }
     }
 
 }

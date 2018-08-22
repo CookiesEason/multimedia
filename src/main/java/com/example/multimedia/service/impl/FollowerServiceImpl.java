@@ -100,7 +100,11 @@ public class FollowerServiceImpl implements FollowerService {
     }
 
     private Long getUid(){
-        return userService.findByUsername(UserUtil.getUserName()).getId();
+        User user = userService.findByUsername(UserUtil.getUserName());
+        if (user!=null){
+            return user.getId();
+        }
+        return null;
     }
 
 }

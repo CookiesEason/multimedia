@@ -1,6 +1,7 @@
 package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.Question;
+import com.example.multimedia.domian.User;
 import com.example.multimedia.dto.question.QuestionDTO;
 import com.example.multimedia.dto.question.TestDTO;
 import com.example.multimedia.repository.QuestionRepository;
@@ -96,7 +97,11 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private Long getUid(){
-        return userService.findByUsername(UserUtil.getUserName()).getId();
+        User user = userService.findByUsername(UserUtil.getUserName());
+        if (user!=null){
+            return user.getId();
+        }
+        return null;
     }
 
 

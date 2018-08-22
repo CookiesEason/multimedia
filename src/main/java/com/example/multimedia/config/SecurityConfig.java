@@ -1,5 +1,6 @@
 package com.example.multimedia.config;
 
+import com.example.multimedia.filter.CorsFilter;
 import com.example.multimedia.filter.JwtAuthenticationTokenFilter;
 import com.example.multimedia.handler.AuthenticationFailureHandler;
 import com.example.multimedia.handler.AuthenticationSuccessHandler;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 /**
  * @author CookiesEason
@@ -34,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
+
+        http.addFilterBefore(corsControllerFilter(), SecurityContextPersistenceFilter.class);
 
         http
                 .requestMatchers().anyRequest()
@@ -64,6 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(securityUser).passwordEncoder(bCryptPasswordEncoder());
+    }
+
+    @Bean
+    public CorsFilter corsControllerFilter(){
+        return new CorsFilter();
     }
 
     @Bean

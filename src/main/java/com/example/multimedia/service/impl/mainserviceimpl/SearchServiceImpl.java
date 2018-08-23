@@ -89,7 +89,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public ResultVo searchArticle(int page, String order, String sort, String searchContent, Boolean enable) {
+    public ResultVo searchArticle(int page, String order, String sort, String searchContent) {
         SearchQuery searchQuery = getArticleSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
         Page<ArticleSearch> articleSearchPage = articleSearchRepository.search(searchQuery);
         List<ArticleDTO> articleDTOList = new ArrayList<>();

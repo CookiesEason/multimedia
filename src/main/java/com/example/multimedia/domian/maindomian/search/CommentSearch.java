@@ -26,6 +26,8 @@ public class CommentSearch implements Serializable {
 
     private Long fromuid;
 
+    private Long likecount;
+
     private Timestamp createdate;
 
     @Enumerated(EnumType.STRING)

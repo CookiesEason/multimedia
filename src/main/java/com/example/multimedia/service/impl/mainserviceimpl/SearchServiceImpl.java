@@ -114,14 +114,7 @@ public class SearchServiceImpl implements SearchService {
         List<CommentDTO> commentList = new ArrayList<>();
         commentSearches.getContent().forEach(commentSearch -> {
             User user = userService.findById(commentSearch.getFromuid());
-            Comment comment = new Comment();
-            comment.setId(commentSearch.getId());
-            comment.setTopId(commentSearch.getTopid());
-            comment.setTopId(commentSearch.getId());
-            comment.setContent(commentSearch.getContent());
-            comment.setFromUid(commentSearch.getFromuid());
-            comment.setCreateDate(commentSearch.getCreatedate());
-            CommentDTO commentDTO = new CommentDTO(comment, user);
+            CommentDTO commentDTO = new CommentDTO(commentSearch, user);
             commentList.add(commentDTO);
         });
         PageDTO<CommentDTO> comments = new PageDTO<>(commentList,commentSearches.getTotalElements(),

@@ -3,6 +3,7 @@ package com.example.multimedia.dto;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Comment;
+import com.example.multimedia.domian.maindomian.search.CommentSearch;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
@@ -59,4 +60,15 @@ public class CommentDTO {
         this.headUrl = user.getUserInfo().getHeadImgUrl();
         this.createDate = comment.getCreateDate();
     }
+
+    public CommentDTO(CommentSearch commentSearch, User user){
+        this.userId = user.getId();
+        this.commentId = commentSearch.getId();
+        this.content = commentSearch.getContent();
+        this.likeCount = commentSearch.getLikecount();
+        this.nickname = user.getUserInfo().getNickname();
+        this.headUrl = user.getUserInfo().getHeadImgUrl();
+        this.createDate = commentSearch.getCreatedate();
+    }
+
 }

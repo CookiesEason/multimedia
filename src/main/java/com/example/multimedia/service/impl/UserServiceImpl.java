@@ -212,14 +212,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResultVo checkAccessComment() {
-        List<UserRole> roles  = userRepository.findByUsername(UserUtil.getUserName()).getRoleList();
-        boolean isAccess = false;
-        for (UserRole role : roles) {
-            if (!"ROLE_PRIMARY_USER".equals(role.getRole())) {
-                isAccess = true;
+        User user = userRepository.findByUsername(UserUtil.getUserName());
+        if (user!=null){
+            List<UserRole> roles  = user.getRoleList();
+            boolean isAccess = false;
+            for (UserRole role : roles) {
+                if (!"ROLE_PRIMARY_USER".equals(role.getRole())) {
+                    isAccess = true;
+                }
             }
+            return ResultVoUtil.success(isAccess);
         }
-        return ResultVoUtil.success(isAccess);
+       return ResultVoUtil.error(0,"发生错误,您还未登录");
     }
 
     private String encryptPassword(String password){

@@ -9,6 +9,7 @@ import com.example.multimedia.handler.LogoutHandle;
 import com.example.multimedia.service.impl.SecurityUserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,9 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers().anyRequest()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/user/register","/api/user/activateEmail",
-                            "/api/comment/video/{videoId}","/api/search/**")
+                    .antMatchers("/api/user/register","/api/user/activateEmail","/api/search/**")
                     .permitAll()
+                .antMatchers(HttpMethod.GET,"/api/comment/**").permitAll()
                 .antMatchers("/api/admin/**").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()

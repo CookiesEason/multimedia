@@ -12,11 +12,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ArticleRepository extends JpaRepository<Article,Long> {
 
 
-    Page<Article> findAllByEnableAndTagsTag(Boolean enable,String tag,Pageable pageable);
+    Page<Article> findAllByTagsTag(String tag,Pageable pageable);
 
-    Page<Article> findAllByEnable(Boolean enable, Pageable pageable);
+    Page<Article> findAll(Pageable pageable);
 
-    Page<Article> findAllByUserIdAndEnable(Long userId,Boolean enable,Pageable pageable);
+    Page<Article> findAllByUserId(Long userId,Pageable pageable);
 
     void deleteByIdAndUserId(Long id, Long userId);
 

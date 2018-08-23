@@ -158,9 +158,8 @@ public class AdminController {
     public ResultVo getArticles(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
                                 @RequestParam(defaultValue = "asc") String order,
-                                @RequestParam(defaultValue = "createDate") String sort,
-                                @RequestParam Boolean enable){
-        return articleService.findAllByEnable(page,size,order,sort,enable);
+                                @RequestParam(defaultValue = "createDate") String sort){
+        return articleService.findAll(page,size,order,sort);
     }
 
     @GetMapping("/articles/search")
@@ -178,11 +177,6 @@ public class AdminController {
                                   @RequestParam String text,
                                   @RequestParam String tag){
         return articleService.update(articleId, title, text, tag);
-    }
-
-    @PostMapping("articles/enable/{articleId}")
-    public ResultVo enableArticle(@PathVariable Long articleId,@RequestParam Boolean enable){
-        return articleService.enableArticle(articleId,enable);
     }
 
     @DeleteMapping("articles/{articleId}")

@@ -42,10 +42,9 @@ public interface ArticleService {
      * @param size
      * @param order
      * @param sort
-     * @param enable
      * @return
      */
-    ResultVo findAllByEnable(int page,int size,String order,String sort,Boolean enable);
+    ResultVo findAll(int page,int size,String order,String sort);
 
     /**
      * 分类查找文章
@@ -54,10 +53,9 @@ public interface ArticleService {
      * @param order
      * @param sort
      * @param tag
-     * @param enable
      * @return
      */
-    ResultVo findAllByTag(int page,int size,String order,String sort,String tag,Boolean enable);
+    ResultVo findAllByTag(int page,int size,String order,String sort,String tag);
 
     /**
      * 获取自己文章
@@ -65,10 +63,9 @@ public interface ArticleService {
      * @param size
      * @param order
      * @param sort
-     * @param enable
      * @return
      */
-    ResultVo findMyAll(int page,int size,String order,String sort,Boolean enable);
+    ResultVo findMyAll(int page,int size,String order,String sort);
 
     /**
      * 查看他人所有文章
@@ -95,13 +92,5 @@ public interface ArticleService {
     Article findById(long id);
 
     void save(Article article);
-
-    /**
-     * 审核文章
-     * @param articleId
-     * @param enable
-     * @return
-     */
-    ResultVo enableArticle(Long articleId, Boolean enable);
 
 }

@@ -28,7 +28,7 @@ public class ArticleController {
                                 @RequestParam(defaultValue = "10") int size,
                                 @RequestParam(defaultValue = "desc") String order,
                                 @RequestParam(defaultValue = "createDate") String sort){
-        return articleService.findAllByEnable(page,size,order,sort,true);
+        return articleService.findAll(page,size,order,sort);
     }
 
     @GetMapping("/tag")
@@ -37,7 +37,7 @@ public class ArticleController {
                                      @RequestParam(defaultValue = "desc") String order,
                                      @RequestParam(defaultValue = "createDate") String sort,
                                      @RequestParam String tag){
-        return articleService.findAllByTag(page,size,order,sort,tag,true);
+        return articleService.findAllByTag(page,size,order,sort,tag);
     }
 
     @GetMapping("/{articleId}")
@@ -58,9 +58,8 @@ public class ArticleController {
     public ResultVo getMyArticle(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size,
                                  @RequestParam(defaultValue = "desc") String order,
-                                 @RequestParam(defaultValue = "createDate") String sort,
-                                 @RequestParam(defaultValue = "true")Boolean enable){
-        return articleService.findMyAll(page, size, order, sort, enable);
+                                 @RequestParam(defaultValue = "createDate") String sort){
+        return articleService.findMyAll(page, size, order, sort);
     }
 
     @PostMapping

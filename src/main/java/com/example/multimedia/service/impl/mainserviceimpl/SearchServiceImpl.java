@@ -94,12 +94,10 @@ public class SearchServiceImpl implements SearchService {
         Page<ArticleSearch> articleSearchPage = articleSearchRepository.search(searchQuery);
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         articleSearchPage.getContent().forEach(articleSearch -> {
-            if (enable.equals(articleSearch.getEnable())){
-                Article article = new Article(articleSearch,tagsRepository.findById(articleSearch.getTags_id()).get());
-                ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
-                        article);
-                articleDTOList.add(articleDTO);
-            }
+            Article article = new Article(articleSearch,tagsRepository.findById(articleSearch.getTags_id()).get());
+            ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
+                    article);
+            articleDTOList.add(articleDTO);
         });
         PageDTO<ArticleDTO> articleDTOPageDTO = new PageDTO<>(articleDTOList,articleSearchPage.getTotalElements(),
                 articleSearchPage.getTotalElements());

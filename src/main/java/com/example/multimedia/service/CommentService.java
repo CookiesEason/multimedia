@@ -2,6 +2,7 @@ package com.example.multimedia.service;
 
 import com.example.multimedia.domian.abstractdomian.AbstractComment;
 import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.maindomian.Comment;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -21,13 +22,20 @@ public interface CommentService {
     ResultVo createComment(Long topId, String content, Topic topic);
 
     /**
-     * 获取某个视频下所有评论,分页
+     * 保存
+     * @param comment
+     * @return
+     */
+    ResultVo save(Comment comment);
+
+    /**
+     * 获取某个作品下所有评论,分页
      * @param contentId
      * @param topic
      * @param commentPage
      * @return
      */
-    ResultVo getComments(Long contentId,Topic topic,int commentPage);
+    ResultVo getComments(Long contentId,Topic topic,int commentPage,String sort);
 
     /**
      * 查找评论
@@ -59,4 +67,11 @@ public interface CommentService {
      */
     ResultVo findAll(int page,int size,String order,String sort);
 
+    /**
+     * 找自己评论
+     * @param contentId
+     * @param topic
+     * @return
+     */
+    ResultVo findMyself(Long contentId,Topic topic);
 }

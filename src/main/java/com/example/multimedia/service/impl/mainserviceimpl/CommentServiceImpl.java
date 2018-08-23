@@ -23,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -96,36 +98,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResultVo getComments(Long topId,Topic topic,int commentPage) {
+    public ResultVo save(Comment comment) {
+        commentRepository.save(comment);
+        return ResultVoUtil.success();
+    }
+
+    @Override
+    public ResultVo getComments(Long topId,Topic topic,int commentPage,String sort) {
         int size=10;
-        Pageable pageable = PageRequest.of(commentPage,size);
+        Pageable pageable = PageRequest.of(commentPage,size,sort("DESC",sort));
         Page<Comment> c = commentRepository.findAllByTopIdAndTopic(pageable,topId,topic);
         List<CommentDTO> commentList = new ArrayList<>();
-        c.getContent().forEach(comment -> {
-            boolean isLike = false;
-            CommentLike commentLike = (CommentLike) commentLikeService.status(comment.getId(),getUid(),null);
-            if (commentLike!=null&&commentLike.isStatus()){
-                isLike = true;
-            }
-            User user = userService.findById(comment.getFromUid());
-            List<Reply> replyList = replyService.findAllByCommentId(comment.getId());
-            List<ReplyDTO> replyDTOList = new ArrayList<>();
-            replyList.forEach(reply -> {
-                boolean replyLike = false;
-                ReplyLike replyLike1 = (ReplyLike) replyLikeService.status(reply.getId(),getUid(),null);
-                if (replyLike1!=null&&replyLike1.isStatus()){
-                    replyLike = true;
-                }
-                ReplyDTO replyDTO = new ReplyDTO(reply,replyLike,
-                        replyLikeService.countAllById(reply.getId()),
-                        new SimpleUserDTO(userService.findById(reply.getFromUid())),
-                        new SimpleUserDTO(userService.findById(reply.getToUid())));
-                replyDTOList.add(replyDTO);
-            });
-            CommentDTO commentDTO = new CommentDTO(comment, isLike,commentLikeService.countAllById(comment.getId()),
-                    user,replyDTOList);
-            commentList.add(commentDTO);
-        });
+        c.getContent().forEach(comment -> commentResultVO(commentList, comment));
         PageDTO<CommentDTO> comments = new PageDTO<>(commentList,c.getTotalElements(),
                 (long) c.getTotalPages());
         return ResultVoUtil.success(comments);
@@ -162,17 +146,54 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ResultVo findAll(int page, int size, String order,String sort) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
-        Page<Comment> videoComments = commentRepository.findAll(pageable);
+        Page<Comment> commentPage = commentRepository.findAll(pageable);
         List<CommentDTO> commentList = new ArrayList<>();
-       videoComments.getContent().forEach(videoComment -> {
-           User user = userService.findById(videoComment.getFromUid());
-           CommentDTO commentDTO = new CommentDTO(videoComment,
-                   commentLikeService.countAllById(videoComment.getId()), user);
+        commentPage.getContent().forEach(comment -> {
+           User user = userService.findById(comment.getFromUid());
+           CommentDTO commentDTO = new CommentDTO(comment, user);
            commentList.add(commentDTO);
        });
-        PageDTO<CommentDTO> comments = new PageDTO<>(commentList,videoComments.getTotalElements(),
-                (long) videoComments.getTotalPages());
+        PageDTO<CommentDTO> comments = new PageDTO<>(commentList,commentPage.getTotalElements(),
+                (long) commentPage.getTotalPages());
         return ResultVoUtil.success(comments);
+    }
+
+    @Override
+    public ResultVo findMyself(Long contentId,Topic topic) {
+        Long userId = getUid();
+        if (userId==null){
+            return ResultVoUtil.error(0,"未登录");
+        }
+        List<Comment> c = commentRepository.findAllByTopIdAndTopicAndFromUid(contentId,topic,userId);
+        List<CommentDTO> commentList = new ArrayList<>();
+        c.forEach(comment -> commentResultVO(commentList, comment));
+        return ResultVoUtil.success(commentList);
+    }
+
+    private void commentResultVO(List<CommentDTO> commentList, Comment comment) {
+        boolean isLike = false;
+        CommentLike commentLike = (CommentLike) commentLikeService.status(comment.getId(),getUid(),null);
+        if (commentLike!=null&&commentLike.isStatus()){
+            isLike = true;
+        }
+        User user = userService.findById(comment.getFromUid());
+        List<Reply> replyList = replyService.findAllByCommentId(comment.getId());
+        List<ReplyDTO> replyDTOList = new ArrayList<>();
+        replyList.forEach(reply -> {
+            boolean replyLike = false;
+            ReplyLike replyLike1 = (ReplyLike) replyLikeService.status(reply.getId(),getUid(),null);
+            if (replyLike1!=null&&replyLike1.isStatus()){
+                replyLike = true;
+            }
+            ReplyDTO replyDTO = new ReplyDTO(reply,replyLike,
+                    replyLikeService.countAllById(reply.getId()),
+                    new SimpleUserDTO(userService.findById(reply.getFromUid())),
+                    new SimpleUserDTO(userService.findById(reply.getToUid())));
+            replyDTOList.add(replyDTO);
+        });
+        CommentDTO commentDTO = new CommentDTO(comment, isLike,
+                user,replyDTOList);
+        commentList.add(commentDTO);
     }
 
     private Long getUid(){

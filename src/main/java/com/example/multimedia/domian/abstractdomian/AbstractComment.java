@@ -29,6 +29,8 @@ public abstract class AbstractComment {
 
     private Long fromUid;
 
+    private Long likeCount;
+
     @CreatedDate
     private Timestamp createDate;
 

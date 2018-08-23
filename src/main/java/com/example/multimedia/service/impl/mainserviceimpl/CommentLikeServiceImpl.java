@@ -50,6 +50,7 @@ public class CommentLikeServiceImpl implements LikeService {
             commentLike.setStatus(true);
             commentLike.setUserId(getUid());
             commentLike.setCommentId(commentId);
+            comment.setLikeCount(comment.getLikeCount()+1);
             String title;
             if (comment.getTopic().equals(Topic.VIDEO)){
                  title = videoService.findById(comment.getTopId()).getTitle();
@@ -60,8 +61,14 @@ public class CommentLikeServiceImpl implements LikeService {
                     comment.getContent(),null,userId, comment.getFromUid(),"commentPraise");
         }else {
             commentLike.setStatus(!commentLike.isStatus());
+            if (commentLike.isStatus()){
+                comment.setLikeCount(comment.getLikeCount()+1);
+            }else {
+                comment.setLikeCount(comment.getLikeCount()-1);
+            }
         }
         commentLikeRepository.save(commentLike);
+        commentService.save(comment);
     }
 
 

@@ -38,11 +38,11 @@ public class CommentDTO {
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private List<ReplyDTO> replyDTOList;
 
-    public CommentDTO(Comment comment, Boolean isLike,Long likeCount, User user, List<ReplyDTO> replyDTOList) {
+    public CommentDTO(Comment comment, Boolean isLike, User user, List<ReplyDTO> replyDTOList) {
         this.userId = user.getId();
         this.commentId = comment.getId();
         this.content = comment.getContent();
-        this.likeCount = likeCount;
+        this.likeCount = comment.getLikeCount();
         this.nickname = user.getUserInfo().getNickname();
         this.headUrl = user.getUserInfo().getHeadImgUrl();
         this.createDate = comment.getCreateDate();
@@ -50,11 +50,11 @@ public class CommentDTO {
         this.replyDTOList = replyDTOList;
     }
 
-    public CommentDTO(Comment comment, Long likeCount, User user) {
+    public CommentDTO(Comment comment, User user) {
         this.userId = user.getId();
         this.commentId = comment.getId();
         this.content = comment.getContent();
-        this.likeCount = likeCount;
+        this.likeCount = comment.getLikeCount();
         this.nickname = user.getUserInfo().getNickname();
         this.headUrl = user.getUserInfo().getHeadImgUrl();
         this.createDate = comment.getCreateDate();

@@ -62,10 +62,6 @@ public class SearchServiceImpl implements SearchService {
     private ReplySearchRepository replySearchRepository;
 
     @Autowired
-    @Qualifier(value = "CommentLikeService")
-    private LikeService videoCommentLikeService;
-
-    @Autowired
     @Qualifier(value = "ReplyLikeService")
     private LikeService videoReplyLikeService;
 
@@ -125,9 +121,7 @@ public class SearchServiceImpl implements SearchService {
             comment.setContent(commentSearch.getContent());
             comment.setFromUid(commentSearch.getFromuid());
             comment.setCreateDate(commentSearch.getCreatedate());
-            CommentDTO commentDTO = new CommentDTO(comment,
-                    videoCommentLikeService.countAllById(comment.getId())
-                    ,user);
+            CommentDTO commentDTO = new CommentDTO(comment, user);
             commentList.add(commentDTO);
         });
         PageDTO<CommentDTO> comments = new PageDTO<>(commentList,commentSearches.getTotalElements(),

@@ -22,4 +22,6 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
 
     List<Comment> deleteAllByTopIdAndTopic(Long video,Topic topic);
 
+    List<Comment> findAllByTopIdAndTopicAndFromUid(Long topicId,Topic topic,Long fromUid);
+
 }

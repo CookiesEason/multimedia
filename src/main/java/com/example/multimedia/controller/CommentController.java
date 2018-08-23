@@ -42,15 +42,28 @@ public class CommentController {
     }
 
     @GetMapping("/video/{videoId}")
-    private ResultVo getComments(@PathVariable Long videoId,@RequestParam(defaultValue = "0") int page){
-        return commentService.getComments(videoId,Topic.VIDEO,page);
+    private ResultVo getVideosComments(@PathVariable Long videoId,
+                                       @RequestParam(defaultValue = "likeCount") String sort,
+                                       @RequestParam(defaultValue = "0") int page){
+        return commentService.getComments(videoId,Topic.VIDEO,page,sort);
     }
 
     @GetMapping("/article/{articleId}")
-    private ResultVo getArticleComments(@PathVariable Long articleId,@RequestParam(defaultValue = "0") int page){
-        return commentService.getComments(articleId,Topic.ARTICLE,page);
+    private ResultVo getArticleComments(@PathVariable Long articleId,
+                                        @RequestParam(defaultValue = "likeCount") String sort,
+                                        @RequestParam(defaultValue = "0") int page){
+        return commentService.getComments(articleId,Topic.ARTICLE,page,sort);
     }
 
+    @GetMapping("/video/me/{videoId}")
+    private ResultVo getMyVideoComments(@PathVariable Long videoId){
+        return commentService.findMyself(videoId,Topic.VIDEO);
+    }
+
+    @GetMapping("/article/me/{articleId}")
+    private ResultVo getMyArticleComments(@PathVariable Long videoId){
+        return commentService.findMyself(videoId,Topic.ARTICLE);
+    }
 
     @PostMapping("/video/add")
     private ResultVo createComment(@RequestParam Long videoId,@RequestParam String content){

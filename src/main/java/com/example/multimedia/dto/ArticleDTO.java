@@ -33,8 +33,6 @@ public class ArticleDTO implements Serializable {
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private Boolean isLike;
 
-    private Boolean enable;
-
     private Timestamp createDate;
 
     public ArticleDTO(SimpleUserDTO user, Article article) {
@@ -45,7 +43,6 @@ public class ArticleDTO implements Serializable {
         this.text = article.getText();
         this.readCount = article.getReadCount();
         this.likeCount = article.getLikeCount();
-        this.enable = article.getEnable();
         this.createDate = article.getCreateDate();
     }
 
@@ -58,7 +55,6 @@ public class ArticleDTO implements Serializable {
         this.readCount = article.getReadCount();
         this.likeCount = article.getLikeCount();
         this.isLike = isLike;
-        this.enable = article.getEnable();
         this.createDate = article.getCreateDate();
     }
 }

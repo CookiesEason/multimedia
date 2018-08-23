@@ -30,7 +30,7 @@ public interface SearchService {
      * @param enable
      * @return
      */
-    ResultVo searchArticle(int page,String order,String sort,String searchContent,Boolean enable);
+    ResultVo searchArticle(int page,String order,String sort,String searchContent);
 
     /**
      *搜索评论

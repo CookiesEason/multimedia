@@ -50,9 +50,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private NoticeService noticeService;
-
     @Override
     public ResultVo save(String title, String text, String tag) {
         Article article = new Article();
@@ -95,30 +92,30 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResultVo findAllByEnable(int page,int size,String order,String sort,Boolean enable) {
+    public ResultVo findAll(int page,int size,String order,String sort) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
-        Page<Article> articlePage =  articleRepository.findAllByEnable(enable,pageable);
+        Page<Article> articlePage =  articleRepository.findAll(pageable);
         return getResultVo(articlePage);
     }
 
     @Override
-    public ResultVo findAllByTag(int page, int size, String order, String sort,String tag,Boolean enable) {
+    public ResultVo findAllByTag(int page, int size, String order, String sort,String tag) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
-        Page<Article> articlePage = articleRepository.findAllByEnableAndTagsTag(enable,tag,pageable);
+        Page<Article> articlePage = articleRepository.findAllByTagsTag(tag,pageable);
         return getResultVo(articlePage);
     }
 
     @Override
-    public ResultVo findMyAll(int page, int size, String order, String sort, Boolean enable) {
+    public ResultVo findMyAll(int page, int size, String order, String sort) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
-        Page<Article> articlePage = articleRepository.findAllByUserIdAndEnable(getUid(),enable,pageable);
+        Page<Article> articlePage = articleRepository.findAllByUserId(getUid(),pageable);
         return getResultVo(articlePage);
     }
 
     @Override
     public ResultVo findUserAll(Long userId,int page, int size, String order, String sort) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
-        Page<Article> articlePage = articleRepository.findAllByUserIdAndEnable(userId,true,pageable);
+        Page<Article> articlePage = articleRepository.findAllByUserId(userId,pageable);
         return getResultVo(articlePage);
     }
 
@@ -152,23 +149,6 @@ public class ArticleServiceImpl implements ArticleService {
     public void save(Article article) {
         articleRepository.save(article);
     }
-
-    @Override
-    public ResultVo enableArticle(Long articleId, Boolean enable) {
-        Article article = articleRepository.findById(articleId).get();
-        article.setEnable(enable);
-        save(article);
-        if (enable){
-            noticeService.saveNotice(Topic.ARTICLE,articleId,article.getTitle(),null,null,null,
-                    null,article.getUserId(),"enable");
-        }else {
-            deleteById(articleId);
-            noticeService.saveNotice(Topic.ARTICLE,articleId,article.getTitle(),null,null,null,
-                    null,article.getUserId(),"unEnable");
-        }
-        return ResultVoUtil.success();
-    }
-
 
     private ResultVo getResultVo(Page<Article> articlePage) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();

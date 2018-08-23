@@ -38,8 +38,6 @@ public class Article {
 
     private Long likeCount = 0L;
 
-    private Boolean enable = false;
-
     @CreatedDate
     private Timestamp createDate;
 
@@ -55,7 +53,6 @@ public class Article {
         this.text = articleSearch.getText();
         this.readCount = articleSearch.getRead_count();
         this.likeCount = articleSearch.getLike_count();
-        this.enable = articleSearch.getEnable();
         this.createDate = articleSearch.getCreate_date();
     }
 }

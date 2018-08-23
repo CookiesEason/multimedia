@@ -30,8 +30,6 @@ public class ArticleSearch implements Serializable {
 
     private Long like_count;
 
-    private Boolean enable;
-
     private Timestamp create_date;
 
 }

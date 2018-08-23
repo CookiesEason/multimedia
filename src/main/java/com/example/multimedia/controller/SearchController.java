@@ -32,7 +32,7 @@ public class SearchController {
                                 @RequestParam(defaultValue = "asc") String order,
                                 @RequestParam(defaultValue = "create_date") String sort,
                                 @RequestParam String searchContent){
-        return searchService.searchArticle(page,order,sort,searchContent,true);
+        return searchService.searchArticle(page,order,sort,searchContent);
     }
 
 

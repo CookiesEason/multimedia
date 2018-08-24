@@ -28,11 +28,24 @@ public class AdminNoticeServiceImpl implements AdminNoticeService {
     private AdminNoticeRepository adminNoticeRepository;
 
     @Override
-    public void save(Long topicId, Topic topic, String title) {
+    public void save(Long topicId, Topic topic, String title,String type) {
         AdminNotice adminNotice = new AdminNotice();
         adminNotice.setTopicId(topicId);
         adminNotice.setTitle(title);
         adminNotice.setTopic(topic);
+        adminNotice.setType(type);
+        adminNoticeRepository.save(adminNotice);
+    }
+
+    @Override
+    public void save(Long topicId, Topic topic, String title, String reason, String reasonCntent, String type) {
+        AdminNotice adminNotice = new AdminNotice();
+        adminNotice.setTopicId(topicId);
+        adminNotice.setTitle(title);
+        adminNotice.setTopic(topic);
+        adminNotice.setReason(reason);
+        adminNotice.setReasonContent(reasonCntent);
+        adminNotice.setType(type);
         adminNoticeRepository.save(adminNotice);
     }
 

@@ -124,4 +124,13 @@ public interface VideoService {
      * 删除3天前的历史记录
      */
     void  deleteHistory();
+
+    /**
+     * 举报
+     * @param videoId
+     * @param reason
+     * @param content
+     * @return
+     */
+    ResultVo reportVideo(Long videoId,String reason,String content);
 }

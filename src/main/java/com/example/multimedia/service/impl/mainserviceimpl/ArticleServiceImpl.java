@@ -50,6 +50,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AdminNoticeService adminNoticeService;
+
     @Override
     public ResultVo save(String title, String text, String tag) {
         Article article = new Article();
@@ -148,6 +151,17 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void save(Article article) {
         articleRepository.save(article);
+    }
+
+    @Override
+    public ResultVo reportArticle(Long articleId, String reason, String content) {
+        Article article = findById((long)articleId);
+        if (article== null){
+            return ResultVoUtil.error(0,"发生错误");
+        }
+         adminNoticeService.save(articleId,Topic.ARTICLE,article.getTitle(),
+                 reason,content,"report");
+         return ResultVoUtil.success();
     }
 
     private ResultVo getResultVo(Page<Article> articlePage) {

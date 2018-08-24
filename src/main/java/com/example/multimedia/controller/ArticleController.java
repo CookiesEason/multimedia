@@ -84,4 +84,11 @@ public class ArticleController {
         likeService.like(articleId, Topic.ARTICLE);
     }
 
+    @PostMapping("/report/{articleId}")
+    public ResultVo report(@PathVariable Long articleId,
+                           @RequestParam String reason,
+                           @RequestParam String reasonContent){
+        return articleService.reportArticle(articleId,reason,reasonContent);
+    }
+
 }

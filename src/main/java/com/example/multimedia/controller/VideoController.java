@@ -111,5 +111,11 @@ public class VideoController {
         videoService.play(videoId);
     }
 
+    @PostMapping("/report/{videoId}")
+    public ResultVo report(@PathVariable Long videoId,
+                           @RequestParam String reason,
+                           @RequestParam String reasonContent){
+        return videoService.reportVideo(videoId,reason,reasonContent);
+    }
 
 }

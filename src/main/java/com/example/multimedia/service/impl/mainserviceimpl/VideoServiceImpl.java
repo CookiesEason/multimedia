@@ -266,11 +266,22 @@ public class VideoServiceImpl implements VideoService {
         videoHistoryRepository.deleteAllByWatchTimeBefore(new Timestamp(System.currentTimeMillis()-259200000));
     }
 
+    @Override
+    public ResultVo reportVideo(Long videoId, String reason, String content) {
+        Video video = findById(videoId);
+        if (video== null){
+            return ResultVoUtil.error(0,"发生错误");
+        }
+        adminNoticeService.save(videoId,Topic.VIDEO,video.getTitle(),
+                reason,content,"report");
+        return ResultVoUtil.success();
+    }
+
     private ResultVo saveVideo(Video video, Tags tags) {
         if (tags!=null){
             video.setTags(tags);
             save(video);
-            adminNoticeService.save(video.getId(),Topic.VIDEO,video.getTitle());
+            adminNoticeService.save(video.getId(),Topic.VIDEO,video.getTitle(),"confirm");
             return ResultVoUtil.success();
         }else {
             return ResultVoUtil.error(0,"分类不存在,请检查你选择的分类");

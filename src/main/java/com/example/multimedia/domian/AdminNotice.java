@@ -30,6 +30,12 @@ public class AdminNotice {
     @Enumerated(EnumType.STRING)
     private Topic topic;
 
+    private String reason;
+
+    private String reasonContent;
+
+    private String type;
+
     @CreatedDate
     private Timestamp date;
 

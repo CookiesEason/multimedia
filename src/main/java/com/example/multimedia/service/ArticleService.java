@@ -93,4 +93,13 @@ public interface ArticleService {
 
     void save(Article article);
 
+    /**
+     * 举报
+     * @param articleId
+     * @param reason
+     * @param content
+     * @return
+     */
+    ResultVo reportArticle(Long articleId,String reason,String content);
+
 }

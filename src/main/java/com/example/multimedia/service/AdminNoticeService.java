@@ -9,7 +9,9 @@ import com.example.multimedia.vo.ResultVo;
  */
 public interface AdminNoticeService {
 
-    void save(Long topicId, Topic topic, String title);
+    void save(Long topicId, Topic topic, String title,String type);
+
+    void save(Long topicId, Topic topic, String title,String reason,String reasonCntent,String type);
 
     ResultVo getAdminNotice(int page);
 

@@ -7,6 +7,7 @@ import com.example.multimedia.service.MailService;
 import com.example.multimedia.service.NoticeService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
+import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -86,6 +87,15 @@ public class UserController {
     @GetMapping("/api/user/{userId}")
     private ResultVo simpleUserInfo(@PathVariable Long userId){
         User user = userService.findById(userId);
+        if (user!=null){
+            return ResultVoUtil.success(new SimpleUserDTO(user));
+        }
+        return ResultVoUtil.error(0,"不存在该用户");
+    }
+
+    @GetMapping("/api/user/me")
+    private ResultVo mySimpleUserInfo(){
+        User user = userService.findByUsername(UserUtil.getUserName());
         if (user!=null){
             return ResultVoUtil.success(new SimpleUserDTO(user));
         }

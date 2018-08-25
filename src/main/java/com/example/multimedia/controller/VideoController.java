@@ -26,13 +26,6 @@ public class VideoController {
     @Qualifier(value = "LikeService")
     private LikeService videoLikeService;
 
-    @Autowired
-    private TagsService tagsService;
-
-    @GetMapping("tags")
-    private ResultVo getTags(){
-        return tagsService.getTags();
-    }
 
     @GetMapping("/watchHistory")
     private ResultVo watchHistory(@RequestParam(defaultValue = "0")int page){

@@ -1,9 +1,13 @@
 package com.example.multimedia.repository;
 
 import com.example.multimedia.domian.maindomian.Article;
+import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -14,10 +18,10 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
 
     Page<Article> findAllByTagsTag(String tag,Pageable pageable);
 
-    Page<Article> findAll(Pageable pageable);
-
     Page<Article> findAllByUserId(Long userId,Pageable pageable);
 
     void deleteByIdAndUserId(Long id, Long userId);
+
+    List<Article> findAllBySmallTags(Set<SmallTags> smallTags);
 
 }

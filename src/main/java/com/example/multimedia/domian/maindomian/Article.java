@@ -1,6 +1,7 @@
 package com.example.multimedia.domian.maindomian;
 
 import com.example.multimedia.domian.maindomian.search.ArticleSearch;
+import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -8,6 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -33,6 +36,9 @@ public class Article {
     @Lob
     @NotBlank(message = "内容不能为空")
     private String text;
+
+    @ManyToMany
+    private Set<SmallTags> smallTags;
 
     private Long readCount = 0L;
 

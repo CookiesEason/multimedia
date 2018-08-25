@@ -28,6 +28,9 @@ public class AdminController {
     private TagsService tagsService;
 
     @Autowired
+    private SmallTagsService smallTagsService;
+
+    @Autowired
     private VideoService videoService;
 
     @Autowired
@@ -98,24 +101,44 @@ public class AdminController {
         return userService.changeRole(userId,role);
     }
 
-    @GetMapping("videos/tags")
+    @GetMapping("tags")
     private ResultVo getTags(){
         return tagsService.getTags();
     }
 
-    @PostMapping("videos/updateTag")
+    @PostMapping("updateTag")
     private ResultVo updateTag(@RequestParam String oldTag,@RequestParam String tag){
         return tagsService.updateTag(oldTag, tag);
     }
 
-    @PostMapping("videos/addTag")
-    private ResultVo addTags(@RequestParam String tag){
+    @PostMapping("addTag")
+    private ResultVo addTag(@RequestParam String tag){
         return tagsService.addTag(tag);
     }
 
-    @PostMapping("videos/deleteTag")
+    @PostMapping("deleteTag")
     private ResultVo deleteTag(@RequestParam String tag){
         return tagsService.deleteTag(tag);
+    }
+
+    @GetMapping("smallTags")
+    private ResultVo getSmallTag(@RequestParam(defaultValue = "0")int page){
+        return ResultVoUtil.success(smallTagsService.findAll(page));
+    }
+
+    @PostMapping("addSmallTags")
+    private ResultVo addSmallTag(@RequestParam String tag,@RequestParam String smallTag){
+        return smallTagsService.save(smallTag,tag);
+    }
+
+    @PostMapping("updateSmallTags/{smallTagId}")
+    private ResultVo updateSmallTag(@PathVariable Long smallTagId,String newTag){
+        return smallTagsService.update(smallTagId,newTag);
+    }
+
+    @DeleteMapping("smallTags/{smallTagId}")
+    private ResultVo deteleSmallTag(@PathVariable Long smallTagId){
+        return smallTagsService.delete(smallTagId);
     }
 
     @GetMapping("videos")

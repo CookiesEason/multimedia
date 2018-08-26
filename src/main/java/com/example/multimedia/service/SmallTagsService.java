@@ -1,10 +1,12 @@
 package com.example.multimedia.service;
 
+import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SmallTagDTO;
 import com.example.multimedia.vo.ResultVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -22,4 +24,7 @@ public interface SmallTagsService {
 
     ResultVo delete(Long id);
 
+    Set<SmallTags> findAllBySmallTag(Set<String> set);
+
+    SmallTags findBySmallTag(String tag);
 }

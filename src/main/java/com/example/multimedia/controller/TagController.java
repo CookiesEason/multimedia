@@ -23,12 +23,12 @@ public class TagController {
     @Autowired
     private TagsService tagsService;
 
-    @GetMapping("/tags")
+    @GetMapping("/api/tags")
     private ResultVo getTags(){
         return tagsService.getTags();
     }
 
-    @RequestMapping("/smallTags")
+    @RequestMapping("/api/smallTags")
     private ResultVo getSmallTagsByTag(@RequestParam String tag){
         return ResultVoUtil.success(smallTagsService.getSmallTagByTag(tag));
     }

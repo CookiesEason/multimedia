@@ -2,6 +2,9 @@ package com.example.multimedia.service;
 
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.vo.ResultVo;
+import org.springframework.data.domain.Page;
+
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -16,7 +19,7 @@ public interface ArticleService {
      * @param tag
      * @return
      */
-    ResultVo save(String title,String text,String tag);
+    ResultVo save(String title, String text, String tag, Set<String> smallTags);
 
     /**
      * 更新文章
@@ -26,7 +29,7 @@ public interface ArticleService {
      * @param tag
      * @return
      */
-    ResultVo update(Long articleId,String title,String text,String tag);
+    ResultVo update(Long articleId,String title,String text,String tag,Set<String> smallTags);
 
     /**
      * 删除文章
@@ -90,6 +93,14 @@ public interface ArticleService {
      * @return
      */
     Article findById(long id);
+
+    /**
+     * 按某标签查找
+     * @param page
+     * @param smallTag
+     * @return
+     */
+    ResultVo findAllBySmallTag(int page, int size,String smallTag,String sort);
 
     void save(Article article);
 

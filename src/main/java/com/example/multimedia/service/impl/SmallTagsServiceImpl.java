@@ -2,12 +2,13 @@ package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Tags;
+import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SmallTagDTO;
 import com.example.multimedia.repository.ArticleRepository;
 import com.example.multimedia.repository.SmallTagsRepository;
-import com.example.multimedia.service.ArticleService;
+import com.example.multimedia.repository.VideoRepository;
 import com.example.multimedia.service.SmallTagsService;
 import com.example.multimedia.service.TagsService;
 import com.example.multimedia.util.ResultVoUtil;
@@ -40,6 +41,9 @@ public class SmallTagsServiceImpl implements SmallTagsService {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private VideoRepository videoRepository;
+
     @Override
     @CacheEvict(value = "smallTags",key = "#tag")
     public ResultVo save(String smallTag, String tag) {
@@ -47,8 +51,8 @@ public class SmallTagsServiceImpl implements SmallTagsService {
         if (tags==null){
             return ResultVoUtil.error(0,"分类不存在");
         }
-        if (smallTagsRepository.findBySmallTag(smallTag)!=null){
-            return ResultVoUtil.error(0,"标签存在");
+        if (findBySmallTag(smallTag)!=null){
+            return ResultVoUtil.error(0,"标签已存在");
         }
         SmallTags smallTags = new SmallTags();
         smallTags.setSmallTag(smallTag);
@@ -98,18 +102,31 @@ public class SmallTagsServiceImpl implements SmallTagsService {
     @Override
     @CacheEvict(value = "smallTags",allEntries = true)
     public ResultVo delete(Long id) {
-        // TODO: 2018/08/25  删除级联
-        Set<SmallTags> smallTagsSet = new HashSet<>();
         SmallTags smallTags = smallTagsRepository.getOne(id);
-        smallTagsSet.add(smallTags);
         List<Article> articles = new ArrayList<>();
-        articleRepository.findAllBySmallTags(smallTagsSet).forEach(article -> {
+        articleRepository.findAllBySmallTags(smallTags).forEach(article -> {
             article.getSmallTags().remove(smallTags);
             articles.add(article);
         });
+        List<Video> videos = new ArrayList<>();
+        videoRepository.findAllBySmallTags(smallTags).forEach(video -> {
+            video.getSmallTags().remove(smallTags);
+            videos.add(video);
+        });
         articleRepository.saveAll(articles);
+        videoRepository.saveAll(videos);
         smallTagsRepository.deleteById(id);
         return ResultVoUtil.success();
+    }
+
+    @Override
+    public Set<SmallTags> findAllBySmallTag(Set<String> set) {
+        return smallTagsRepository.findBySmallTagIn(set);
+    }
+
+    @Override
+    public SmallTags findBySmallTag(String tag) {
+        return smallTagsRepository.findBySmallTag(tag);
     }
 
 

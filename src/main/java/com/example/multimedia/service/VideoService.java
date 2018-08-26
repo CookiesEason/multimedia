@@ -4,6 +4,8 @@ import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 /**
  * 视频
  * @author CookiesEason
@@ -20,7 +22,8 @@ public interface VideoService {
      * @param multipartFile;
      * @return ResultVo
      */
-    ResultVo uploadVideo(String title,String introduction,String tag,MultipartFile multipartFile);
+    ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
+                         MultipartFile multipartFile);
 
     /**
      * 查找自己所有视频(已通过，和未通过)
@@ -72,7 +75,7 @@ public interface VideoService {
      * @param tag;
      * @return ResultVo
      */
-    ResultVo updateVideo(long id,String title, String introduction, String tag);
+    ResultVo updateVideo(long id,String title, String introduction, String tag, Set<String> smallTags);
 
     /**
      * 获取单个视频信息
@@ -133,4 +136,12 @@ public interface VideoService {
      * @return
      */
     ResultVo reportVideo(Long videoId,String reason,String content);
+
+    /**
+     * 按某标签查找
+     * @param page
+     * @param smallTag
+     * @return
+     */
+    ResultVo findAllBySmallTag(int page, int size,String smallTag,String sort);
 }

@@ -22,6 +22,8 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
 
     void deleteByIdAndUserId(Long id, Long userId);
 
-    List<Article> findAllBySmallTags(Set<SmallTags> smallTags);
+    List<Article> findAllBySmallTags(SmallTags smallTags);
+
+    Page<Article> findAllBySmallTags(SmallTags smallTags,Pageable pageable);
 
 }

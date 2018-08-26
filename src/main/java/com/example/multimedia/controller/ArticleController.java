@@ -1,12 +1,15 @@
 package com.example.multimedia.controller;
 
 import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.service.ArticleService;
 import com.example.multimedia.service.LikeService;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -40,6 +43,14 @@ public class ArticleController {
         return articleService.findAllByTag(page,size,order,sort,tag);
     }
 
+    @GetMapping("/smallTag")
+    public ResultVo getArticlesBySmallTag(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size,
+                                          @RequestParam String smallTag,
+                                          @RequestParam(defaultValue = "createDate") String sort){
+        return articleService.findAllBySmallTag(page, size, smallTag, sort);
+    }
+
     @GetMapping("/{articleId}")
     public ResultVo getArticle(@PathVariable Long articleId){
         return articleService.findById(articleId);
@@ -63,15 +74,17 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResultVo saveArticle(@RequestParam String title,@RequestParam String text,
-                                 @RequestParam String tag) {
-        return articleService.save(title, text, tag);
+    public ResultVo saveArticle(@RequestParam String title, @RequestParam String text,
+                                @RequestParam String tag,
+                                @RequestParam(value = "smallTags")Set<String> smallTags) {
+        return articleService.save(title, text, tag,smallTags);
     }
 
     @PostMapping("/update/{articleId}")
     public ResultVo updateArticle(@PathVariable Long articleId,@RequestParam String title,
-                                   @RequestParam String text,@RequestParam String tag){
-        return articleService.update(articleId, title, text, tag);
+                                   @RequestParam String text,@RequestParam String tag,
+                                  @RequestParam(value = "smallTags")Set<String> smallTags){
+        return articleService.update(articleId, title, text, tag,smallTags);
     }
 
     @DeleteMapping("/{articleId}")

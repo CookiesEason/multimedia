@@ -4,6 +4,7 @@ import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.VideoHistory;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.TopicLike;
+import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.Video;
@@ -24,10 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.sql.Timestamp;
-import java.util.Optional;
 
 /**
  * @author CookiesEason
@@ -65,6 +64,9 @@ public class VideoServiceImpl implements VideoService {
     private NoticeService noticeService;
 
     @Autowired
+    private SmallTagsService smallTagsService;
+
+    @Autowired
     @Qualifier(value = "LikeService")
     private LikeService likeService;
 
@@ -72,13 +74,14 @@ public class VideoServiceImpl implements VideoService {
     private TagsService tagsService;
 
     @Override
-    public ResultVo uploadVideo(String title,String introduction,String tag,MultipartFile multipartFile) {
+    public ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
+                                MultipartFile multipartFile) {
         Video video = new Video();
         if (multipartFile==null){
             video.setTitle(title);
             video.setIntroduction(introduction);
             video.setUserId(getUid());
-            return saveVideo(video, tagsService.findByTag(tag));
+            return saveVideo(video, tagsService.findByTag(tag),smallTags);
         }
         if (!multipartFile.getOriginalFilename().contains(PREFIX_VIDEO)){
             ResultVo resultVo = fileService.uploadFile(multipartFile);
@@ -89,7 +92,7 @@ public class VideoServiceImpl implements VideoService {
             video.setIntroduction(introduction);
             video.setUserId(getUid());
             video.setVideoUrl(resultVo.getData().toString());
-            return saveVideo(video, tagsService.findByTag(tag));
+            return saveVideo(video, tagsService.findByTag(tag),smallTags);
         }else {
             return ResultVoUtil.error(0,"请注意上传的文件为视频");
         }
@@ -102,13 +105,7 @@ public class VideoServiceImpl implements VideoService {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Video> videos = videoRepository.findAllByUserIdAndEnable(pageable,getUid(),isEnable);
-        List<VideoDTO> videoDTOS = new ArrayList<>();
-        for (Video video :videos.getContent()){
-            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
-            videoDTOS.add(videoDTO);
-        }
-        VideosDTO videosDTO = new VideosDTO(videoDTOS,videos.getTotalElements(),
-                (long) videos.getTotalPages());
+        VideosDTO videosDTO = getVideosDTO(videos);
         return ResultVoUtil.success(videosDTO);
     }
 
@@ -116,13 +113,7 @@ public class VideoServiceImpl implements VideoService {
     public ResultVo findVideos(int page, int size,String order,String sort,Boolean enable) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<Video> videos = videoRepository.findAllByEnable(pageable,enable);
-        List<VideoDTO> videoDTOS = new ArrayList<>();
-        for (Video video :videos.getContent()){
-            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
-            videoDTOS.add(videoDTO);
-        }
-        VideosDTO videosDTO = new VideosDTO(videoDTOS,videos.getTotalElements(),
-                (long) videos.getTotalPages());
+        VideosDTO videosDTO = getVideosDTO(videos);
         return ResultVoUtil.success(videosDTO);
     }
 
@@ -131,13 +122,7 @@ public class VideoServiceImpl implements VideoService {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Video> videos = videoRepository.findAllByEnableAndTagsTag(pageable,true,tag);
-        List<VideoDTO> videoDTOS = new ArrayList<>();
-        for (Video video :videos.getContent()){
-            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
-            videoDTOS.add(videoDTO);
-        }
-        VideosDTO videosDTO = new VideosDTO(videoDTOS,videos.getTotalElements(),
-                (long) videos.getTotalPages());
+        VideosDTO videosDTO = getVideosDTO(videos);
         return ResultVoUtil.success(videosDTO);
     }
 
@@ -146,14 +131,24 @@ public class VideoServiceImpl implements VideoService {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Video> videos = videoRepository.findAllByUserIdAndEnable(pageable,userId,true);
+        VideosDTO videosDTO = getVideosDTO(videos);
+        return ResultVoUtil.success(videosDTO);
+    }
+
+    private VideosDTO getVideosDTO(Page<Video> videos) {
         List<VideoDTO> videoDTOS = new ArrayList<>();
-        for (Video video :videos.getContent()){
-            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
+        for (Video video : videos.getContent()) {
+            Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
+            video.getSmallTags().forEach(smallTags -> {
+                SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
+                smallTagDTOS.add(smallTagDTO);
+            });
+            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),
+                    video, smallTagDTOS);
             videoDTOS.add(videoDTO);
         }
-        VideosDTO videosDTO = new VideosDTO(videoDTOS,videos.getTotalElements(),
+        return new VideosDTO(videoDTOS, videos.getTotalElements(),
                 (long) videos.getTotalPages());
-        return ResultVoUtil.success(videosDTO);
     }
 
     @Override
@@ -166,7 +161,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public ResultVo updateVideo(long id,String title, String introduction, String tag) {
+    public ResultVo updateVideo(long id,String title, String introduction, String tag, Set<String> smallTags) {
         Video video = videoRepository.findByIdAndUserId(id,getUid());
         if (introduction.length()<10){
             return ResultVoUtil.error(0,"请输入介绍信息不少于10个字");
@@ -174,7 +169,7 @@ public class VideoServiceImpl implements VideoService {
         video.setTitle(title);
         video.setIntroduction(introduction);
         Tags tags = tagsService.findByTag(tag);
-        return saveVideo(video,tags);
+        return saveVideo(video,tags,smallTags);
     }
 
     @Override
@@ -185,10 +180,16 @@ public class VideoServiceImpl implements VideoService {
         if (topicLike !=null){
             isLike = topicLike.isStatus();
         }
+        Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
+        Video video = videoRepository.findById(id);
+        video.getSmallTags().forEach(smallTags -> {
+            SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
+            smallTagDTOS.add(smallTagDTO);
+        });
         VideoDTO videoDTO = new VideoDTO(
                 new SimpleUserDTO(getUser(UserUtil.getUserName())),
-                videoRepository.findById(id),
-                isLike);
+                video,
+                isLike,smallTagDTOS);
         return ResultVoUtil.success(videoDTO);
     }
 
@@ -277,12 +278,26 @@ public class VideoServiceImpl implements VideoService {
         return ResultVoUtil.success();
     }
 
-    private ResultVo saveVideo(Video video, Tags tags) {
+    @Override
+    public ResultVo findAllBySmallTag(int page, int size, String smallTag, String sort) {
+        Sort s = new Sort(Sort.Direction.DESC,sort);
+        Pageable pageable = PageRequest.of(page,size,s);
+        Page<Video> videoPage = videoRepository.findAllBySmallTags(smallTagsService.findBySmallTag(smallTag),pageable);
+        VideosDTO videosDTO = getVideosDTO(videoPage);
+        return ResultVoUtil.success(videosDTO);
+    }
+
+    private ResultVo saveVideo(Video video, Tags tags,Set<String> smallTags) {
+        Set<SmallTags> smallTagsSet = smallTagsService.findAllBySmallTag(smallTags);
         if (tags!=null){
-            video.setTags(tags);
-            save(video);
-            adminNoticeService.save(video.getId(),Topic.VIDEO,video.getTitle(),"confirm");
-            return ResultVoUtil.success();
+           if (smallTagsSet.size()>0){
+               video.setTags(tags);
+               video.setSmallTags(smallTagsSet);
+               save(video);
+               adminNoticeService.save(video.getId(),Topic.VIDEO,video.getTitle(),"confirm");
+               return ResultVoUtil.success();
+           }
+            return ResultVoUtil.error(0,"必须选择一个分类");
         }else {
             return ResultVoUtil.error(0,"分类不存在,请检查你选择的分类");
         }

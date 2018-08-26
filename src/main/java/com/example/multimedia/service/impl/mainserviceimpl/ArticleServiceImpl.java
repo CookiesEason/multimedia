@@ -5,9 +5,11 @@ import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.TopicLike;
+import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.ArticleDTO;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
+import com.example.multimedia.dto.SmallTagDTO;
 import com.example.multimedia.repository.ArticleRepository;
 import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
@@ -22,9 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author CookiesEason
@@ -48,38 +48,51 @@ public class ArticleServiceImpl implements ArticleService {
     private TagsService tagsService;
 
     @Autowired
+    private SmallTagsService smallTagsService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
     private AdminNoticeService adminNoticeService;
 
     @Override
-    public ResultVo save(String title, String text, String tag) {
+    public ResultVo save(String title, String text, String tag, Set<String> smallTags) {
         Article article = new Article();
         article.setTitle(title);
         article.setText(text);
         Tags tags = tagsService.findByTag(tag);
+        Set<SmallTags> smallTagsSet = smallTagsService.findAllBySmallTag(smallTags);
         if (tags!=null){
-            article.setUserId(getUid());
-            article.setTags(tags);
-            articleRepository.save(article);
-            return ResultVoUtil.success();
+            if (smallTagsSet.size()>0){
+                article.setUserId(getUid());
+                article.setTags(tags);
+                article.setSmallTags(smallTagsSet);
+                articleRepository.save(article);
+                return ResultVoUtil.success();
+            }
+            return ResultVoUtil.error(0,"必须选择一个标签");
         }
         return ResultVoUtil.error(0,"分类不存在,请检查你选择的分类");
     }
 
     @Override
-    public ResultVo update(Long articleId, String title, String text, String tag) {
+    public ResultVo update(Long articleId, String title, String text, String tag,Set<String> smallTags) {
         Optional<Article> article = articleRepository.findById(articleId);
         if (article.isPresent()){
             Article newArticle = article.get();
             newArticle.setTitle(title);
             newArticle.setText(text);
             Tags tags = tagsService.findByTag(tag);
+            Set<SmallTags> smallTagsSet = smallTagsService.findAllBySmallTag(smallTags);
             if (tags!=null){
-                newArticle.setTags(tags);
-                articleRepository.save(newArticle);
-                return ResultVoUtil.success();
+                if (smallTagsSet.size()>0){
+                    newArticle.setTags(tags);
+                    newArticle.setSmallTags(smallTagsSet);
+                    articleRepository.save(newArticle);
+                    return ResultVoUtil.success();
+                }
+                return ResultVoUtil.error(0,"必须选择一个标签");
             }
             return ResultVoUtil.error(0,"分类不存在,请检查你选择的分类");
         }
@@ -136,8 +149,13 @@ public class ArticleServiceImpl implements ArticleService {
             Article article = articleOptional.get();
             article.setReadCount(article.getReadCount()+1);
             save(article);
+            Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
+            article.getSmallTags().forEach(smallTags -> {
+                SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
+                smallTagDTOS.add(smallTagDTO);
+            });
             return ResultVoUtil.success(new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
-                    article,isLike));
+                    article,isLike,smallTagDTOS));
         }
         return ResultVoUtil.error(404,"发生未知的错误");
     }
@@ -146,6 +164,14 @@ public class ArticleServiceImpl implements ArticleService {
     public Article findById(long id) {
         Optional<Article> video = articleRepository.findById(id);
         return video.orElse(null);
+    }
+
+    @Override
+    public ResultVo findAllBySmallTag(int page, int size,String smallTag,String sort) {
+        Sort s = new Sort(Sort.Direction.DESC,sort);
+        Pageable pageable = PageRequest.of(page,size,s);
+        Page<Article> articlePage = articleRepository.findAllBySmallTags(smallTagsService.findBySmallTag(smallTag),pageable);
+        return getResultVo(articlePage);
     }
 
     @Override
@@ -166,9 +192,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     private ResultVo getResultVo(Page<Article> articlePage) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
+        Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
         articlePage.getContent().forEach(article -> {
+            article.getSmallTags().forEach(smallTags -> {
+                SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
+                smallTagDTOS.add(smallTagDTO);
+            });
             ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
-                    article);
+                    article,smallTagDTOS);
             articleDTOList.add(articleDTO);
         });
         return ResultVoUtil.success(new PageDTO<>(articleDTOList, articlePage.getTotalElements(),

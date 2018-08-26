@@ -1,6 +1,7 @@
 package com.example.multimedia.domian.maindomian;
 
 import com.example.multimedia.domian.maindomian.search.VideoSearch;
+import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -45,6 +47,8 @@ public class Video {
     @OneToOne(fetch = FetchType.EAGER)
     private Tags tags;
 
+    @ManyToMany
+    private Set<SmallTags> smallTags;
 
     public Video() {
     }

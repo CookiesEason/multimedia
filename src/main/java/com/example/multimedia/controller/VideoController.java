@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 /**
  * @author CookiesEason
  * 2018/08/03 16:46
@@ -35,8 +37,10 @@ public class VideoController {
     @PostMapping
     @ResponseBody
     private ResultVo uploadVideo(@RequestParam String title,@RequestParam String introduction,
-                                 @RequestParam String tag, @RequestParam(value = "file",required = false) MultipartFile multipartFile){
-        return videoService.uploadVideo(title,introduction,tag,multipartFile);
+                                 @RequestParam String tag,
+                                 @RequestParam(value = "smallTags") Set<String> smallTags,
+                                 @RequestParam(value = "file",required = false) MultipartFile multipartFile){
+        return videoService.uploadVideo(title,introduction,tag,smallTags,multipartFile);
     }
 
     @GetMapping("/{id}")
@@ -48,8 +52,10 @@ public class VideoController {
     @PostMapping("/{id}")
     @ResponseBody
     private ResultVo updateVideo(@PathVariable long id,@RequestParam String title,
-                                 @RequestParam String introduction, @RequestParam String tag){
-        return videoService.updateVideo(id,title,introduction,tag);
+                                 @RequestParam String introduction,
+                                 @RequestParam String tag,
+                                 @RequestParam(value = "smallTags") Set<String> smallTags){
+        return videoService.updateVideo(id,title,introduction,tag,smallTags);
     }
 
     @DeleteMapping("/{id}")
@@ -58,7 +64,7 @@ public class VideoController {
         return videoService.deleteById(id);
     }
 
-    @GetMapping("/user")
+    @GetMapping("/me")
     @ResponseBody
     private ResultVo findMyVideos(@RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "createDate") String sort,
@@ -92,6 +98,14 @@ public class VideoController {
                                 @RequestParam(defaultValue = "createDate") String sort,
                                      @RequestParam String tag){
         return videoService.findAllByTag(page,size,sort,tag);
+    }
+
+    @GetMapping("/smallTag")
+    public ResultVo getVideosBySmallTag(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size,
+                                          @RequestParam String smallTag,
+                                          @RequestParam(defaultValue = "createDate") String sort){
+        return videoService.findAllBySmallTag(page, size, smallTag, sort);
     }
 
     @PostMapping("/like/{videoId}")

@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -163,8 +164,9 @@ public class AdminController {
     private ResultVo updateVideo(@PathVariable Long videoId,
                                  @RequestParam String title,
                                  @RequestParam String introduction,
+                                 @RequestParam(value = "smallTags") Set<String> smallTags,
                                  @RequestParam String tag){
-        return videoService.updateVideo(videoId,title,introduction,tag);
+        return videoService.updateVideo(videoId,title,introduction,tag,smallTags);
     }
 
     @PostMapping("videos/enable/{videoId}")
@@ -197,8 +199,9 @@ public class AdminController {
     public ResultVo updateArticle(@PathVariable Long articleId,
                                   @RequestParam String title,
                                   @RequestParam String text,
-                                  @RequestParam String tag){
-        return articleService.update(articleId, title, text, tag);
+                                  @RequestParam String tag,
+                                  @RequestParam(value = "smallTags") Set<String> smallTags){
+        return articleService.update(articleId, title, text, tag,smallTags);
     }
 
     @DeleteMapping("articles/{articleId}")

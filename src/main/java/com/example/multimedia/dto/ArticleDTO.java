@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -31,27 +32,32 @@ public class ArticleDTO implements Serializable {
     private Long likeCount;
 
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+    private Set<SmallTagDTO> smallTags;
+
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private Boolean isLike;
 
     private Timestamp createDate;
 
-    public ArticleDTO(SimpleUserDTO user, Article article) {
+    public ArticleDTO(SimpleUserDTO user, Article article,Set<SmallTagDTO> smallTags) {
         this.id = article.getId();
         this.user = user;
         this.tag = article.getTags().getTag();
         this.title = article.getTitle();
         this.text = article.getText();
+        this.smallTags = smallTags;
         this.readCount = article.getReadCount();
         this.likeCount = article.getLikeCount();
         this.createDate = article.getCreateDate();
     }
 
-    public ArticleDTO(SimpleUserDTO user, Article article,Boolean isLike) {
+    public ArticleDTO(SimpleUserDTO user, Article article,Boolean isLike,Set<SmallTagDTO> smallTags) {
         this.id = article.getId();
         this.user = user;
         this.tag = article.getTags().getTag();
         this.title = article.getTitle();
         this.text = article.getText();
+        this.smallTags = smallTags;
         this.readCount = article.getReadCount();
         this.likeCount = article.getLikeCount();
         this.isLike = isLike;

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -15,5 +16,7 @@ public interface SmallTagsRepository extends JpaRepository<SmallTags,Long> {
     List<SmallTags> findAllByTagsTag(String tag);
 
     SmallTags findBySmallTag(String smallTag);
+
+    Set<SmallTags> findBySmallTagIn(Set<String> set);
 
 }

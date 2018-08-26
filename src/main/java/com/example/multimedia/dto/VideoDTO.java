@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -32,11 +33,14 @@ public class VideoDTO {
     private String tag;
 
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+    private Set<SmallTagDTO> smallTags;
+
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private Boolean isLike;
 
     private Boolean enable;
 
-    public VideoDTO(SimpleUserDTO user, Video video,Boolean isLike) {
+    public VideoDTO(SimpleUserDTO user, Video video,Boolean isLike,Set<SmallTagDTO> smallTags) {
         this.videoId = video.getId();
         this.user = user;
         this.title = video.getTitle();
@@ -46,11 +50,12 @@ public class VideoDTO {
         this.likeCount = video.getLikeCount();
         this.createDate = video.getCreateDate();
         this.tag = video.getTags().getTag();
+        this.smallTags = smallTags;
         this.enable = video.isEnable();
         this.isLike = isLike;
 }
 
-    public VideoDTO(SimpleUserDTO user, Video video) {
+    public VideoDTO(SimpleUserDTO user, Video video,Set<SmallTagDTO> smallTags) {
         this.videoId = video.getId();
         this.user = user;
         this.title = video.getTitle();
@@ -60,6 +65,7 @@ public class VideoDTO {
         this.likeCount = video.getLikeCount();
         this.createDate = video.getCreateDate();
         this.tag = video.getTags().getTag();
+        this.smallTags = smallTags;
         this.enable = video.isEnable();
     }
 

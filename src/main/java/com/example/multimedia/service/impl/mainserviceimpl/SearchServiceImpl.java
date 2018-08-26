@@ -36,7 +36,9 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -79,7 +81,8 @@ public class SearchServiceImpl implements SearchService {
         videoSearchPage.getContent().forEach(videoSearch -> {
             if (enable.equals(videoSearch.getEnable())){
                 Video video = new Video(videoSearch,tagsRepository.findById(videoSearch.getTags_id()).get());
-                VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),video);
+                VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),
+                        video,null);
                 videoDTOS.add(videoDTO);
             }
         });
@@ -96,7 +99,7 @@ public class SearchServiceImpl implements SearchService {
         articleSearchPage.getContent().forEach(articleSearch -> {
             Article article = new Article(articleSearch,tagsRepository.findById(articleSearch.getTags_id()).get());
             ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
-                    article);
+                    article,null);
             articleDTOList.add(articleDTO);
         });
         PageDTO<ArticleDTO> articleDTOPageDTO = new PageDTO<>(articleDTOList,articleSearchPage.getTotalElements(),

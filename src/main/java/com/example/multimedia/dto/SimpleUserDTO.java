@@ -1,6 +1,7 @@
 package com.example.multimedia.dto;
 
 import com.example.multimedia.domian.User;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 /**
@@ -16,9 +17,19 @@ public class SimpleUserDTO {
 
     private String headUrl;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+    private Long hot;
+
     public SimpleUserDTO(User user) {
         this.id = user.getId();
         this.nickname = user.getUserInfo().getNickname();
         this.headUrl = user.getUserInfo().getHeadImgUrl();
+    }
+
+    public SimpleUserDTO(User user,Long hot) {
+        this.id = user.getId();
+        this.nickname = user.getUserInfo().getNickname();
+        this.headUrl = user.getUserInfo().getHeadImgUrl();
+        this.hot = hot;
     }
 }

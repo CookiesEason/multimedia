@@ -3,6 +3,8 @@ package com.example.multimedia.service.impl;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.domian.UserRole;
+import com.example.multimedia.dto.PageDTO;
+import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.dto.UsersDTO;
 import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.repository.UserRoleRepository;
@@ -20,6 +22,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -208,6 +211,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllByIdIn(List<Long> ids) {
         return userRepository.findUsersByIdIn(ids);
+    }
+
+    @Override
+    public int getUserHot(Long userId) {
+        return userRepository.getUserWorkHot(userId);
+    }
+
+    @Override
+    public ResultVo findHotUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<SimpleUserDTO> simpleUserDTOS = new ArrayList<>();
+        Page<User> users = userRepository.getHotUsers(pageable);
+        users.getContent().forEach(user -> {
+            SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user,(long)getUserHot(user.getId()));
+            simpleUserDTOS.add(simpleUserDTO);
+        });
+        PageDTO<SimpleUserDTO> userDTOPageDTO = new PageDTO<>(simpleUserDTOS,users.getTotalElements(),
+                (long)users.getTotalPages());
+        return ResultVoUtil.success(userDTOPageDTO);
     }
 
     @Override

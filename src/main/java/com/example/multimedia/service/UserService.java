@@ -119,6 +119,16 @@ public interface UserService {
      */
     List<User> findAllByIdIn(List<Long> ids);
 
+    int getUserHot(Long userId);
+
+    /**
+     * 热度
+     * @param page
+     * @param size
+     * @return
+     */
+    ResultVo findHotUsers(int page, int size);
+
     /**
      * 确认是否具有评论权限
      * @return

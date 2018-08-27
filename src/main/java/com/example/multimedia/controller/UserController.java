@@ -3,6 +3,7 @@ package com.example.multimedia.controller;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.dto.SimpleUserDTO;
+import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.service.MailService;
 import com.example.multimedia.service.NoticeService;
 import com.example.multimedia.service.UserService;
@@ -36,6 +37,9 @@ public class UserController {
 
     @Autowired
     private NoticeService noticeService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/api/user/register")
     private ResultVo registerUser(@Validated User user, BindingResult bindingResult){
@@ -95,12 +99,25 @@ public class UserController {
 
     @GetMapping("/api/user/me")
     private ResultVo mySimpleUserInfo(){
+        // TODO: 2018/08/27  可能删除
         User user = userService.findByUsername(UserUtil.getUserName());
         if (user!=null){
             return ResultVoUtil.success(new SimpleUserDTO(user));
         }
         return ResultVoUtil.error(0,"不存在该用户");
     }
+
+    @GetMapping("/api/user/hot/{userId}")
+    public int getWorksHot(@PathVariable Long userId){
+        return  userService.getUserHot(userId);
+    }
+
+    @GetMapping("/api/user/hot")
+    public ResultVo getHotUser(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "10") int size){
+        return userService.findHotUsers(page, size);
+    }
+
 
     @GetMapping("/api/user/messages")
     private ResultVo getMessages(@RequestParam(defaultValue = "0") int page){

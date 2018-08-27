@@ -1,5 +1,7 @@
 package com.example.multimedia.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.multimedia.properties.TengXunProperties;
 import com.example.multimedia.service.FileService;
 import com.example.multimedia.util.ResultVoUtil;
@@ -61,5 +63,44 @@ public class FileServiceImpl implements FileService {
             cosClient.shutdown();
         }
         return ResultVoUtil.error(0,"发生错误,请稍后重试");
+    }
+
+    @Override
+    public JSONObject uploadWangFile(MultipartFile multipartFile) {
+        JSONObject jsonObject=new JSONObject();
+        JSONArray jsonArray=new JSONArray();
+        if (multipartFile.isEmpty()){
+            jsonObject.put("errno",1);
+            return jsonObject;
+        }
+        String oldFileName = multipartFile.getOriginalFilename();
+        String eName = oldFileName.substring(oldFileName.lastIndexOf("."));
+        String newFileName = UUID.randomUUID()+eName;
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month=cal.get(Calendar.MONTH)+1;
+        int day=cal.get(Calendar.DATE);
+        COSCredentials cred = new BasicCOSCredentials(tengXunProperties.getAccessKey(), tengXunProperties.getSecretKey());
+        ClientConfig clientConfig = new ClientConfig(new Region(tengXunProperties.getBucket()));
+        COSClient cosClient = new COSClient(cred,clientConfig);
+        String bucketName = tengXunProperties.getBucketName();
+        try {
+            File localFile = File.createTempFile("temp", null);
+            multipartFile.transferTo(localFile);
+            String key = "/"+year+"/"+month+"/"+day+"/"+newFileName;
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
+            PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
+            jsonObject.put("errno",0);
+            jsonArray.add(tengXunProperties.getPath()+putObjectRequest.getKey());
+            jsonObject.put("data",jsonArray);
+            return jsonObject;
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        finally {
+            cosClient.shutdown();
+        }
+        jsonObject.put("errno",1);
+        return jsonObject;
     }
 }

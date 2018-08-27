@@ -26,14 +26,14 @@ public class FollowerController {
         return followerService.checkFollow(followerId);
     }
 
-    @GetMapping("/followers")
-    private ResultVo getFollowers(@RequestParam(defaultValue = "0")int page){
-        return followerService.getFollowers(page);
+    @GetMapping("/followers/{userId}")
+    private ResultVo getFollowers(@PathVariable Long userId,@RequestParam(defaultValue = "0")int page){
+        return followerService.getFollowers(page,userId);
     }
 
-    @GetMapping("/fans")
-    private ResultVo getFans(@RequestParam(defaultValue = "0") int page){
-        return followerService.getFans(page);
+    @GetMapping("/fans/{userId}")
+    private ResultVo getFans(@PathVariable Long userId,@RequestParam(defaultValue = "0") int page){
+        return followerService.getFans(page,userId);
     }
 
 

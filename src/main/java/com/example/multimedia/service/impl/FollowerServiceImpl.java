@@ -69,16 +69,16 @@ public class FollowerServiceImpl implements FollowerService {
     }
 
     @Override
-    public ResultVo getFollowers(int page) {
+    public ResultVo getFollowers(int page,Long userId) {
         Pageable pageable = PageRequest.of(page,SIZE);
-        Page<Follower> followerPage = followerRepository.findAllByUserId(getUid(),pageable);
+        Page<Follower> followerPage = followerRepository.findAllByUserId(userId,pageable);
         return getUsers(followerPage);
     }
 
     @Override
-    public ResultVo getFans(int page) {
+    public ResultVo getFans(int page,Long userId) {
         Pageable pageable = PageRequest.of(page,SIZE);
-        Page<Follower> followerPage = followerRepository.findAllByFollowerId(getUid(),pageable);
+        Page<Follower> followerPage = followerRepository.findAllByFollowerId(userId,pageable);
         return getUsers(followerPage);
     }
 

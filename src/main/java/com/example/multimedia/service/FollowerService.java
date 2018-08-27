@@ -26,13 +26,13 @@ public interface FollowerService {
      * 获取关注列表
      * @return
      */
-    ResultVo getFollowers(int page);
+    ResultVo getFollowers(int page, Long userId);
 
     /**
      * 获取粉丝列表
      * @return
      */
-    ResultVo getFans(int page);
+    ResultVo getFans(int page, Long userId);
 
 
 }

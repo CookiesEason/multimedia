@@ -33,7 +33,6 @@ public class Announcement {
     private String tag;
 
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private Timestamp createDate;
 
 }

@@ -16,13 +16,18 @@ public class AnnouncementController {
     @Autowired
     private AnnouncementService announcementService;
 
+    @GetMapping("/{id}")
+    public ResultVo getAnnounces(@PathVariable Long id){
+        return announcementService.findOne(id);
+    }
+
     @GetMapping
     public ResultVo getAnnounces(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size){
         return announcementService.findAll(page, size);
     }
 
-    @GetMapping("/{tag}")
+    @GetMapping("/tag/{tag}")
     public ResultVo getAnnounces(@PathVariable String tag,
                                  @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size){

@@ -9,6 +9,13 @@ import com.example.multimedia.vo.ResultVo;
 public interface AnnouncementService {
 
     /**
+     * 查看某篇
+     * @param id
+     * @return
+     */
+    ResultVo findOne(Long id);
+
+    /**
      * 查询所有
      * @param page
      * @param size

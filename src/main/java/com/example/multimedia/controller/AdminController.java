@@ -52,6 +52,9 @@ public class AdminController {
     @Autowired
     private AdminNoticeService adminNoticeService;
 
+    @Autowired
+    private AnnouncementService announcementService;
+
     @GetMapping("users")
     private ResultVo findUsers(@RequestParam(defaultValue = "0") int page){
         String role = "%USER%";
@@ -282,6 +285,24 @@ public class AdminController {
     @DeleteMapping("messages/{messageId}")
     private void deleteMessage(@PathVariable Long messageId){
         adminNoticeService.deleteById(messageId);
+    }
+
+
+    @PostMapping("/announcements")
+    public ResultVo saveAnnouncements(@RequestParam String title,
+                                      @RequestParam String text,@RequestParam String tag){
+        return announcementService.save(title, text, tag);
+    }
+
+    @PostMapping("/announcements/update")
+    public ResultVo updateAnnouncements(@RequestParam Long id,@RequestParam String title,
+                                        @RequestParam String text,@RequestParam String tag){
+        return announcementService.update(id,title, text, tag);
+    }
+
+    @DeleteMapping("/announcements/{id}")
+    public ResultVo deleteAnnouncements(@PathVariable Long id){
+        return announcementService.delete(id);
     }
 
 }

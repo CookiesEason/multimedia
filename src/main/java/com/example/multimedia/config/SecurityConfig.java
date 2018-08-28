@@ -44,7 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers().anyRequest()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/user/works/hot","/api/user/register","/api/user/activateEmail","/api/search/**")
+                    .antMatchers("/api/announcements/**"
+                            ,"/api/user/works/hot",
+                            "/api/user/register","/api/user/activateEmail",
+                            "/api/search/**")
                     .permitAll()
                 .antMatchers(HttpMethod.GET,"/api/video/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/articles/**").permitAll()

@@ -20,7 +20,7 @@ public class AnnouncementDTO implements Serializable {
 
     private String tag;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "MM/dd")
     private Timestamp createDate;
 
     public AnnouncementDTO(Announcement announcement) {

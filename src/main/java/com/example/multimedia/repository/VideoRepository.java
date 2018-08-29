@@ -5,6 +5,8 @@ import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -30,5 +32,8 @@ public interface VideoRepository extends JpaRepository<Video,Long> {
     List<Video> findAllBySmallTags(SmallTags smallTags);
 
     Page<Video> findAllBySmallTags(SmallTags smallTags, Pageable pageable);
+
+    @Query(value = "SELECT count(*) FROM video WHERE TO_DAYS(NOW()) - TO_DAYS(create_date) <= :day",nativeQuery = true)
+    int countVideosForDays(@Param("day") int day);
 
 }

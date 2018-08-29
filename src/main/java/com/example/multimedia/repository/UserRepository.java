@@ -29,8 +29,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     List<User> findUsersByIdIn(List<Long> ids);
 
-    Page<User> findAllByIdIn(List<Long> ids, Pageable pageable);
-
     @Query(value = "SELECT SUM(like_count) FROM (select SUM(like_count) as like_count from video where user_id = :id\n" +
             "UNION\n" +
             "select SUM(like_count)as like_count from article where user_id = :id)t",nativeQuery = true)
@@ -47,5 +45,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
             countQuery = "select count(*) from user"
             ,nativeQuery = true)
     Page<User> getHotUsers(Pageable pageable);
+
+
+    @Query(value = "SELECT count(*) FROM `user` WHERE TO_DAYS(NOW()) - TO_DAYS(date) <=:day",nativeQuery = true)
+    int countNewRegister(@Param("day") int day);
 
 }

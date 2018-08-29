@@ -144,4 +144,10 @@ public interface VideoService {
      * @return
      */
     ResultVo findAllBySmallTag(int page, int size,String smallTag,String sort);
+
+    /**
+     * 最新投稿 过去三天
+     * @return
+     */
+    int countVideosForDays(int day);
 }

@@ -287,6 +287,11 @@ public class VideoServiceImpl implements VideoService {
         return ResultVoUtil.success(videosDTO);
     }
 
+    @Override
+    public int countVideosForDays(int day) {
+        return videoRepository.countVideosForDays(day);
+    }
+
     private ResultVo saveVideo(Video video, Tags tags,Set<String> smallTags) {
         Set<SmallTags> smallTagsSet = smallTagsService.findAllBySmallTag(smallTags);
         if (tags!=null){

@@ -113,4 +113,11 @@ public interface ArticleService {
      */
     ResultVo reportArticle(Long articleId,String reason,String content);
 
+
+    /**
+     * 最新投稿 过去三天
+     * @return
+     */
+    int countArticlesForDays(int day);
+
 }

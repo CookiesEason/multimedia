@@ -248,6 +248,11 @@ public class UserServiceImpl implements UserService {
        return ResultVoUtil.error(0,"发生错误,您还未登录");
     }
 
+    @Override
+    public int newRegisterCountForDays(int day) {
+        return userRepository.countNewRegister(day);
+    }
+
     private String encryptPassword(String password){
        return new BCryptPasswordEncoder().encode(password);
     }

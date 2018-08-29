@@ -190,6 +190,11 @@ public class ArticleServiceImpl implements ArticleService {
          return ResultVoUtil.success();
     }
 
+    @Override
+    public int countArticlesForDays(int day) {
+        return articleRepository.countArticlesForDays(day);
+    }
+
     private ResultVo getResultVo(Page<Article> articlePage) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         Set<SmallTagDTO> smallTagDTOS = new HashSet<>();

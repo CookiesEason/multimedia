@@ -134,4 +134,11 @@ public interface UserService {
      * @return
      */
     ResultVo checkAccessComment();
+
+    /**
+     * 某时间段新注册用户
+     * @param day
+     * @return
+     */
+    int newRegisterCountForDays(int day);
 }

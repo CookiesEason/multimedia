@@ -45,14 +45,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private CommentService commentService;
-
-    @Autowired
-    private ReplyService replyService;
-
     @Override
-    @CacheEvict(value = "message",allEntries = true)
     public ResultVo saveNotice(Topic topic,Long topicId,String title,Long commentId,String comment,
                                String reply, Long fromUid,Long toUid,String type) {
         Notice notice = new Notice();
@@ -70,7 +63,6 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    @Cacheable(value = "message")
     public ResultVo getNotices(int page) {
         Sort sort = new Sort(Sort.Direction.DESC,"date");
         Pageable pageable = PageRequest.of(page,SIZE,sort);
@@ -81,13 +73,13 @@ public class NoticeServiceImpl implements NoticeService {
             notice.setReaded(true);
             noticeList.add(notice);
             if (notice.getTopic().equals(Topic.FOLLOW)){
-                NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUsername(),
+                NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
                         "/api/user/"+notice.getFromUid(),"关注了你",notice.getDate());
                 notices.add(message);
             }
             if (notice.getTopic().equals(Topic.VIDEO)){
                 if ("videoPraise".equals(notice.getType())){
-                    NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUsername(),
+                    NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
                             "/api/user/"+notice.getFromUid(),"点赞了你的视频",
                            notice.getTitle(), "/video/"+notice.getTopicId()
                             ,notice.getDate());
@@ -109,7 +101,7 @@ public class NoticeServiceImpl implements NoticeService {
                 }
             }else if(notice.getTopic().equals(Topic.ARTICLE)){
                 if ("articlePraise".equals(notice.getType())){
-                    NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUsername(),
+                    NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
                             "/api/user/"+notice.getFromUid(),"点赞了你的文章",
                             articleService.findById((long)notice.getTopicId()).getTitle(),
                             "/article/"+notice.getTopicId()
@@ -121,13 +113,7 @@ public class NoticeServiceImpl implements NoticeService {
                     articleCommentNotice(notices,notice,"点赞了你的评论");
                 }else if ("reply".equals(notice.getType())){
                    articleReplyNotice(notices,notice,"回复了你的评论");
-                }else if ("enable".equals(notice.getType())){
-                    passNotice(notices, notice, "你的文章已经通过审核",
-                            "/articles/"+notice.getTopic());
-                } else if ("unEnable".equals(notice.getType())) {
-                    passNotice(notices, notice, "你的文章未通过审核",
-                            null);
-                } else {
+                }else {
                     articleReplyNotice(notices, notice, "点赞了你的回复");
                 }
             }
@@ -144,7 +130,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     private void videoCommentNotice(List<NoticeDTO> notices, Notice notice,String content) {
-        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUsername(),
+        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
                 "/api/user/"+notice.getFromUid(),content,
                 videoService.findById(notice.getTopicId()).getTitle(),
                 "/video/"+notice.getTopicId(),notice.getCommentId(),notice.getComment()
@@ -153,7 +139,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     private void videoReplyNotice(List<NoticeDTO> notices, Notice notice,String content) {
-        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUsername(),
+        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
                 "/api/user/"+notice.getFromUid(),content,
                 videoService.findById(notice.getTopicId()).getTitle(),
                 "/video/"+notice.getTopicId(),notice.getCommentId(),notice.getComment()
@@ -162,7 +148,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     private void articleCommentNotice(List<NoticeDTO> notices, Notice notice,String content) {
-        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUsername(),
+        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
                 "/api/user/"+notice.getFromUid(),content,
                 articleService.findById((long)notice.getTopicId()).getTitle(),
                 "/article/"+notice.getTopicId(),notice.getCommentId(),notice.getComment()
@@ -171,7 +157,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     private void articleReplyNotice(List<NoticeDTO> notices, Notice notice,String content) {
-        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUsername(),
+        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
                 "/api/user/"+notice.getFromUid(),content,
                 articleService.findById((long)notice.getTopicId()).getTitle(),
                 "/article/"+notice.getTopicId(),notice.getCommentId(),notice.getComment()
@@ -180,7 +166,6 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    @CacheEvict(value = "message",allEntries = true)
     public void deleteById(Long messageId) {
         noticeRepository.deleteByIdAndToUid(messageId,getUid());
     }

@@ -32,7 +32,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query(value = "SELECT SUM(like_count) FROM (select SUM(like_count) as like_count from video where user_id = :id\n" +
             "UNION\n" +
             "select SUM(like_count)as like_count from article where user_id = :id)t",nativeQuery = true)
-    int getUserWorkHot(@Param("id") Long userId);
+    Long getUserWorkHot(@Param("id") Long userId);
 
     @Query(value = "SELECT * FROM (SELECT t.user_id,SUM(num) as hot from (SELECT user_id ,SUM(like_count) as num from `user` INNER JOIN article ON article.user_id = `user`.id\n" +
             "GROUP BY `user`.id\n" +

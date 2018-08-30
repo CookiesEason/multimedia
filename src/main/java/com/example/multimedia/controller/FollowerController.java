@@ -27,8 +27,9 @@ public class FollowerController {
     }
 
     @GetMapping("/followers/{userId}")
-    private ResultVo getFollowers(@PathVariable Long userId,@RequestParam(defaultValue = "0")int page){
-        return followerService.getFollowers(page,userId);
+    private ResultVo getFollowers(@PathVariable Long userId,@RequestParam(defaultValue = "0")int page,
+                                  @RequestParam(defaultValue = "10") int size){
+        return followerService.getFollowers(page,size,userId);
     }
 
     @GetMapping("/fans/{userId}")

@@ -69,16 +69,16 @@ public class FollowerServiceImpl implements FollowerService {
     }
 
     @Override
-    public ResultVo getFollowers(int page,Long userId) {
-        Pageable pageable = PageRequest.of(page,SIZE);
-        Page<Follower> followerPage = followerRepository.findAllByUserId(userId,pageable);
+    public ResultVo getFollowers(int page,int size,Long userId) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Follower> followerPage = followerRepository.findAllByUserIdAndStatus(userId,true,pageable);
         return getUsers(followerPage);
     }
 
     @Override
     public ResultVo getFans(int page,Long userId) {
         Pageable pageable = PageRequest.of(page,SIZE);
-        Page<Follower> followerPage = followerRepository.findAllByFollowerId(userId,pageable);
+        Page<Follower> followerPage = followerRepository.findAllByFollowerIdAndStatus(userId,true,pageable);
         return getUsers(followerPage);
     }
 
@@ -88,7 +88,8 @@ public class FollowerServiceImpl implements FollowerService {
         List<SimpleUserDTO> userDTOS = new ArrayList<>();
         userService.findAllByIdIn(ids).forEach(user -> {
             SimpleUserDTO simpleUser = new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
-                    user.getUserInfo().getHeadImgUrl());
+                    user.getUserInfo().getHeadImgUrl(),user.getUserInfo().getSignature(),
+                    userService.getUserHot(user.getId()));
             userDTOS.add(simpleUser);
         });
         PageDTO<SimpleUserDTO> users = new PageDTO<>(userDTOS,followerPage.getTotalElements(),

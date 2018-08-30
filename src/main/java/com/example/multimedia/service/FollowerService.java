@@ -26,7 +26,7 @@ public interface FollowerService {
      * 获取关注列表
      * @return
      */
-    ResultVo getFollowers(int page, Long userId);
+    ResultVo getFollowers(int page, int size,Long userId);
 
     /**
      * 获取粉丝列表

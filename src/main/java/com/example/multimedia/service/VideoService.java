@@ -121,7 +121,7 @@ public interface VideoService {
      * 获取观看历史
      * @return
      */
-    ResultVo getHistory(int page);
+    ResultVo getHistory(int page, int size);
 
     /**
      * 删除3天前的历史记录

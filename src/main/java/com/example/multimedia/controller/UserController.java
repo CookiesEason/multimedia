@@ -61,6 +61,11 @@ public class UserController {
         return ResultVoUtil.success(userService.findById(userId));
     }
 
+    @GetMapping("/api/user/simpleInfo/{userId}")
+    private ResultVo simpleInfo(@PathVariable Long userId){
+        return userService.simpleInfo(userId);
+    }
+
     @PostMapping("/api/user/signature")
     private ResultVo signature(@RequestParam String signature){
         return userService.signature(signature);
@@ -88,7 +93,7 @@ public class UserController {
     }
 
     @GetMapping("/api/user/hot/{userId}")
-    public int getWorksHot(@PathVariable Long userId){
+    public Long getWorksHot(@PathVariable Long userId){
         return  userService.getUserHot(userId);
     }
 

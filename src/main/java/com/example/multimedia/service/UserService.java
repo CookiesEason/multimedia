@@ -47,6 +47,12 @@ public interface UserService {
     ResultVo save(UserInfo userInfo);
 
     /**
+     * 简单用户信息
+     * @return
+     */
+    ResultVo simpleInfo(Long userId);
+
+    /**
      * 用户信息查询
      * @param nickname
      * @return
@@ -126,7 +132,7 @@ public interface UserService {
      */
     List<User> findAllByIdIn(List<Long> ids);
 
-    int getUserHot(Long userId);
+    Long getUserHot(Long userId);
 
     /**
      * 热度

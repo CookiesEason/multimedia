@@ -1,5 +1,6 @@
 package com.example.multimedia.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -15,6 +16,11 @@ public class VideoHistoryDTO {
 
     private String title;
 
+    @JsonFormat(pattern = "MM月dd日")
     private Timestamp watchTime;
+
+   private Long userId;
+
+   private String nickname;
 
 }

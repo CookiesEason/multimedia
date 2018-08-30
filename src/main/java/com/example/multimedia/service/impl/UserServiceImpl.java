@@ -110,6 +110,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResultVo simpleInfo(Long userId) {
+        User user = findById(userId);
+        SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user);
+        return ResultVoUtil.success(simpleUserDTO);
+    }
+
+    @Override
     public User findByUserInfoNickname(String nickname) {
         return userRepository.findByUserInfoNickname(nickname);
     }
@@ -222,7 +229,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getUserHot(Long userId) {
+    public Long getUserHot(Long userId) {
         return userRepository.getUserWorkHot(userId);
     }
 

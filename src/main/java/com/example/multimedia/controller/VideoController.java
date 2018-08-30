@@ -30,8 +30,9 @@ public class VideoController {
 
 
     @GetMapping("/watchHistory")
-    private ResultVo watchHistory(@RequestParam(defaultValue = "0")int page){
-        return videoService.getHistory(page);
+    private ResultVo watchHistory(@RequestParam(defaultValue = "0")int page,
+                                  @RequestParam(defaultValue = "10") int size){
+        return videoService.getHistory(page,size);
     }
 
     @PostMapping

@@ -39,6 +39,14 @@ public class SimpleUserDTO {
         this.headUrl = headUrl;
     }
 
+    public SimpleUserDTO(Long id, String nickname, String headUrl, String signature, Long hot) {
+        this.id = id;
+        this.nickname = nickname;
+        this.headUrl = headUrl;
+        this.signature = signature;
+        this.hot = hot;
+    }
+
     public SimpleUserDTO(User user, Long hot) {
         this.id = user.getId();
         this.nickname = user.getUserInfo().getNickname();

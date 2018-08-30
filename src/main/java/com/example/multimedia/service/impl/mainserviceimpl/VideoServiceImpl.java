@@ -246,8 +246,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public ResultVo getHistory(int page) {
-        int size = 10;
+    public ResultVo getHistory(int page, int size) {
         Sort sort = new Sort(Sort.Direction.DESC,"watchTime");
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<VideoHistory> videoHistories = videoHistoryRepository.findAllByUserId(getUid(),pageable);
@@ -257,6 +256,9 @@ public class VideoServiceImpl implements VideoService {
             videoHistoryDTO.setVideoId(videoHistory.getVideoId());
             videoHistoryDTO.setTitle(findById(videoHistory.getVideoId()).getTitle());
             videoHistoryDTO.setWatchTime(videoHistory.getWatchTime());
+            User user = userService.findById(videoHistory.getUserId());
+            videoHistoryDTO.setUserId(user.getId());
+            videoHistoryDTO.setNickname(user.getUserInfo().getNickname());
             videoHistoryDTOS.add(videoHistoryDTO);
         });
         PageDTO<VideoHistoryDTO> videoHistoryPageDTO = new PageDTO<>(videoHistoryDTOS,videoHistories.getTotalElements(),

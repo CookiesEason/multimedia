@@ -33,6 +33,13 @@ public interface UserService {
     User findByUsername(String username);
 
     /**
+     * 更新个性签名
+     * @param signature
+     * @return
+     */
+    ResultVo signature(String signature);
+
+    /**
      * 更新用户个人信息
      * @param userInfo
      * @return

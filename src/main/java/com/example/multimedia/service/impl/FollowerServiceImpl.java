@@ -87,7 +87,8 @@ public class FollowerServiceImpl implements FollowerService {
         followerPage.getContent().forEach(follower -> ids.add(follower.getFollowerId()));
         List<SimpleUserDTO> userDTOS = new ArrayList<>();
         userService.findAllByIdIn(ids).forEach(user -> {
-            SimpleUserDTO simpleUser = new SimpleUserDTO(user);
+            SimpleUserDTO simpleUser = new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
+                    user.getUserInfo().getHeadImgUrl());
             userDTOS.add(simpleUser);
         });
         PageDTO<SimpleUserDTO> users = new PageDTO<>(userDTOS,followerPage.getTotalElements(),

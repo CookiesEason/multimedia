@@ -185,10 +185,14 @@ public class CommentServiceImpl implements CommentService {
             if (replyLike1!=null&&replyLike1.isStatus()){
                 replyLike = true;
             }
+            User fromUser = userService.findById(reply.getFromUid());
+            User toUser = userService.findById(reply.getToUid());
             ReplyDTO replyDTO = new ReplyDTO(reply,replyLike,
                     replyLikeService.countAllById(reply.getId()),
-                    new SimpleUserDTO(userService.findById(reply.getFromUid())),
-                    new SimpleUserDTO(userService.findById(reply.getToUid())));
+                    new SimpleUserDTO(fromUser.getId(),fromUser.getUserInfo().getNickname(),
+                            fromUser.getUserInfo().getHeadImgUrl()),
+                    new SimpleUserDTO(toUser.getId(),toUser.getUserInfo().getNickname(),
+                            toUser.getUserInfo().getHeadImgUrl()));
             replyDTOList.add(replyDTO);
         });
         CommentDTO commentDTO = new CommentDTO(comment, isLike,

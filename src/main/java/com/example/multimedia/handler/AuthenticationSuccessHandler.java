@@ -1,6 +1,7 @@
 package com.example.multimedia.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.example.multimedia.domian.User;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.JwtUtil;
@@ -28,7 +29,9 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         response.setContentType("application/json; charset=utf-8");
         String token = JwtUtil.generateToken(authentication);
         CookieUtil.set(response, JwtUtil.TOKEN_PREFIX,token,9600);
-        SimpleUserDTO simpleUserDTO = new SimpleUserDTO(service.findByUsername(authentication.getName()));
+        User user = service.findByUsername(authentication.getName());
+        SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
+                user.getUserInfo().getHeadImgUrl());
         response.getWriter().print(JSON.toJSON(ResultVoUtil.success(simpleUserDTO)));
     }
 }

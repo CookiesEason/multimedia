@@ -203,7 +203,9 @@ public class ArticleServiceImpl implements ArticleService {
                 SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
                 smallTagDTOS.add(smallTagDTO);
             });
-            ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
+            User user = userService.findById(article.getUserId());
+            ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
+                    user.getUserInfo().getHeadImgUrl()),
                     article,smallTagDTOS);
             articleDTOList.add(articleDTO);
         });

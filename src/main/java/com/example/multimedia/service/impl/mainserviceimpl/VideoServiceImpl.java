@@ -143,7 +143,9 @@ public class VideoServiceImpl implements VideoService {
                 SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
                 smallTagDTOS.add(smallTagDTO);
             });
-            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),
+            User user = userService.findById(video.getUserId());
+            VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
+                    user.getUserInfo().getHeadImgUrl()),
                     video, smallTagDTOS);
             videoDTOS.add(videoDTO);
         }

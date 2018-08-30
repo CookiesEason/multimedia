@@ -33,10 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author CookiesEason
@@ -61,9 +58,10 @@ public class UserServiceImpl implements UserService {
     private StringRedisTemplate template;
 
     @Override
-    @Cacheable(value = "user", key = "#id")
+    @Cacheable(value = "user", key = "#id",unless = "#result==null ")
     public User findById(Long id) {
-        return userRepository.findUserById(id);
+        Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.orElse(null);
     }
 
     @Override
@@ -88,12 +86,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "user",allEntries = true)
+    public ResultVo signature(String signature) {
+        User user = findByUsername(UserUtil.getUserName());
+        user.getUserInfo().setSignature(signature);
+        userRepository.save(user);
+        return ResultVoUtil.success();
+    }
+
+    @Override
     @CacheEvict(value = "user", allEntries = true)
     public ResultVo save(UserInfo userInfo) {
         // TODO: 2018/07/30 用户个人中心
         User user = findByUsername(UserUtil.getUserName());
         String originalName = user.getUserInfo().getNickname();
         if (checkNickName(userInfo) || userInfo.getNickname().equals(originalName)) {
+            userInfo.setHeadImgUrl(user.getUserInfo().getHeadImgUrl());
             user.setUserInfo(userInfo);
             userRepository.save(user);
             return ResultVoUtil.success();

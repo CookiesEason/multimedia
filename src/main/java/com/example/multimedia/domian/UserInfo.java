@@ -29,4 +29,16 @@ public class UserInfo implements Serializable {
 
     private String headImgUrl;
 
+    private String signature;
+
+    private String introduction;
+
+    private String sex = "保密";
+
+    private String province;
+
+    private String city;
+
+    private String zone;
+
 }

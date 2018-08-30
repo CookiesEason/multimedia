@@ -81,7 +81,9 @@ public class SearchServiceImpl implements SearchService {
         videoSearchPage.getContent().forEach(videoSearch -> {
             if (enable.equals(videoSearch.getEnable())){
                 Video video = new Video(videoSearch,tagsRepository.findById(videoSearch.getTags_id()).get());
-                VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(userService.findById(video.getUserId())),
+                User user = userService.findById(video.getUserId());
+                VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
+                        user.getUserInfo().getHeadImgUrl()),
                         video,null);
                 videoDTOS.add(videoDTO);
             }
@@ -98,7 +100,9 @@ public class SearchServiceImpl implements SearchService {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         articleSearchPage.getContent().forEach(articleSearch -> {
             Article article = new Article(articleSearch,tagsRepository.findById(articleSearch.getTags_id()).get());
-            ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
+            User user = userService.findById(article.getUserId());
+            ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
+                    user.getUserInfo().getHeadImgUrl()),
                     article,null);
             articleDTOList.add(articleDTO);
         });
@@ -133,9 +137,11 @@ public class SearchServiceImpl implements SearchService {
             reply.setContent(replySearch.getContent());
             reply.setCreateDate(replySearch.getCreatedate());
             reply.setId(replySearch.getId());
+            User user = userService.findById(replySearch.getFromuid());
             ReplyDTO replyDTO = new ReplyDTO(reply,
                     videoReplyLikeService.countAllById(reply.getId()),
-                    new SimpleUserDTO(userService.findById(replySearch.getFromuid())));
+                    new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
+                            user.getUserInfo().getHeadImgUrl()));
             replyDTOList.add(replyDTO);
         });
         PageDTO<ReplyDTO> replies = new PageDTO<>(replyDTOList,videoReplySearches.getTotalElements(),

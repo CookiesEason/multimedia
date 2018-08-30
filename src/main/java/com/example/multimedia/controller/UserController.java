@@ -38,9 +38,6 @@ public class UserController {
     @Autowired
     private NoticeService noticeService;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @PostMapping("/api/user/register")
     private ResultVo registerUser(@Validated User user, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
@@ -59,12 +56,14 @@ public class UserController {
         return userService.activateEmail(username,activeCode);
     }
 
-    @GetMapping("/api/user/info")
-    private ResultVo info(){
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return ResultVoUtil.success(userService.findByUsername(userDetails.getUsername()));
+    @GetMapping("/api/user/info/{userId}")
+    private ResultVo info(@PathVariable Long userId){
+        return ResultVoUtil.success(userService.findById(userId));
+    }
+
+    @PostMapping("/api/user/signature")
+    private ResultVo signature(@RequestParam String signature){
+        return userService.signature(signature);
     }
 
     @PostMapping("/api/user/info")
@@ -86,25 +85,6 @@ public class UserController {
     @PostMapping("/api/user/head")
     private ResultVo uploadHead(@RequestParam("file") MultipartFile multipartFile){
         return userService.updateHead(multipartFile);
-    }
-
-    @GetMapping("/api/user/{userId}")
-    private ResultVo simpleUserInfo(@PathVariable Long userId){
-        User user = userService.findById(userId);
-        if (user!=null){
-            return ResultVoUtil.success(new SimpleUserDTO(user));
-        }
-        return ResultVoUtil.error(0,"不存在该用户");
-    }
-
-    @GetMapping("/api/user/me")
-    private ResultVo mySimpleUserInfo(){
-        // TODO: 2018/08/27  可能删除
-        User user = userService.findByUsername(UserUtil.getUserName());
-        if (user!=null){
-            return ResultVoUtil.success(new SimpleUserDTO(user));
-        }
-        return ResultVoUtil.error(0,"不存在该用户");
     }
 
     @GetMapping("/api/user/hot/{userId}")

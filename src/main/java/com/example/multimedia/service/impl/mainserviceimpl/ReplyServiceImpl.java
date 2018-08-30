@@ -132,9 +132,11 @@ public class ReplyServiceImpl implements ReplyService {
         Page<Reply> videoReplies = replyRepository.findAll(pageable);
         List<ReplyDTO> replyDTOList = new ArrayList<>();
         videoReplies.getContent().forEach(videoReply -> {
+            User user = userService.findById(videoReply.getFromUid());
             ReplyDTO replyDTO = new ReplyDTO(videoReply,
                     replyLikeService.countAllById(videoReply.getId()),
-                    new SimpleUserDTO(userService.findById(videoReply.getFromUid())));
+                    new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
+                            user.getUserInfo().getHeadImgUrl()));
             replyDTOList.add(replyDTO);
         });
         PageDTO<ReplyDTO> replies = new PageDTO<>(replyDTOList,videoReplies.getTotalElements(),

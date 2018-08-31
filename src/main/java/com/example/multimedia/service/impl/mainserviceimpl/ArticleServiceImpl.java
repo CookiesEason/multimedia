@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -56,8 +57,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private AdminNoticeService adminNoticeService;
 
+    @Autowired
+    private FileService fileService;
+
     @Override
-    public ResultVo save(String title, String text, String tag, Set<String> smallTags) {
+    public ResultVo save(String title, String text, String tag, MultipartFile multipartFile, Set<String> smallTags) {
         Article article = new Article();
         article.setTitle(title);
         article.setText(text);
@@ -67,6 +71,7 @@ public class ArticleServiceImpl implements ArticleService {
             if (smallTagsSet.size()>0){
                 article.setUserId(getUid());
                 article.setTags(tags);
+                article.setBgImg(fileService.uploadFile(multipartFile).getData().toString());
                 article.setSmallTags(smallTagsSet);
                 articleRepository.save(article);
                 return ResultVoUtil.success();
@@ -77,12 +82,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResultVo update(Long articleId, String title, String text, String tag,Set<String> smallTags) {
+    public ResultVo update(Long articleId, String title, String text, MultipartFile multipartFile,
+                           String tag,Set<String> smallTags) {
         Optional<Article> article = articleRepository.findById(articleId);
         if (article.isPresent()){
             Article newArticle = article.get();
             newArticle.setTitle(title);
             newArticle.setText(text);
+            if (multipartFile!=null){
+                newArticle.setBgImg(fileService.uploadFile(multipartFile).getData().toString());
+            }
             Tags tags = tagsService.findByTag(tag);
             Set<SmallTags> smallTagsSet = smallTagsService.findAllBySmallTag(smallTags);
             if (tags!=null){

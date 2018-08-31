@@ -8,6 +8,7 @@ import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -75,16 +76,17 @@ public class ArticleController {
 
     @PostMapping
     public ResultVo saveArticle(@RequestParam String title, @RequestParam String text,
-                                @RequestParam String tag,
+                                @RequestParam String tag, @RequestParam MultipartFile file,
                                 @RequestParam(value = "smallTags")Set<String> smallTags) {
-        return articleService.save(title, text, tag,smallTags);
+        return articleService.save(title, text, tag,file,smallTags);
     }
 
     @PostMapping("/update/{articleId}")
     public ResultVo updateArticle(@PathVariable Long articleId,@RequestParam String title,
                                    @RequestParam String text,@RequestParam String tag,
+                                  @RequestParam(required = false) MultipartFile file,
                                   @RequestParam(value = "smallTags")Set<String> smallTags){
-        return articleService.update(articleId, title, text, tag,smallTags);
+        return articleService.update(articleId, title, text, file, tag,smallTags);
     }
 
     @DeleteMapping("/{articleId}")

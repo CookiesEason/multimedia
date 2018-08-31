@@ -21,6 +21,8 @@ public class ArticleDTO implements Serializable {
 
     private SimpleUserDTO user;
 
+    private String bgImg;
+
     private String tag;
 
     private String title;
@@ -44,6 +46,7 @@ public class ArticleDTO implements Serializable {
         this.user = user;
         this.tag = article.getTags().getTag();
         this.title = article.getTitle();
+        this.bgImg = article.getBgImg();
         this.text = article.getText();
         this.smallTags = smallTags;
         this.readCount = article.getReadCount();
@@ -55,6 +58,7 @@ public class ArticleDTO implements Serializable {
         this.id = article.getId();
         this.user = user;
         this.tag = article.getTags().getTag();
+        this.bgImg = article.getBgImg();
         this.title = article.getTitle();
         this.text = article.getText();
         this.smallTags = smallTags;

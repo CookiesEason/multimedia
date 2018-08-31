@@ -3,6 +3,7 @@ package com.example.multimedia.service;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public interface ArticleService {
      * @param tag
      * @return
      */
-    ResultVo save(String title, String text, String tag, Set<String> smallTags);
+    ResultVo save(String title, String text, String tag, MultipartFile multipartFile, Set<String> smallTags);
 
     /**
      * 更新文章
@@ -29,7 +30,7 @@ public interface ArticleService {
      * @param tag
      * @return
      */
-    ResultVo update(Long articleId,String title,String text,String tag,Set<String> smallTags);
+    ResultVo update(Long articleId,String title,String text,MultipartFile multipartFile,String tag,Set<String> smallTags);
 
     /**
      * 删除文章

@@ -36,6 +36,9 @@ public class Article {
     @NotBlank(message = "内容不能为空")
     private String text;
 
+    @NotBlank(message = "封面不能为空")
+    private String bgImg;
+
     @ManyToMany
     private Set<SmallTags> smallTags;
 

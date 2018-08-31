@@ -10,6 +10,7 @@ import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -203,8 +204,9 @@ public class AdminController {
                                   @RequestParam String title,
                                   @RequestParam String text,
                                   @RequestParam String tag,
+                                  @RequestParam(required = false) MultipartFile file,
                                   @RequestParam(value = "smallTags") Set<String> smallTags){
-        return articleService.update(articleId, title, text, tag,smallTags);
+        return articleService.update(articleId, title, text, file,tag,smallTags);
     }
 
     @DeleteMapping("articles/{articleId}")

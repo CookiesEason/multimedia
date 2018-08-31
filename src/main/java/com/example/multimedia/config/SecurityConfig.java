@@ -41,10 +41,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(corsControllerFilter(), SecurityContextPersistenceFilter.class);
 
+
         http
                 .requestMatchers().anyRequest()
                 .and()
                     .authorizeRequests()
+                    .antMatchers(HttpMethod.OPTIONS).permitAll()
                     .antMatchers(
                             "/api/data/**",
                             "/api/announcements/**"

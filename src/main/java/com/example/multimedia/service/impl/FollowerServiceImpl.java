@@ -72,29 +72,31 @@ public class FollowerServiceImpl implements FollowerService {
     public ResultVo getFollowers(int page,int size,Long userId) {
         Pageable pageable = PageRequest.of(page,size);
         Page<Follower> followerPage = followerRepository.findAllByUserIdAndStatus(userId,true,pageable);
-        return getUsers(followerPage);
+        List<Long> ids = new ArrayList<>();
+        followerPage.getContent().forEach(follower -> ids.add(follower.getFollowerId()));
+        PageDTO<SimpleUserDTO> users = getSimpleUserDTOPageDTO(followerPage, ids);
+        return ResultVoUtil.success(users);
     }
 
     @Override
     public ResultVo getFans(int page,Long userId) {
         Pageable pageable = PageRequest.of(page,SIZE);
         Page<Follower> followerPage = followerRepository.findAllByFollowerIdAndStatus(userId,true,pageable);
-        return getUsers(followerPage);
+        List<Long> ids = new ArrayList<>();
+        followerPage.getContent().forEach(follower -> ids.add(follower.getUserId()));
+        PageDTO<SimpleUserDTO> users = getSimpleUserDTOPageDTO(followerPage, ids);
+        return ResultVoUtil.success(users);
     }
 
-    private ResultVo getUsers(Page<Follower> followerPage) {
-        List<Long> ids = new ArrayList<>();
-        followerPage.getContent().forEach(follower -> ids.add(follower.getFollowerId()));
+
+    private PageDTO<SimpleUserDTO> getSimpleUserDTOPageDTO(Page<Follower> followerPage, List<Long> ids) {
         List<SimpleUserDTO> userDTOS = new ArrayList<>();
         userService.findAllByIdIn(ids).forEach(user -> {
-            SimpleUserDTO simpleUser = new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
-                    user.getUserInfo().getHeadImgUrl(),user.getUserInfo().getSignature(),
-                    userService.getUserHot(user.getId()));
+            SimpleUserDTO simpleUser = new SimpleUserDTO(user);
             userDTOS.add(simpleUser);
         });
-        PageDTO<SimpleUserDTO> users = new PageDTO<>(userDTOS,followerPage.getTotalElements(),
+        return new PageDTO<>(userDTOS, followerPage.getTotalElements(),
                 (long) followerPage.getTotalPages());
-        return ResultVoUtil.success(users);
     }
 
     private Follower findByUserIdAndFollowerId(Long userId, Long followerId){

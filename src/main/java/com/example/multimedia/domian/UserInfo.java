@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @author CookiesEason
@@ -32,6 +33,10 @@ public class UserInfo implements Serializable {
     private String signature;
 
     private String introduction;
+
+    private String announcement;
+
+    private Timestamp birthday;
 
     private String sex = "保密";
 

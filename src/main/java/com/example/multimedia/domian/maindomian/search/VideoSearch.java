@@ -27,6 +27,8 @@ public class VideoSearch implements Serializable {
 
     private Long tags_id;
 
+    private String bg_url;
+
     private Boolean enable;
 
     private Long like_count;

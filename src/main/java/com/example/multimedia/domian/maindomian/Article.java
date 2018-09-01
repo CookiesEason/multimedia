@@ -57,6 +57,7 @@ public class Article {
         this.id = articleSearch.getId();
         this.userId = articleSearch.getUser_id();
         this.tags = tags;
+        this.bgImg = articleSearch.getBg_img();
         this.title = articleSearch.getTitle();
         this.text = articleSearch.getText();
         this.readCount = articleSearch.getRead_count();

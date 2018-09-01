@@ -33,6 +33,8 @@ public class Video {
     @Length(min = 10,message = "请输入介绍信息不少于10个字")
     private String introduction;
 
+    private String imgUrl;
+
     private String videoUrl;
 
     private long playCount;
@@ -57,6 +59,7 @@ public class Video {
         this.id = videoSearch.getId();
         this.userId = videoSearch.getUser_id();
         this.title = videoSearch.getTitle();
+        this.imgUrl = videoSearch.getBg_url();
         this.introduction = videoSearch.getIntroduction();
         this.videoUrl = videoSearch.getVideo_url();
         this.playCount = videoSearch.getPlay_count();

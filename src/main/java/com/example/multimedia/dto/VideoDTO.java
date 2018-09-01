@@ -24,6 +24,8 @@ public class VideoDTO {
 
     private String videoUrl;
 
+    private String imgUrl;
+
     private Long playCount;
 
     private Long likeCount;
@@ -46,6 +48,7 @@ public class VideoDTO {
         this.title = video.getTitle();
         this.introduction = video.getIntroduction();
         this.videoUrl = video.getVideoUrl();
+        this.imgUrl = video.getImgUrl();
         this.playCount = video.getPlayCount();
         this.likeCount = video.getLikeCount();
         this.createDate = video.getCreateDate();
@@ -61,6 +64,7 @@ public class VideoDTO {
         this.title = video.getTitle();
         this.introduction = video.getIntroduction();
         this.videoUrl = video.getVideoUrl();
+        this.imgUrl = video.getImgUrl();
         this.playCount = video.getPlayCount();
         this.likeCount = video.getLikeCount();
         this.createDate = video.getCreateDate();

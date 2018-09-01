@@ -75,6 +75,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
+                                MultipartFile imgFile,
                                 MultipartFile multipartFile) {
         Video video = new Video();
         if (multipartFile==null){
@@ -85,13 +86,15 @@ public class VideoServiceImpl implements VideoService {
         }
         if (!multipartFile.getOriginalFilename().contains(PREFIX_VIDEO)){
             ResultVo resultVo = fileService.uploadFile(multipartFile);
-            if (resultVo.getCode()==0){
+            ResultVo bgResult = fileService.uploadFile(imgFile);
+            if (resultVo.getCode()==0||bgResult.getCode()==0){
                 return resultVo;
             }
             video.setTitle(title);
             video.setIntroduction(introduction);
             video.setUserId(getUid());
             video.setVideoUrl(resultVo.getData().toString());
+            video.setImgUrl(bgResult.getData().toString());
             return saveVideo(video, tagsService.findByTag(tag),smallTags);
         }else {
             return ResultVoUtil.error(0,"请注意上传的文件为视频");
@@ -163,13 +166,17 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public ResultVo updateVideo(long id,String title, String introduction, String tag, Set<String> smallTags) {
+    public ResultVo updateVideo(long id,String title, String introduction, String tag,
+                                Set<String> smallTags,MultipartFile file) {
         Video video = videoRepository.findByIdAndUserId(id,getUid());
         if (introduction.length()<10){
             return ResultVoUtil.error(0,"请输入介绍信息不少于10个字");
         }
         video.setTitle(title);
         video.setIntroduction(introduction);
+        if (file!=null){
+            video.setImgUrl(fileService.uploadFile(file).getData().toString());
+        }
         Tags tags = tagsService.findByTag(tag);
         return saveVideo(video,tags,smallTags);
     }

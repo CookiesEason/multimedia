@@ -169,8 +169,9 @@ public class AdminController {
                                  @RequestParam String title,
                                  @RequestParam String introduction,
                                  @RequestParam(value = "smallTags") Set<String> smallTags,
-                                 @RequestParam String tag){
-        return videoService.updateVideo(videoId,title,introduction,tag,smallTags);
+                                 @RequestParam String tag,
+                                 @RequestParam(required = false) MultipartFile file){
+        return videoService.updateVideo(videoId,title,introduction,tag,smallTags,file);
     }
 
     @PostMapping("videos/enable/{videoId}")

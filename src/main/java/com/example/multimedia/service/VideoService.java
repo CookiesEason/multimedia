@@ -23,6 +23,7 @@ public interface VideoService {
      * @return ResultVo
      */
     ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
+                         MultipartFile imgFile,
                          MultipartFile multipartFile);
 
     /**
@@ -75,7 +76,7 @@ public interface VideoService {
      * @param tag;
      * @return ResultVo
      */
-    ResultVo updateVideo(long id,String title, String introduction, String tag, Set<String> smallTags);
+    ResultVo updateVideo(long id,String title, String introduction, String tag, Set<String> smallTags,MultipartFile file);
 
     /**
      * 获取单个视频信息

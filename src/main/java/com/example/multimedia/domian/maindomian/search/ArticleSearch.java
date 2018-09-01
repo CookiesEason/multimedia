@@ -22,6 +22,8 @@ public class ArticleSearch implements Serializable {
 
     private Long tags_id;
 
+    private String bg_img;
+
     private String title;
 
     private String text;

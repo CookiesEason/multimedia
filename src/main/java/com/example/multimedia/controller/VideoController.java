@@ -38,10 +38,10 @@ public class VideoController {
     @PostMapping
     @ResponseBody
     private ResultVo uploadVideo(@RequestParam String title,@RequestParam String introduction,
-                                 @RequestParam String tag,
+                                 @RequestParam String tag,@RequestParam(value = "imgFile") MultipartFile imgFile,
                                  @RequestParam(value = "smallTags") Set<String> smallTags,
                                  @RequestParam(value = "file",required = false) MultipartFile multipartFile){
-        return videoService.uploadVideo(title,introduction,tag,smallTags,multipartFile);
+        return videoService.uploadVideo(title,introduction,tag,smallTags,imgFile,multipartFile);
     }
 
     @GetMapping("/{id}")
@@ -55,8 +55,9 @@ public class VideoController {
     private ResultVo updateVideo(@PathVariable long id,@RequestParam String title,
                                  @RequestParam String introduction,
                                  @RequestParam String tag,
-                                 @RequestParam(value = "smallTags") Set<String> smallTags){
-        return videoService.updateVideo(id,title,introduction,tag,smallTags);
+                                 @RequestParam(value = "smallTags") Set<String> smallTags,
+                                 @RequestParam(value = "imgFile") MultipartFile imgFile){
+        return videoService.updateVideo(id,title,introduction,tag,smallTags,imgFile);
     }
 
     @DeleteMapping("/{id}")

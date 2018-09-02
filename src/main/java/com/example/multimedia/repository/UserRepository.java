@@ -50,4 +50,15 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query(value = "SELECT count(*) FROM `user` WHERE TO_DAYS(NOW()) - TO_DAYS(date) <=:day",nativeQuery = true)
     int countNewRegister(@Param("day") int day);
 
+   @Query(value = "SELECT * FROM (SELECT video.user_id,date FROM topic_like  INNER JOIN\n" +
+           "video on video.id = topic_like.top_id\n" +
+           "WHERE `status`=1 AND topic='VIDEO' AND topic_like.user_id =:userId  AND TO_DAYS(NOW()) - TO_DAYS(date) <=3\n" +
+           "UNION\n" +
+           "SELECT article.user_id,date FROM topic_like  INNER JOIN\n" +
+           "article on article.id = topic_like.top_id\n" +
+           "WHERE `status`=1 AND topic='ARTICLE' AND topic_like.user_id =:userId  AND TO_DAYS(NOW()) - TO_DAYS(date) <=3)\n" +
+           "t INNER JOIN `user` ON t.user_id = user.id GROUP BY user_id ORDER BY t.date desc \n",
+           countQuery = "select count(*) from user"
+           ,nativeQuery = true)
+   Page<User> likeUserIds(@Param("userId")Long userId, Pageable pageable);
 }

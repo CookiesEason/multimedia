@@ -11,6 +11,7 @@ import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.dto.SmallTagDTO;
 import com.example.multimedia.repository.ArticleRepository;
+import com.example.multimedia.repository.TopicLikeRepository;
 import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
@@ -59,6 +60,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private TopicLikeRepository topicLikeRepository;
 
     @Override
     public ResultVo save(String title, String text, String tag, MultipartFile multipartFile, Set<String> smallTags) {
@@ -202,6 +206,14 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public int countArticlesForDays(int day) {
         return articleRepository.countArticlesForDays(day);
+    }
+
+    @Override
+    public ResultVo findAllByLike(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Article> articlePage = articleRepository.findAllByIdIn(topicLikeRepository.ids(Topic.ARTICLE.toString(),
+                userId),pageable);
+        return getResultVo(articlePage);
     }
 
     private ResultVo getResultVo(Page<Article> articlePage) {

@@ -121,4 +121,6 @@ public interface ArticleService {
      */
     int countArticlesForDays(int day);
 
+    ResultVo findAllByLike(Long userId, int page, int size);
+
 }

@@ -8,6 +8,7 @@ import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.Video;
+import com.example.multimedia.repository.TopicLikeRepository;
 import com.example.multimedia.repository.VideoHistoryRepository;
 import com.example.multimedia.repository.VideoRepository;
 import com.example.multimedia.service.*;
@@ -72,6 +73,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private TagsService tagsService;
+
+    @Autowired
+    private TopicLikeRepository topicLikeRepository;
 
     @Override
     public ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
@@ -301,6 +305,15 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public int countVideosForDays(int day) {
         return videoRepository.countVideosForDays(day);
+    }
+
+    @Override
+    public ResultVo findAllByLike(Long userId,int page,int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Video> videoPage = videoRepository.findAllByIdIn(topicLikeRepository.ids(Topic.VIDEO.toString(),
+                userId),pageable);
+        VideosDTO videosDTO = getVideosDTO(videoPage);
+        return ResultVoUtil.success(videosDTO);
     }
 
     private ResultVo saveVideo(Video video, Tags tags,Set<String> smallTags) {

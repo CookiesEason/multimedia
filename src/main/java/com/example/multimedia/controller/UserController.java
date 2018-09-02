@@ -108,6 +108,10 @@ public class UserController {
         return userService.findHotUsers(page, size);
     }
 
+    @GetMapping("/api/user/likeUsers/{userId}")
+    public ResultVo getLikeUsers(@PathVariable Long userId){
+        return userService.likeUsers(userId);
+    }
 
     @GetMapping("/api/user/messages")
     private ResultVo getMessages(@RequestParam(defaultValue = "0") int page){

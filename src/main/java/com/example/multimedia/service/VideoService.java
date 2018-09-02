@@ -151,4 +151,11 @@ public interface VideoService {
      * @return
      */
     int countVideosForDays(int day);
+
+    /**
+     * 点赞过的视频
+     * @return
+     */
+    ResultVo findAllByLike(Long userId,int page,int size);
+
 }

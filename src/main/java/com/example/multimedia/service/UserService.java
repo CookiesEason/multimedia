@@ -156,4 +156,11 @@ public interface UserService {
      * @return
      */
     int newRegisterCountForDays(int day);
+
+    /**
+     * 最新点赞5位作者
+     * @param userId
+     * @return
+     */
+    ResultVo likeUsers(Long userId);
 }

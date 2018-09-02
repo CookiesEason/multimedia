@@ -28,6 +28,8 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
 
     Page<Article> findAllBySmallTags(SmallTags smallTags,Pageable pageable);
 
+    Page<Article> findAllByIdIn(long[] ids,Pageable pageable);
+
     @Query(value = "SELECT count(*) FROM article WHERE TO_DAYS(NOW()) - TO_DAYS(create_date) <= :day",nativeQuery = true)
     int countArticlesForDays(@Param("day") int day);
 

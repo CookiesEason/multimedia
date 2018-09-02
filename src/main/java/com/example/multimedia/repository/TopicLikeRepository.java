@@ -3,6 +3,10 @@ package com.example.multimedia.repository;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.TopicLike;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * @author CookiesEason
@@ -17,4 +21,7 @@ public interface TopicLikeRepository extends JpaRepository<TopicLike, Long> {
     void deleteAllByTopId(Long topId);
 
     void deleteAllByTopIdAndTopic(Long topId,Topic topic);
+
+    @Query(value = "SELECT top_id FROM topic_like WHERE `status`=1 AND topic=:topic AND user_id = :userId AND TO_DAYS(NOW()) - TO_DAYS(date) <=3",nativeQuery = true)
+    long[] ids(@Param("topic") String topic,@Param("userId") Long userId);
 }

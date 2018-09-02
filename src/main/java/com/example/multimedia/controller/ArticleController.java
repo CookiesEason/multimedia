@@ -74,6 +74,12 @@ public class ArticleController {
         return articleService.findMyAll(page, size, order, sort);
     }
 
+    @GetMapping("/userLike/{userId}")
+    public ResultVo getMyLikeVideos(@PathVariable Long userId,@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10")int size){
+        return articleService.findAllByLike(userId,page,size);
+    }
+
     @PostMapping
     public ResultVo saveArticle(@RequestParam String title, @RequestParam String text,
                                 @RequestParam String tag, @RequestParam MultipartFile file,

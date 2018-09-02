@@ -111,6 +111,8 @@ public class UserServiceImpl implements UserService {
         String originalName = user.getUserInfo().getNickname();
         if (checkNickName(userInfo) || userInfo.getNickname().equals(originalName)) {
             userInfo.setHeadImgUrl(user.getUserInfo().getHeadImgUrl());
+            userInfo.setAnnouncement(user.getUserInfo().getAnnouncement());
+            userInfo.setSignature(user.getUserInfo().getSignature());
             user.setUserInfo(userInfo);
             userRepository.save(user);
             return ResultVoUtil.success();
@@ -275,6 +277,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public int newRegisterCountForDays(int day) {
         return userRepository.countNewRegister(day);
+    }
+
+    @Override
+    public ResultVo likeUsers(Long userId) {
+        Pageable pageable = PageRequest.of(0,5);
+        List<User> users = userRepository.likeUserIds(userId,pageable)
+                .getContent();
+        List<SimpleUserDTO> simpleUserDTOS = new ArrayList<>();
+        users.forEach(user -> {
+            SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user.getId(),
+                    user.getUserInfo().getNickname(),user.getUserInfo().getHeadImgUrl(),
+                    user.getUserInfo().getSignature(),getUserHot(user.getId()));
+            simpleUserDTOS.add(simpleUserDTO);
+        });
+        return ResultVoUtil.success(simpleUserDTOS);
     }
 
     private String encryptPassword(String password){

@@ -110,6 +110,12 @@ public class VideoController {
         return videoService.findAllBySmallTag(page, size, smallTag, sort);
     }
 
+    @GetMapping("/userLike/{userId}")
+    public ResultVo getMyLikeVideos(@PathVariable Long userId,@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10")int size){
+        return videoService.findAllByLike(userId,page,size);
+    }
+
     @PostMapping("/like/{videoId}")
     private void videoLike(@PathVariable Long videoId){
         videoLikeService.like(videoId, Topic.VIDEO);

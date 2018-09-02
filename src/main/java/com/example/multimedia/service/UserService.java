@@ -39,6 +39,8 @@ public interface UserService {
      */
     ResultVo signature(String signature);
 
+    ResultVo announcement(String announcement);
+
     /**
      * 更新用户个人信息
      * @param userInfo

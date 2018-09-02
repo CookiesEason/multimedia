@@ -1,5 +1,6 @@
 package com.example.multimedia.domian;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -38,6 +39,7 @@ public class User implements Serializable {
     private String password;
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Timestamp date;
 
     private boolean active = false;

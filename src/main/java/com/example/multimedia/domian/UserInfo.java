@@ -1,5 +1,6 @@
 package com.example.multimedia.domian;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -36,6 +37,7 @@ public class UserInfo implements Serializable {
 
     private String announcement;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Timestamp birthday;
 
     private String sex = "保密";

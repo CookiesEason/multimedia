@@ -71,6 +71,11 @@ public class UserController {
         return userService.signature(signature);
     }
 
+    @PostMapping("/api/user/announcement")
+    private ResultVo anncouncement(@RequestParam String announcement){
+        return userService.announcement(announcement);
+    }
+
     @PostMapping("/api/user/info")
     private ResultVo updateInfo(@RequestBody @Validated UserInfo userInfo) {
         return userService.save(userInfo);

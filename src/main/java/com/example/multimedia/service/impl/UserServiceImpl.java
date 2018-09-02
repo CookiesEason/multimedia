@@ -96,6 +96,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @CacheEvict(value = "user", allEntries = true)
+    public ResultVo announcement(String announcement) {
+        User user = findByUsername(UserUtil.getUserName());
+        user.getUserInfo().setAnnouncement(announcement);
+        userRepository.save(user);
+        return ResultVoUtil.success();
+    }
+
+    @Override
+    @CacheEvict(value = "user", allEntries = true)
     public ResultVo save(UserInfo userInfo) {
         // TODO: 2018/07/30 用户个人中心
         User user = findByUsername(UserUtil.getUserName());

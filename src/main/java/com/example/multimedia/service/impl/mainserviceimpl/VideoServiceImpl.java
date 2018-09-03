@@ -233,6 +233,7 @@ public class VideoServiceImpl implements VideoService {
             videoHistory = new VideoHistory();
             videoHistory.setUserId(getUid());
             videoHistory.setVideoId(videoId);
+            videoHistory.setTitle(findById(videoId).getTitle());
         }else {
             videoHistory.setWatchTime(new Timestamp(System.currentTimeMillis()));
         }
@@ -265,7 +266,7 @@ public class VideoServiceImpl implements VideoService {
         videoHistories.forEach(videoHistory -> {
             VideoHistoryDTO videoHistoryDTO = new VideoHistoryDTO();
             videoHistoryDTO.setVideoId(videoHistory.getVideoId());
-            videoHistoryDTO.setTitle(findById(videoHistory.getVideoId()).getTitle());
+            videoHistoryDTO.setTitle(videoHistory.getTitle());
             videoHistoryDTO.setWatchTime(videoHistory.getWatchTime());
             User user = userService.findById(videoHistory.getUserId());
             videoHistoryDTO.setUserId(user.getId());

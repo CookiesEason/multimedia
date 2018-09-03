@@ -22,6 +22,8 @@ public class VideoHistory {
 
     private Long videoId;
 
+    private String title;
+
     private Long userId;
 
     @UpdateTimestamp

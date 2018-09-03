@@ -29,7 +29,7 @@ public abstract class AbstractComment {
 
     private Long fromUid;
 
-    private Long likeCount;
+    private Long likeCount = 0L;
 
     @CreatedDate
     private Timestamp createDate;

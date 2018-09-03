@@ -73,16 +73,20 @@ public class NoticeServiceImpl implements NoticeService {
             notice.setReaded(true);
             noticeList.add(notice);
             if (notice.getTopic().equals(Topic.FOLLOW)){
-                NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
-                        "/api/user/"+notice.getFromUid(),"关注了你",notice.getDate());
+                User user = userService.findById(notice.getFromUid());
+                NoticeDTO message = new NoticeDTO(notice.getId(),user.getUserInfo().getNickname(),
+                        user.getUserInfo().getHeadImgUrl(),
+                        "/api/user/"+notice.getFromUid(),"关注了你",notice.getDate(),notice.getType());
                 notices.add(message);
             }
             if (notice.getTopic().equals(Topic.VIDEO)){
                 if ("videoPraise".equals(notice.getType())){
-                    NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
+                    User user = userService.findById(notice.getFromUid());
+                    NoticeDTO message = new NoticeDTO(notice.getId(),user.getUserInfo().getNickname(),
+                            user.getUserInfo().getHeadImgUrl(),
                             "/api/user/"+notice.getFromUid(),"点赞了你的视频",
                            notice.getTitle(), "/video/"+notice.getTopicId()
-                            ,notice.getDate());
+                            ,notice.getDate(),notice.getType());
                     notices.add(message);
                 }else if ("comment".equals(notice.getType())){
                     videoCommentNotice(notices, notice,"评论了你的视频");
@@ -101,11 +105,13 @@ public class NoticeServiceImpl implements NoticeService {
                 }
             }else if(notice.getTopic().equals(Topic.ARTICLE)){
                 if ("articlePraise".equals(notice.getType())){
-                    NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
+                    User user = userService.findById(notice.getFromUid());
+                    NoticeDTO message = new NoticeDTO(notice.getId(),user.getUserInfo().getNickname(),
+                            user.getUserInfo().getHeadImgUrl(),
                             "/api/user/"+notice.getFromUid(),"点赞了你的文章",
                             articleService.findById((long)notice.getTopicId()).getTitle(),
                             "/article/"+notice.getTopicId()
-                            ,notice.getDate());
+                            ,notice.getDate(),notice.getType());
                     notices.add(message);
                 }else if ("comment".equals(notice.getType())){
                     articleCommentNotice(notices, notice,"评论了你的文章");
@@ -124,44 +130,52 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     private void passNotice(List<NoticeDTO> notices, Notice notice, String content, String url) {
-        NoticeDTO message = new NoticeDTO(notice.getId(), null, null
-                , content, notice.getTitle(), url, notice.getDate());
+        NoticeDTO message = new NoticeDTO(notice.getId(), null,null, null
+                , content, notice.getTitle(), url, notice.getDate(),notice.getType());
         notices.add(message);
     }
 
     private void videoCommentNotice(List<NoticeDTO> notices, Notice notice,String content) {
-        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
+        User user = userService.findById(notice.getFromUid());
+        NoticeDTO message = new NoticeDTO(notice.getId(),user.getUserInfo().getNickname(),
+                user.getUserInfo().getHeadImgUrl(),
                 "/api/user/"+notice.getFromUid(),content,
-                videoService.findById(notice.getTopicId()).getTitle(),
+                notice.getTitle(),
                 "/video/"+notice.getTopicId(),notice.getCommentId(),notice.getComment()
-                ,notice.getDate());
+                ,notice.getDate(),notice.getType());
         notices.add(message);
     }
 
     private void videoReplyNotice(List<NoticeDTO> notices, Notice notice,String content) {
-        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
+        User user = userService.findById(notice.getFromUid());
+        NoticeDTO message = new NoticeDTO(notice.getId(),user.getUserInfo().getNickname(),
+                user.getUserInfo().getHeadImgUrl(),
                 "/api/user/"+notice.getFromUid(),content,
-                videoService.findById(notice.getTopicId()).getTitle(),
+                notice.getTitle(),
                 "/video/"+notice.getTopicId(),notice.getCommentId(),notice.getComment()
-                ,notice.getReply(),notice.getDate());
+                ,notice.getReply(),notice.getDate(),notice.getType());
         notices.add(message);
     }
 
     private void articleCommentNotice(List<NoticeDTO> notices, Notice notice,String content) {
-        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
+        User user = userService.findById(notice.getFromUid());
+        NoticeDTO message = new NoticeDTO(notice.getId(),user.getUserInfo().getNickname(),
+                user.getUserInfo().getHeadImgUrl(),
                 "/api/user/"+notice.getFromUid(),content,
-                articleService.findById((long)notice.getTopicId()).getTitle(),
+                notice.getTitle(),
                 "/article/"+notice.getTopicId(),notice.getCommentId(),notice.getComment()
-                ,notice.getDate());
+                ,notice.getDate(),notice.getType());
         notices.add(message);
     }
 
     private void articleReplyNotice(List<NoticeDTO> notices, Notice notice,String content) {
-        NoticeDTO message = new NoticeDTO(notice.getId(),userService.findById(notice.getFromUid()).getUserInfo().getNickname(),
+        User user = userService.findById(notice.getFromUid());
+        NoticeDTO message = new NoticeDTO(notice.getId(),user.getUserInfo().getNickname(),
+                user.getUserInfo().getHeadImgUrl(),
                 "/api/user/"+notice.getFromUid(),content,
-                articleService.findById((long)notice.getTopicId()).getTitle(),
+                notice.getTitle(),
                 "/article/"+notice.getTopicId(),notice.getCommentId(),notice.getComment()
-                ,notice.getReply(),notice.getDate());
+                ,notice.getReply(),notice.getDate(),notice.getType());
         notices.add(message);
     }
 

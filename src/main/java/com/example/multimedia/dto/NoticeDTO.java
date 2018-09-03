@@ -22,6 +22,9 @@ public class NoticeDTO implements Serializable {
     private String nickname;
 
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+    private String headUrl;
+
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private String userUrl;
 
     private String content;
@@ -44,29 +47,36 @@ public class NoticeDTO implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy年MM月dd日 HH:mm:ss")
     private Timestamp date;
 
+    private String type;
 
 
-    public NoticeDTO(Long messageId,String nickname, String userUrl, String content,Timestamp date) {
+
+    public NoticeDTO(Long messageId,String nickname,String headUrl,String userUrl, String content,Timestamp date,String type) {
         this.messageId = messageId;
         this.nickname = nickname;
+        this.headUrl = headUrl;
         this.userUrl = userUrl;
         this.content = content;
         this.date = date;
+        this.type = type;
     }
 
-    public NoticeDTO(Long messageId, String nickname, String userUrl, String content, String topicTitle, String topicUrl, Timestamp date) {
+    public NoticeDTO(Long messageId, String nickname,String headUrl, String userUrl, String content, String topicTitle, String topicUrl, Timestamp date,String type) {
         this.messageId = messageId;
         this.nickname = nickname;
+        this.headUrl = headUrl;
         this.userUrl = userUrl;
         this.content = content;
         this.topicTitle = topicTitle;
         this.topicUrl = topicUrl;
         this.date = date;
+        this.type = type;
     }
 
-    public NoticeDTO(Long messageId, String nickname, String userUrl, String content, String topicTitle, String topicUrl, Long commentId, String comment, Timestamp date) {
+    public NoticeDTO(Long messageId, String nickname, String headUrl,String userUrl, String content, String topicTitle, String topicUrl, Long commentId, String comment, Timestamp date,String type) {
         this.messageId = messageId;
         this.nickname = nickname;
+        this.headUrl = headUrl;
         this.userUrl = userUrl;
         this.content = content;
         this.topicTitle = topicTitle;
@@ -74,11 +84,13 @@ public class NoticeDTO implements Serializable {
         this.commentId = commentId;
         this.comment = comment;
         this.date = date;
+        this.type = type;
     }
 
-    public NoticeDTO(Long messageId, String nickname, String userUrl, String content, String topicTitle, String topicUrl, Long commentId, String comment, String reply, Timestamp date) {
+    public NoticeDTO(Long messageId, String nickname, String headUrl,String userUrl, String content, String topicTitle, String topicUrl, Long commentId, String comment, String reply, Timestamp date,String type) {
         this.messageId = messageId;
         this.nickname = nickname;
+        this.headUrl = headUrl;
         this.userUrl = userUrl;
         this.content = content;
         this.topicTitle = topicTitle;
@@ -87,5 +99,6 @@ public class NoticeDTO implements Serializable {
         this.comment = comment;
         this.reply = reply;
         this.date = date;
+        this.type = type;
     }
 }

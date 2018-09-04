@@ -37,5 +37,10 @@ public class FollowerController {
         return followerService.getFans(page,userId);
     }
 
+    @GetMapping("/fans/num/{userId}")
+    public ResultVo fansNumForDays(@PathVariable Long userId){
+        return followerService.fansForDays(userId);
+    }
+
 
 }

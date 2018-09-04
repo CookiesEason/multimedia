@@ -133,4 +133,9 @@ public class VideoController {
         return videoService.reportVideo(videoId,reason,reasonContent);
     }
 
+    @GetMapping("/proportion/{userId}")
+    public ResultVo proportion(@PathVariable Long userId){
+        return videoService.countWorksProportion(userId);
+    }
+
 }

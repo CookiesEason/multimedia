@@ -108,7 +108,7 @@ public class AdminController {
 
     @GetMapping("tags")
     private ResultVo getTags(){
-        return tagsService.getTags();
+        return ResultVoUtil.success(tagsService.getTags());
     }
 
     @PostMapping("updateTag")

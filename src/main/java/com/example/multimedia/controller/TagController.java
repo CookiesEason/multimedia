@@ -25,7 +25,7 @@ public class TagController {
 
     @GetMapping("/api/tags")
     private ResultVo getTags(){
-        return tagsService.getTags();
+        return ResultVoUtil.success(tagsService.getTags());
     }
 
     @RequestMapping("/api/smallTags")

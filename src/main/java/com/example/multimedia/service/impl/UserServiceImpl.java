@@ -1,13 +1,17 @@
 package com.example.multimedia.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.domian.UserRole;
+import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.domian.maindomian.Article;
+import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.dto.UsersDTO;
-import com.example.multimedia.repository.UserRepository;
-import com.example.multimedia.repository.UserRoleRepository;
+import com.example.multimedia.repository.*;
 import com.example.multimedia.service.FileService;
 import com.example.multimedia.service.MailService;
 import com.example.multimedia.service.UserService;
@@ -35,6 +39,9 @@ import javax.validation.constraints.Email;
 import java.sql.Timestamp;
 import java.util.*;
 
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.toMap;
+
 /**
  * @author CookiesEason
  * 2018/07/23 15:18
@@ -56,6 +63,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private StringRedisTemplate template;
+
+    @Autowired
+    private ArticleRepository articleRepository;
+
+    @Autowired
+    private VideoRepository videoRepository;
+
+    @Autowired
+    private TopicLikeRepository topicLikeRepository;
 
     @Override
     @Cacheable(value = "user", key = "#id",unless = "#result==null ")
@@ -292,6 +308,48 @@ public class UserServiceImpl implements UserService {
             simpleUserDTOS.add(simpleUserDTO);
         });
         return ResultVoUtil.success(simpleUserDTOS);
+    }
+
+    @Override
+    public ResultVo likeWorksProportion(Long userId) {
+        Map<String,Integer> kv = new HashMap<>();
+        List<Article> articles = articleRepository.findAllByIdIn(topicLikeRepository.likeIds(Topic.ARTICLE.toString(),userId));
+        articles.forEach(article -> article.getSmallTags().forEach(smallTags -> {
+            if (kv.containsKey(smallTags.getSmallTag())){
+                kv.put(smallTags.getSmallTag(),kv.get(smallTags.getSmallTag())+1);
+            }else {
+                kv.put(smallTags.getSmallTag(),1);
+            }
+        }));
+        List<Video> videos = videoRepository.findAllByIdIn(topicLikeRepository.likeIds(Topic.VIDEO.toString(),userId));
+        videos.forEach(video -> video.getSmallTags().forEach(smallTags -> {
+            if (kv.containsKey(smallTags.getSmallTag())){
+                kv.put(smallTags.getSmallTag(),kv.get(smallTags.getSmallTag())+1);
+            }else {
+                kv.put(smallTags.getSmallTag(),1);
+            }
+        }));
+        Map<String,Integer> result;
+        result = kv.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(
+                toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+                        LinkedHashMap::new)
+        );
+        JSONArray jsonArray=new JSONArray();
+        List<Integer> values = new ArrayList<>();
+        JSONObject rs =new JSONObject();
+        result.forEach((k, v) -> {
+            if (values.size()>4){
+                return;
+            }
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("name",k);
+            jsonObject.put("max",100);
+            values.add(v*10);
+            jsonArray.add(jsonObject);
+        });
+        rs.put("indicator",jsonArray);
+        rs.put("value",values);
+        return ResultVoUtil.success(rs);
     }
 
     private String encryptPassword(String password){

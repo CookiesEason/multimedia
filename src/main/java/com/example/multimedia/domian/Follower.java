@@ -1,11 +1,11 @@
 package com.example.multimedia.domian;
 
 import lombok.Data;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
  * @author CookiesEason
@@ -13,6 +13,7 @@ import javax.persistence.Id;
  */
 @Entity
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class Follower {
 
     @Id
@@ -24,5 +25,8 @@ public class Follower {
     private Long followerId;
 
     private Boolean status;
+
+    @LastModifiedDate
+    private Timestamp date;
 
 }

@@ -24,4 +24,7 @@ public interface TopicLikeRepository extends JpaRepository<TopicLike, Long> {
 
     @Query(value = "SELECT top_id FROM topic_like WHERE `status`=1 AND topic=:topic AND user_id = :userId AND TO_DAYS(NOW()) - TO_DAYS(date) <=3",nativeQuery = true)
     long[] ids(@Param("topic") String topic,@Param("userId") Long userId);
+
+    @Query(value = "SELECT top_id FROM topic_like WHERE `status`=1 AND topic=:topic AND user_id = :userId AND TO_DAYS(NOW()) - TO_DAYS(date) <=30",nativeQuery = true)
+    long[] likeIds(@Param("topic") String topic,@Param("userId") Long userId);
 }

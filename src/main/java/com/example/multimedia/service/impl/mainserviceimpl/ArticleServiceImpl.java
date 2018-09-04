@@ -1,10 +1,13 @@
 package com.example.multimedia.service.impl.mainserviceimpl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.TopicLike;
+import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.ArticleDTO;
 import com.example.multimedia.dto.PageDTO;
@@ -216,10 +219,23 @@ public class ArticleServiceImpl implements ArticleService {
         return getResultVo(articlePage);
     }
 
+    @Override
+    public ResultVo countWorksProportion(Long userId) {
+        List<Tags> tags =  tagsService.getTags();
+        JSONArray jsonArray=new JSONArray();
+        for (Tags t: tags) {
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("name",t.getTag());
+            jsonObject.put("value",articleRepository.countAllByTagsTagAndUserId(t.getTag(),userId));
+            jsonArray.add(jsonObject);
+        }
+        return ResultVoUtil.success(jsonArray);
+    }
+
     private ResultVo getResultVo(Page<Article> articlePage) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
-        Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
         articlePage.getContent().forEach(article -> {
+            Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
             article.getSmallTags().forEach(smallTags -> {
                 SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
                 smallTagDTOS.add(smallTagDTO);

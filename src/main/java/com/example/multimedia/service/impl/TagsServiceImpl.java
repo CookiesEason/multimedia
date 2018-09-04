@@ -10,6 +10,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author CookiesEason
  * 2018/08/18 17:22
@@ -22,8 +24,8 @@ public class TagsServiceImpl implements TagsService{
 
     @Override
     @Cacheable(value = "tags")
-    public ResultVo getTags() {
-        return ResultVoUtil.success(tagsRepository.findAll());
+    public List<Tags> getTags() {
+        return tagsRepository.findAll();
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.example.multimedia.vo.ResultVo;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -123,4 +124,10 @@ public interface ArticleService {
 
     ResultVo findAllByLike(Long userId, int page, int size);
 
+    /**
+     * 作品类别占比
+     * @param userId
+     * @return
+     */
+    ResultVo countWorksProportion(Long userId);
 }

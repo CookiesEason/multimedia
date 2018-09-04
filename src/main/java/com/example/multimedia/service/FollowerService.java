@@ -35,4 +35,6 @@ public interface FollowerService {
     ResultVo getFans(int page, Long userId);
 
 
+    ResultVo fansForDays(Long userId);
+
 }

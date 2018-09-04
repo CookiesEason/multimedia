@@ -19,7 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.*;
 
 /**
  * @author CookiesEason
@@ -86,6 +89,20 @@ public class FollowerServiceImpl implements FollowerService {
         followerPage.getContent().forEach(follower -> ids.add(follower.getUserId()));
         PageDTO<SimpleUserDTO> users = getSimpleUserDTOPageDTO(followerPage, ids);
         return ResultVoUtil.success(users);
+    }
+
+    @Override
+    public ResultVo fansForDays(Long userId) {
+        long [] fansNum = followerRepository.fansNumByDays(userId);
+        List<Long> num = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            if (i<=fansNum.length-1){
+                num.add(fansNum[i]);
+            }else {
+                num.add(fansNum[fansNum.length-1]);
+            }
+        }
+        return ResultVoUtil.success(num);
     }
 
 

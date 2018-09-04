@@ -3,6 +3,8 @@ package com.example.multimedia.service;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.vo.ResultVo;
 
+import java.util.List;
+
 /**
  * @author CookiesEason
  * 2018/08/18 17:20
@@ -13,7 +15,7 @@ public interface TagsService {
      * 获取标签
      * @return
      */
-    ResultVo getTags();
+    List<Tags> getTags();
 
     /**
      * 更新标签

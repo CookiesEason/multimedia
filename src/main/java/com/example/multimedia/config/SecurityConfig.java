@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             "/api/user/register","/api/user/activateEmail",
                             "/api/search/**")
                     .permitAll()
+                .antMatchers(HttpMethod.GET,"/api/follower/**").permitAll()
                 .antMatchers("/api/user/messages","/api/user/messages/count").authenticated()
                 .antMatchers(HttpMethod.GET,"/api/user/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/video/**").permitAll()

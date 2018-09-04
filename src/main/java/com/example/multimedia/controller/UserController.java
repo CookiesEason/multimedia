@@ -113,6 +113,11 @@ public class UserController {
         return userService.likeUsers(userId);
     }
 
+    @GetMapping("/api/user/likeWorksProportion/{userId}")
+    public ResultVo getLikeWorksProportion(@PathVariable Long userId){
+        return userService.likeWorksProportion(userId);
+    }
+
     @GetMapping("/api/user/messages")
     private ResultVo getMessages(@RequestParam(defaultValue = "0") int page){
         return noticeService.getNotices(page);

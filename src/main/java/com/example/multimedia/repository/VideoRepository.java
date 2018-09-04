@@ -35,7 +35,11 @@ public interface VideoRepository extends JpaRepository<Video,Long> {
 
     Page<Video> findAllByIdIn(long[] ids,Pageable pageable);
 
+    List<Video> findAllByIdIn(long[] ids);
+
     @Query(value = "SELECT count(*) FROM video WHERE TO_DAYS(NOW()) - TO_DAYS(create_date) <= :day",nativeQuery = true)
     int countVideosForDays(@Param("day") int day);
+
+    Long countAllByTagsTagAndUserId(String tag,Long userId);
 
 }

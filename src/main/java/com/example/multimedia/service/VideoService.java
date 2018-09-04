@@ -158,4 +158,10 @@ public interface VideoService {
      */
     ResultVo findAllByLike(Long userId,int page,int size);
 
+    /**
+     * 作品类别占比
+     * @param userId
+     * @return
+     */
+    ResultVo countWorksProportion(Long userId);
 }

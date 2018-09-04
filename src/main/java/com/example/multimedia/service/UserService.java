@@ -163,4 +163,11 @@ public interface UserService {
      * @return
      */
     ResultVo likeUsers(Long userId);
+
+    /**
+     * 喜欢作品 标签占比
+     * @param userId
+     * @return
+     */
+    ResultVo likeWorksProportion(Long userId);
 }

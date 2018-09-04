@@ -112,4 +112,9 @@ public class ArticleController {
         return articleService.reportArticle(articleId,reason,reasonContent);
     }
 
+    @GetMapping("/proportion/{userId}")
+    public ResultVo proportion(@PathVariable Long userId){
+        return articleService.countWorksProportion(userId);
+    }
+
 }

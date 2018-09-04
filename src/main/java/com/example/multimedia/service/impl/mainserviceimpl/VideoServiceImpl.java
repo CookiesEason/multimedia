@@ -1,5 +1,7 @@
 package com.example.multimedia.service.impl.mainserviceimpl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.VideoHistory;
 import com.example.multimedia.domian.enums.Topic;
@@ -315,6 +317,19 @@ public class VideoServiceImpl implements VideoService {
                 userId),pageable);
         VideosDTO videosDTO = getVideosDTO(videoPage);
         return ResultVoUtil.success(videosDTO);
+    }
+
+    @Override
+    public ResultVo countWorksProportion(Long userId) {
+        List<Tags> tags =  tagsService.getTags();
+        JSONArray jsonArray=new JSONArray();
+        for (Tags t: tags) {
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("name",t.getTag());
+            jsonObject.put("value",videoRepository.countAllByTagsTagAndUserId(t.getTag(),userId));
+            jsonArray.add(jsonObject);
+        }
+        return ResultVoUtil.success(jsonArray);
     }
 
     private ResultVo saveVideo(Video video, Tags tags,Set<String> smallTags) {

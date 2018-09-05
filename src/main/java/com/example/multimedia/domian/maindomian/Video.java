@@ -37,9 +37,9 @@ public class Video {
 
     private String videoUrl;
 
-    private long playCount;
+    private long playCount = 0L;
 
-    private long likeCount;
+    private long likeCount = 0L;
 
     @CreatedDate
     private Timestamp createDate;

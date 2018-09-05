@@ -329,6 +329,37 @@ public class UserServiceImpl implements UserService {
                 kv.put(smallTags.getSmallTag(),1);
             }
         }));
+        JSONObject rs = getJsonObject(kv);
+        return ResultVoUtil.success(rs);
+    }
+
+    @Override
+    public ResultVo hotWorksProportion(Long userId) {
+        Map<String,Integer> kv = new HashMap<>();
+        List<String> order = Arrays.asList("createDate","likeCount");
+        Sort sort = new Sort(Sort.Direction.DESC,order);
+        Pageable pageable = PageRequest.of(0,10,sort);
+        Page<Article> articlePage = articleRepository.findAllByUserId(userId,pageable);
+        articlePage.getContent().forEach(article -> article.getSmallTags().forEach(smallTags -> {
+            if (kv.containsKey(smallTags.getSmallTag())){
+                kv.put(smallTags.getSmallTag(),kv.get(smallTags.getSmallTag())+1);
+            }else {
+                kv.put(smallTags.getSmallTag(),1);
+            }
+        }));
+        Page<Video> videoPage = videoRepository.findAllByUserIdAndEnable(pageable,userId,true);
+        videoPage.getContent().forEach(video -> video.getSmallTags().forEach(smallTags -> {
+            if (kv.containsKey(smallTags.getSmallTag())){
+                kv.put(smallTags.getSmallTag(),kv.get(smallTags.getSmallTag())+1);
+            }else {
+                kv.put(smallTags.getSmallTag(),1);
+            }
+        }));
+        JSONObject rs = getJsonObject(kv);
+        return ResultVoUtil.success(rs);
+    }
+
+    private JSONObject getJsonObject(Map<String, Integer> kv) {
         Map<String,Integer> result;
         result = kv.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(
                 toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
@@ -349,7 +380,7 @@ public class UserServiceImpl implements UserService {
         });
         rs.put("indicator",jsonArray);
         rs.put("value",values);
-        return ResultVoUtil.success(rs);
+        return rs;
     }
 
     private String encryptPassword(String password){

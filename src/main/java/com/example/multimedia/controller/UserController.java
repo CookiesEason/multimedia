@@ -118,6 +118,11 @@ public class UserController {
         return userService.likeWorksProportion(userId);
     }
 
+    @GetMapping("/api/user/hotWorksProportion/{userId}")
+    public ResultVo getHotWorksProportion(@PathVariable Long userId){
+        return userService.hotWorksProportion(userId);
+    }
+
     @GetMapping("/api/user/messages")
     private ResultVo getMessages(@RequestParam(defaultValue = "0") int page){
         return noticeService.getNotices(page);

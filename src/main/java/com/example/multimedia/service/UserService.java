@@ -170,4 +170,11 @@ public interface UserService {
      * @return
      */
     ResultVo likeWorksProportion(Long userId);
+
+    /**
+     * 热门作品 标签占比
+     * @param userId
+     * @return
+     */
+    ResultVo hotWorksProportion(Long userId);
 }

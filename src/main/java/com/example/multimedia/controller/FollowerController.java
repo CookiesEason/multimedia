@@ -21,6 +21,7 @@ public class FollowerController {
         return followerService.followUser(followerId);
     }
 
+    //可能待删除。
     @GetMapping("/checkFollower/{followerId}")
     private Boolean checkFollower(@PathVariable Long followerId){
         return followerService.checkFollow(followerId);

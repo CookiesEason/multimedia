@@ -76,7 +76,9 @@ public class ReplyServiceImpl implements ReplyService {
         reply.setFromUid(userId);
         reply.setToUid(toUid);
         reply.setContent(content);
-        replyRepository.save(reply);
+        Reply rs = replyRepository.save(reply);
+        ReplyDTO replyDTO = new ReplyDTO(rs,0L,new SimpleUserDTO(userService.findById(userId)),
+                new SimpleUserDTO(userService.findById(toUid)));
         String title;
         if (comment.getTopic().equals(Topic.VIDEO)){
             title = videoService.findById(comment.getTopId()).getTitle();
@@ -85,7 +87,7 @@ public class ReplyServiceImpl implements ReplyService {
         }
         noticeService.saveNotice(comment.getTopic(), comment.getTopId(),title,commentId,comment.getContent(),
                 reply.getContent(),userId, toUid,"reply");
-        return ResultVoUtil.success();
+        return ResultVoUtil.success(replyDTO);
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.Video;
+import com.example.multimedia.repository.ArticleRepository;
 import com.example.multimedia.repository.TopicLikeRepository;
 import com.example.multimedia.repository.VideoHistoryRepository;
 import com.example.multimedia.repository.VideoRepository;
@@ -77,7 +78,13 @@ public class VideoServiceImpl implements VideoService {
     private TagsService tagsService;
 
     @Autowired
+    private FollowerService followerService;
+
+    @Autowired
     private TopicLikeRepository topicLikeRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Override
     public ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
@@ -202,10 +209,44 @@ public class VideoServiceImpl implements VideoService {
             smallTagDTOS.add(smallTagDTO);
         });
         VideoDTO videoDTO = new VideoDTO(
-                new SimpleUserDTO(getUser(UserUtil.getUserName())),
+                new SimpleUserDTO(userService.findById(video.getUserId()),
+                        followerService.checkFollow(video.getUserId())),
                 video,
                 isLike,smallTagDTOS);
-        return ResultVoUtil.success(videoDTO);
+        Sort sort = new Sort(Sort.Direction.DESC,"likeCount");
+        Pageable pageable = PageRequest.of(0,3,sort);
+        List<SimpleVideoDTO> otherVideos= new ArrayList<>();
+        List<SimpleArticleDTO> otherArticles = new ArrayList<>();
+        List<SimpleVideoDTO> recommendVideos = new ArrayList<>();
+        List<SimpleVideoDTO> relatedVideos = new ArrayList<>();
+        videoRepository.findAllByUserIdAndEnable(pageable,video.getUserId(),true).getContent()
+                .forEach(simpleVideo -> {
+                    SimpleVideoDTO simpleVideoDTO = new SimpleVideoDTO(simpleVideo);
+                    otherVideos.add(simpleVideoDTO);
+                });
+        articleRepository.findAllByUserId(video.getUserId(),pageable).getContent()
+                .forEach(simpleArticle -> {
+                    SimpleArticleDTO simpleArticleDTO = new SimpleArticleDTO(simpleArticle);
+                    otherArticles.add(simpleArticleDTO);
+                });
+        pageable = PageRequest.of(0,5,sort);
+        videoRepository.findAllByEnable(pageable,true).getContent()
+                .forEach(simpleVideo -> {
+                    SimpleVideoDTO simpleVideoDTO = new SimpleVideoDTO(simpleVideo);
+                    recommendVideos.add(simpleVideoDTO);
+                });
+        videoRepository.findAllByEnableAndTagsTag(pageable,true,video.getTags().getTag()).getContent()
+                .forEach(simpleVideo -> {
+                    SimpleVideoDTO simpleVideoDTO = new SimpleVideoDTO(simpleVideo);
+                    relatedVideos.add(simpleVideoDTO);
+                });
+        VideoWorkDTO workDTO = new VideoWorkDTO();
+        workDTO.setVideo(videoDTO);
+        workDTO.setOtherVideos(otherVideos);
+        workDTO.setOtherArticles(otherArticles);
+        workDTO.setRecommendVideos(recommendVideos);
+        workDTO.setRelatedVideos(relatedVideos);
+        return ResultVoUtil.success(workDTO);
     }
 
     @Override
@@ -346,10 +387,6 @@ public class VideoServiceImpl implements VideoService {
         }else {
             return ResultVoUtil.error(0,"分类不存在,请检查你选择的分类");
         }
-    }
-
-    private User getUser(String username){
-        return userService.findByUsername(username);
     }
 
     private Long getUid(){

@@ -78,7 +78,8 @@ public class CommentServiceImpl implements CommentService {
         comment.setContent(content);
         comment.setFromUid(fromUid);
         comment.setTopic(topic);
-        commentRepository.save(comment);
+        Comment rs = commentRepository.save(comment);
+        CommentDTO commentDTO = new CommentDTO(rs,userService.findById(fromUid));
         Long toUid;
         String title;
         if (topic.equals(Topic.VIDEO)){
@@ -94,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
             noticeService.saveNotice(topic,topicId, title,comment.getId(),comment.getContent(),
                     null,fromUid,toUid,"comment");
         }
-        return ResultVoUtil.success();
+        return ResultVoUtil.success(commentDTO);
     }
 
     @Override

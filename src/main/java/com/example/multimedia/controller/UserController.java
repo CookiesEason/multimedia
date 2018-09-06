@@ -1,5 +1,6 @@
 package com.example.multimedia.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.dto.SimpleUserDTO;
@@ -37,6 +38,14 @@ public class UserController {
 
     @Autowired
     private NoticeService noticeService;
+
+    @GetMapping("/login")
+    public JSONObject login(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code",101);
+        jsonObject.put("msg","您还未登陆");
+        return jsonObject;
+    }
 
     @PostMapping("/api/user/register")
     private ResultVo registerUser(@Validated User user, BindingResult bindingResult){

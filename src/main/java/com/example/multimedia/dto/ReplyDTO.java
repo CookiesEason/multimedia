@@ -46,4 +46,13 @@ public class ReplyDTO {
         this.likeCount = likeCount;
         this.fromUser = fromUser;
     }
+
+    public ReplyDTO(Reply reply, Long likeCount, SimpleUserDTO fromUser, SimpleUserDTO toUser) {
+        this.replyId = reply.getId();
+        this.content = reply.getContent();
+        this.createDate = reply.getCreateDate();
+        this.likeCount = likeCount;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
+    }
 }

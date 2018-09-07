@@ -4,6 +4,7 @@ import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 /**
@@ -13,18 +14,23 @@ import java.util.Set;
  */
 public interface VideoService {
 
+    String getUploadSignature() throws UnsupportedEncodingException;
+
 
     /**
      * 上传视频
-     * @param title;
-     * @param introduction;
-     * @param tag;
-     * @param multipartFile;
-     * @return ResultVo
+     * @param title
+     * @param introduction
+     * @param tag
+     * @param smallTags
+     * @param imgUrl
+     * @param videoUrl
+     * @param fileId
+     * @return
      */
     ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
-                         MultipartFile imgFile,
-                         MultipartFile multipartFile);
+                         String imgUrl,
+                         String videoUrl,String fileId);
 
     /**
      * 查找自己所有视频(已通过，和未通过)
@@ -76,7 +82,7 @@ public interface VideoService {
      * @param tag;
      * @return ResultVo
      */
-    ResultVo updateVideo(long id,String title, String introduction, String tag, Set<String> smallTags,MultipartFile file);
+    ResultVo updateVideo(long id,String title, String introduction, String tag, Set<String> smallTags,String imgUrl);
 
     /**
      * 获取单个视频信息

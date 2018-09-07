@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 /**
@@ -35,13 +36,20 @@ public class VideoController {
         return videoService.getHistory(page,size);
     }
 
+
+    @PostMapping("/signature")
+    @ResponseBody
+    public String signature() throws UnsupportedEncodingException {
+        return videoService.getUploadSignature();
+    }
+
     @PostMapping
     @ResponseBody
     private ResultVo uploadVideo(@RequestParam String title,@RequestParam String introduction,
-                                 @RequestParam String tag,@RequestParam(value = "imgFile") MultipartFile imgFile,
+                                 @RequestParam String tag,@RequestParam String imgUrl,
                                  @RequestParam(value = "smallTags") Set<String> smallTags,
-                                 @RequestParam(value = "file",required = false) MultipartFile multipartFile){
-        return videoService.uploadVideo(title,introduction,tag,smallTags,imgFile,multipartFile);
+                                 @RequestParam String videoUrl,@RequestParam String fileId){
+        return videoService.uploadVideo(title,introduction,tag,smallTags,imgUrl,videoUrl,fileId);
     }
 
     @GetMapping("/{id}")
@@ -56,8 +64,8 @@ public class VideoController {
                                  @RequestParam String introduction,
                                  @RequestParam String tag,
                                  @RequestParam(value = "smallTags") Set<String> smallTags,
-                                 @RequestParam(value = "imgFile") MultipartFile imgFile){
-        return videoService.updateVideo(id,title,introduction,tag,smallTags,imgFile);
+                                 @RequestParam String imgUrl){
+        return videoService.updateVideo(id,title,introduction,tag,smallTags,imgUrl);
     }
 
     @DeleteMapping("/{id}")

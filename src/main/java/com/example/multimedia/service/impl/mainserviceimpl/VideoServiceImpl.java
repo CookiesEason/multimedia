@@ -10,6 +10,7 @@ import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.Video;
+import com.example.multimedia.properties.TengXunProperties;
 import com.example.multimedia.repository.ArticleRepository;
 import com.example.multimedia.repository.TopicLikeRepository;
 import com.example.multimedia.repository.VideoHistoryRepository;
@@ -28,7 +29,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.sql.Timestamp;
 
@@ -42,6 +47,10 @@ import java.sql.Timestamp;
 public class VideoServiceImpl implements VideoService {
 
     private final static String PREFIX_VIDEO="video/";
+
+    private static final String HMAC_ALGORITHM = "HmacSHA1";
+
+    private static final String CONTENT_CHARSET = "UTF-8";
 
     @Autowired
     private FileService fileService;
@@ -86,32 +95,61 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private TengXunProperties tengXunProperties;
+
+    @Override
+    public String getUploadSignature() {
+        String secretId = tengXunProperties.getAccessKey();
+        String secretKey = tengXunProperties.getSecretKey();
+        long currentTime = System.currentTimeMillis() / 1000;
+        int random = new Random().nextInt(java.lang.Integer.MAX_VALUE);
+        int signValidDuration = 3600 * 24 * 2;
+        String strSign = "";
+        String contextStr = "";
+
+        long endTime = (currentTime + signValidDuration);
+        try {
+            contextStr += "secretId=" + java.net.URLEncoder.encode(secretId, "utf8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        contextStr += "&currentTimeStamp=" + currentTime;
+        contextStr += "&expireTime=" + endTime;
+        contextStr += "&random=" + random;
+        try {
+            Mac mac = Mac.getInstance(HMAC_ALGORITHM);
+            SecretKeySpec key = new SecretKeySpec(secretKey.getBytes(CONTENT_CHARSET), mac.getAlgorithm());
+            mac.init(key);
+
+            byte[] hash = mac.doFinal(contextStr.getBytes(CONTENT_CHARSET));
+            byte[] sigBuf = byteMerger(hash, contextStr.getBytes("utf8"));
+            strSign = new String(new BASE64Encoder().encode(sigBuf).getBytes());
+            strSign = strSign.replace(" ", "").replace("\n", "").replace("\r", "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strSign;
+    }
+
     @Override
     public ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
-                                MultipartFile imgFile,
-                                MultipartFile multipartFile) {
+                                String imgUrl,
+                                String videoUrl,String fileId) {
         Video video = new Video();
-        if (multipartFile==null){
+        if (videoUrl==null){
             video.setTitle(title);
             video.setIntroduction(introduction);
             video.setUserId(getUid());
             return saveVideo(video, tagsService.findByTag(tag),smallTags);
         }
-        if (!multipartFile.getOriginalFilename().contains(PREFIX_VIDEO)){
-            ResultVo resultVo = fileService.uploadFile(multipartFile);
-            ResultVo bgResult = fileService.uploadFile(imgFile);
-            if (resultVo.getCode()==0||bgResult.getCode()==0){
-                return resultVo;
-            }
-            video.setTitle(title);
-            video.setIntroduction(introduction);
-            video.setUserId(getUid());
-            video.setVideoUrl(resultVo.getData().toString());
-            video.setImgUrl(bgResult.getData().toString());
-            return saveVideo(video, tagsService.findByTag(tag),smallTags);
-        }else {
-            return ResultVoUtil.error(0,"请注意上传的文件为视频");
-        }
+        video.setTitle(title);
+        video.setIntroduction(introduction);
+        video.setUserId(getUid());
+        video.setVideoUrl(videoUrl);
+        video.setImgUrl(videoUrl);
+        video.setFileId(fileId);
+        return saveVideo(video, tagsService.findByTag(tag),smallTags);
 
     }
 
@@ -180,15 +218,15 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public ResultVo updateVideo(long id,String title, String introduction, String tag,
-                                Set<String> smallTags,MultipartFile file) {
+                                Set<String> smallTags,String imgUrl) {
         Video video = videoRepository.findByIdAndUserId(id,getUid());
         if (introduction.length()<10){
             return ResultVoUtil.error(0,"请输入介绍信息不少于10个字");
         }
         video.setTitle(title);
         video.setIntroduction(introduction);
-        if (file!=null){
-            video.setImgUrl(fileService.uploadFile(file).getData().toString());
+        if (imgUrl!=null){
+            video.setImgUrl(imgUrl);
         }
         Tags tags = tagsService.findByTag(tag);
         return saveVideo(video,tags,smallTags);
@@ -405,6 +443,13 @@ public class VideoServiceImpl implements VideoService {
             st = new Sort(Sort.Direction.DESC,sort);
         }
         return st;
+    }
+
+    private static byte[] byteMerger(byte[] byte1, byte[] byte2) {
+        byte[] byte3 = new byte[byte1.length + byte2.length];
+        System.arraycopy(byte1, 0, byte3, 0, byte1.length);
+        System.arraycopy(byte2, 0, byte3, byte1.length, byte2.length);
+        return byte3;
     }
 
 }

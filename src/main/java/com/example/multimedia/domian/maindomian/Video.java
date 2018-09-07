@@ -37,6 +37,8 @@ public class Video {
 
     private String videoUrl;
 
+    private String fileId;
+
     private long playCount = 0L;
 
     private long likeCount = 0L;

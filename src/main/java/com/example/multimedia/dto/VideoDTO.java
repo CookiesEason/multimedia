@@ -22,6 +22,8 @@ public class VideoDTO {
 
     private String introduction;
 
+    private String fileId;
+
     private String videoUrl;
 
     private String imgUrl;
@@ -47,6 +49,7 @@ public class VideoDTO {
         this.user = user;
         this.title = video.getTitle();
         this.introduction = video.getIntroduction();
+        this.fileId = video.getFileId();
         this.videoUrl = video.getVideoUrl();
         this.imgUrl = video.getImgUrl();
         this.playCount = video.getPlayCount();
@@ -63,6 +66,7 @@ public class VideoDTO {
         this.user = user;
         this.title = video.getTitle();
         this.introduction = video.getIntroduction();
+        this.fileId = video.getFileId();
         this.videoUrl = video.getVideoUrl();
         this.imgUrl = video.getImgUrl();
         this.playCount = video.getPlayCount();
@@ -71,20 +75,5 @@ public class VideoDTO {
         this.tag = video.getTags().getTag();
         this.smallTags = smallTags;
         this.enable = video.isEnable();
-    }
-
-    @Override
-    public String toString() {
-        return "VideoDTO{" +
-                "user=" + user +
-                ", title='" + title + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", videoUrl='" + videoUrl + '\'' +
-                ", playCount=" + playCount +
-                ", likeCount=" + likeCount +
-                ", createDate=" + createDate +
-                ", tag='" + tag + '\'' +
-                ", enable=" + enable +
-                '}';
     }
 }

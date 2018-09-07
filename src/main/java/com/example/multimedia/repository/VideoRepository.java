@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,5 +43,9 @@ public interface VideoRepository extends JpaRepository<Video,Long> {
     int countVideosForDays(@Param("day") int day);
 
     Long countAllByTagsTagAndUserId(String tag,Long userId);
+
+    Long countAllByCreateDateAfter(Date date);
+
+    Long countAllByTagsTag(String tag);
 
 }

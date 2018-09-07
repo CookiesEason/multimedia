@@ -170,4 +170,10 @@ public interface VideoService {
      * @return
      */
     ResultVo countWorksProportion(Long userId);
+
+    /**
+     * 作品分别计数
+     * @return
+     */
+    ResultVo count();
 }

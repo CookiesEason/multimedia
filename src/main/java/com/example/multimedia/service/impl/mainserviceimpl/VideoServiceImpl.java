@@ -411,6 +411,28 @@ public class VideoServiceImpl implements VideoService {
         return ResultVoUtil.success(jsonArray);
     }
 
+    @Override
+    public ResultVo count() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) - 7);
+        JSONArray jsonArray=new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name","最热");
+        jsonObject.put("num",videoRepository.countAllByCreateDateAfter(calendar.getTime()));
+        jsonArray.add(jsonObject);
+        jsonObject = new JSONObject();
+        jsonObject.put("name","最新");
+        jsonObject.put("num",videoRepository.count());
+        jsonArray.add(jsonObject);
+        tagsService.getTags().forEach(tags -> {
+            JSONObject jo=new JSONObject();
+            jo.put("name",tags.getTag());
+            jo.put("num",videoRepository.countAllByTagsTag(tags.getTag()));
+            jsonArray.add(jo);
+        });
+        return ResultVoUtil.success(jsonArray);
+    }
+
     private ResultVo saveVideo(Video video, Tags tags,Set<String> smallTags) {
         Set<SmallTags> smallTagsSet = smallTagsService.findAllBySmallTag(smallTags);
         if (tags!=null){

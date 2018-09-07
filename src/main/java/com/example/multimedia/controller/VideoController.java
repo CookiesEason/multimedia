@@ -92,6 +92,11 @@ public class VideoController {
         return videoService.findAllByUserId(page,size,sort,userId);
     }
 
+    @GetMapping("/count")
+    public ResultVo count(){
+        return videoService.count();
+    }
+
     @GetMapping
     @ResponseBody
     private ResultVo findVideos(@RequestParam(defaultValue = "0") int page,

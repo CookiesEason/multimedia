@@ -135,20 +135,22 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
                                 String imgUrl,
-                                String videoUrl,String fileId) {
+                                String videoUrl,String fileId,Long time) {
         Video video = new Video();
         if (videoUrl==null){
             video.setTitle(title);
             video.setIntroduction(introduction);
             video.setUserId(getUid());
+            video.setTime(time);
             return saveVideo(video, tagsService.findByTag(tag),smallTags);
         }
         video.setTitle(title);
         video.setIntroduction(introduction);
         video.setUserId(getUid());
         video.setVideoUrl(videoUrl);
-        video.setImgUrl(videoUrl);
+        video.setImgUrl(imgUrl);
         video.setFileId(fileId);
+        video.setTime(time);
         return saveVideo(video, tagsService.findByTag(tag),smallTags);
 
     }

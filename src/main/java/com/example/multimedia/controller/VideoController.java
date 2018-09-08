@@ -48,8 +48,9 @@ public class VideoController {
     private ResultVo uploadVideo(@RequestParam String title,@RequestParam String introduction,
                                  @RequestParam String tag,@RequestParam String imgUrl,
                                  @RequestParam(value = "smallTags") Set<String> smallTags,
-                                 @RequestParam String videoUrl,@RequestParam String fileId){
-        return videoService.uploadVideo(title,introduction,tag,smallTags,imgUrl,videoUrl,fileId);
+                                 @RequestParam String videoUrl,@RequestParam String fileId,
+                                 @RequestParam Long time){
+        return videoService.uploadVideo(title,introduction,tag,smallTags,imgUrl,videoUrl,fileId,time);
     }
 
     @GetMapping("/{id}")

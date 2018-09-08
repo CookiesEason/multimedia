@@ -30,7 +30,7 @@ public interface VideoService {
      */
     ResultVo uploadVideo(String title, String introduction, String tag, Set<String> smallTags,
                          String imgUrl,
-                         String videoUrl,String fileId);
+                         String videoUrl,String fileId,Long time);
 
     /**
      * 查找自己所有视频(已通过，和未通过)

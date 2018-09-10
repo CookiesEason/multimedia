@@ -82,7 +82,7 @@ public class ArticleController {
 
     @PostMapping
     public ResultVo saveArticle(@RequestParam String title, @RequestParam String text,
-                                @RequestParam String tag, @RequestParam MultipartFile file,
+                                @RequestParam String tag, @RequestParam(value = "file") MultipartFile file,
                                 @RequestParam(value = "smallTags")Set<String> smallTags) {
         return articleService.save(title, text, tag,file,smallTags);
     }

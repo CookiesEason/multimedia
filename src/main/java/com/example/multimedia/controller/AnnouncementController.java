@@ -27,8 +27,8 @@ public class AnnouncementController {
         return announcementService.findAll(page, size);
     }
 
-    @GetMapping("/tag/{tag}")
-    public ResultVo getAnnounces(@PathVariable String tag,
+    @GetMapping("/tag")
+    public ResultVo getAnnounces(@RequestParam String tag,
                                  @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size){
         return announcementService.findByTag(tag, page, size);

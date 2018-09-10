@@ -27,8 +27,8 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public ResultVo uploadFile(@RequestParam MultipartFile multipartFile){
-        return fileService.uploadFile(multipartFile);
+    public String uploadFile(@RequestParam MultipartFile multipartFile){
+        return (String) fileService.uploadFile(multipartFile).getData();
     }
 
 }

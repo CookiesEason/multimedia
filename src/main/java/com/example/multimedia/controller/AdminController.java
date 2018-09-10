@@ -56,6 +56,25 @@ public class AdminController {
     @Autowired
     private AnnouncementService announcementService;
 
+    @Autowired
+    private PictureService pictureService;
+
+    @PostMapping("picture")
+    public ResultVo uploadPicture(@RequestParam String imgUrl,@RequestParam String type){
+            return pictureService.save(imgUrl, type);
+    }
+
+    @PostMapping("picture/update")
+    public ResultVo updatePicture(@RequestParam Long id,
+            @RequestParam String imgUrl,@RequestParam String type){
+        return pictureService.update(id,imgUrl, type);
+    }
+
+    @DeleteMapping("picture/{id}")
+    public ResultVo deletePicture(@PathVariable Long id){
+        return pictureService.delete(id);
+    }
+
     @GetMapping("users")
     private ResultVo findUsers(@RequestParam(defaultValue = "0") int page){
         String role = "%USER%";

@@ -74,4 +74,9 @@ public interface CommentService {
      * @return
      */
     ResultVo findMyself(Long contentId,Topic topic);
+
+    /**
+     * 计算评论数
+     */
+    Long num(Long id, Topic topic);
 }

@@ -42,7 +42,11 @@ public class ArticleDTO implements Serializable {
 
     private Timestamp createDate;
 
-    public ArticleDTO(SimpleUserDTO user, Article article,Set<SmallTagDTO> smallTags) {
+    private Boolean enable;
+
+    private Long commentNum;
+
+    public ArticleDTO(SimpleUserDTO user, Article article,Set<SmallTagDTO> smallTags,Long commentNum) {
         this.id = article.getId();
         this.user = user;
         this.tag = article.getTags().getTag();
@@ -53,6 +57,8 @@ public class ArticleDTO implements Serializable {
         this.readCount = article.getReadCount();
         this.likeCount = article.getLikeCount();
         this.createDate = article.getCreateDate();
+        this.commentNum = commentNum;
+        this.enable = article.getEnable();
     }
 
     public ArticleDTO(SimpleUserDTO user, Article article,Boolean isLike,Set<SmallTagDTO> smallTags) {

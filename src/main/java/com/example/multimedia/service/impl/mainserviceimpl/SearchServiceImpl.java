@@ -16,6 +16,7 @@ import com.example.multimedia.repository.search.ArticleSearchRepository;
 import com.example.multimedia.repository.search.CommentSearchRepository;
 import com.example.multimedia.repository.search.ReplySearchRepository;
 import com.example.multimedia.repository.search.VideoSearchRepository;
+import com.example.multimedia.service.CommentService;
 import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.service.SearchService;
@@ -73,6 +74,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CommentService commentService;
+
     @Override
     public ResultVo searchVideo(int page,String order,String sort,String searchContent,Boolean enable) {
         SearchQuery searchQuery = getVideoSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
@@ -103,7 +107,7 @@ public class SearchServiceImpl implements SearchService {
             User user = userService.findById(article.getUserId());
             ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
                     user.getUserInfo().getHeadImgUrl()),
-                    article,null);
+                    article,null,commentService.num(article.getId(),Topic.ARTICLE));
             articleDTOList.add(articleDTO);
         });
         PageDTO<ArticleDTO> articleDTOPageDTO = new PageDTO<>(articleDTOList,articleSearchPage.getTotalElements(),

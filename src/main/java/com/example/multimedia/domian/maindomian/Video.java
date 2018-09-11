@@ -48,7 +48,7 @@ public class Video {
     @CreatedDate
     private Timestamp createDate;
 
-    private boolean enable = true;
+    private boolean enable = false;
 
     @OneToOne(fetch = FetchType.EAGER)
     private Tags tags;

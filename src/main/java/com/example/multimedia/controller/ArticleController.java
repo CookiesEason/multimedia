@@ -4,6 +4,7 @@ import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.service.ArticleService;
 import com.example.multimedia.service.LikeService;
+import com.example.multimedia.service.ProblemService;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +25,9 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Autowired
+    private ProblemService problemService;
+
+    @Autowired
     @Qualifier(value = "LikeService")
     private LikeService likeService;
 
@@ -32,7 +36,7 @@ public class ArticleController {
                                 @RequestParam(defaultValue = "10") int size,
                                 @RequestParam(defaultValue = "desc") String order,
                                 @RequestParam(defaultValue = "createDate") String sort){
-        return articleService.findAll(page,size,order,sort);
+        return articleService.findAll(page,size,order,sort,true);
     }
 
     @GetMapping("/tag")
@@ -70,8 +74,9 @@ public class ArticleController {
     public ResultVo getMyArticle(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size,
                                  @RequestParam(defaultValue = "desc") String order,
-                                 @RequestParam(defaultValue = "createDate") String sort){
-        return articleService.findMyAll(page, size, order, sort);
+                                 @RequestParam(defaultValue = "createDate") String sort,
+                                 @RequestParam(defaultValue = "true") Boolean enable){
+        return articleService.findMyAll(page, size, order, sort,enable);
     }
 
     @GetMapping("/userLike/{userId}")
@@ -115,6 +120,11 @@ public class ArticleController {
     @GetMapping("/proportion/{userId}")
     public ResultVo proportion(@PathVariable Long userId){
         return articleService.countWorksProportion(userId);
+    }
+
+    @GetMapping("/problems/{articleId}")
+    public ResultVo problems(@PathVariable Long articleId){
+        return problemService.getById(articleId,Topic.ARTICLE);
     }
 
 }

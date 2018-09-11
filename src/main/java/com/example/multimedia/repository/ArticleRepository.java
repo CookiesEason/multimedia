@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -17,18 +18,21 @@ import java.util.Set;
  */
 public interface ArticleRepository extends JpaRepository<Article,Long> {
 
+    Optional<Article> findByIdAndEnable(Long id,Boolean enable);
 
-    Page<Article> findAllByTagsTag(String tag,Pageable pageable);
+    Page<Article> findAllByEnable(Pageable pageable,Boolean enable);
 
-    Page<Article> findAllByUserId(Long userId,Pageable pageable);
+    Page<Article> findAllByTagsTagAndEnable(String tag,Pageable pageable,Boolean enable);
+
+    Page<Article> findAllByUserIdAndEnable(Long userId,Pageable pageable,Boolean enable);
 
     void deleteByIdAndUserId(Long id, Long userId);
 
     List<Article> findAllBySmallTags(SmallTags smallTags);
 
-    Page<Article> findAllBySmallTags(SmallTags smallTags,Pageable pageable);
+    Page<Article> findAllBySmallTagsAndEnable(SmallTags smallTags,Pageable pageable,Boolean enable);
 
-    Page<Article> findAllByIdIn(long[] ids,Pageable pageable);
+    Page<Article> findAllByIdInAndEnable(long[] ids,Pageable pageable,Boolean enable);
 
     List<Article> findAllByIdIn(long[] ids);
 

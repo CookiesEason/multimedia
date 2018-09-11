@@ -46,6 +46,8 @@ public class Article {
 
     private Long likeCount = 0L;
 
+    private Boolean enable = true;
+
     @CreatedDate
     private Timestamp createDate;
 

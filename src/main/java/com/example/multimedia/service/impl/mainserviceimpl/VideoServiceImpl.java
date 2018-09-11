@@ -264,7 +264,7 @@ public class VideoServiceImpl implements VideoService {
                     SimpleVideoDTO simpleVideoDTO = new SimpleVideoDTO(simpleVideo);
                     otherVideos.add(simpleVideoDTO);
                 });
-        articleRepository.findAllByUserId(video.getUserId(),pageable).getContent()
+        articleRepository.findAllByUserIdAndEnable(video.getUserId(),pageable,true).getContent()
                 .forEach(simpleArticle -> {
                     SimpleArticleDTO simpleArticleDTO = new SimpleArticleDTO(simpleArticle);
                     otherArticles.add(simpleArticleDTO);
@@ -333,7 +333,6 @@ public class VideoServiceImpl implements VideoService {
             noticeService.saveNotice(Topic.VIDEO,videoId,video.getTitle(),null,null,null,
                     null,video.getUserId(),"enable");
         }else {
-            deleteById(videoId);
             noticeService.saveNotice(Topic.VIDEO,videoId,video.getTitle(),null,null,null,
                     null,video.getUserId(),"unEnable");
         }

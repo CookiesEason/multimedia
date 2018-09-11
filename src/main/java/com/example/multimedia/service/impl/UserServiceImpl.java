@@ -339,7 +339,7 @@ public class UserServiceImpl implements UserService {
         List<String> order = Arrays.asList("createDate","likeCount");
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(0,10,sort);
-        Page<Article> articlePage = articleRepository.findAllByUserId(userId,pageable);
+        Page<Article> articlePage = articleRepository.findAllByUserIdAndEnable(userId,pageable,true);
         articlePage.getContent().forEach(article -> article.getSmallTags().forEach(smallTags -> {
             if (kv.containsKey(smallTags.getSmallTag())){
                 kv.put(smallTags.getSmallTag(),kv.get(smallTags.getSmallTag())+1);

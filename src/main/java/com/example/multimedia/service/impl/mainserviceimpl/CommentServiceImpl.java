@@ -171,6 +171,11 @@ public class CommentServiceImpl implements CommentService {
         return ResultVoUtil.success(commentList);
     }
 
+    @Override
+    public Long num(Long id, Topic topic) {
+        return commentRepository.countAllByTopicAndTopId(topic, id);
+    }
+
     private void commentResultVO(List<CommentDTO> commentList, Comment comment) {
         boolean isLike = false;
         CommentLike commentLike = (CommentLike) commentLikeService.status(comment.getId(),getUid(),null);

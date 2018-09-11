@@ -207,8 +207,9 @@ public class AdminController {
     public ResultVo getArticles(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
                                 @RequestParam(defaultValue = "asc") String order,
-                                @RequestParam(defaultValue = "createDate") String sort){
-        return articleService.findAll(page,size,order,sort);
+                                @RequestParam(defaultValue = "createDate") String sort,
+                                @RequestParam(defaultValue = "true") Boolean enable){
+        return articleService.findAll(page,size,order,sort,enable);
     }
 
     @GetMapping("/articles/search")
@@ -227,6 +228,12 @@ public class AdminController {
                                   @RequestParam(required = false) MultipartFile file,
                                   @RequestParam(value = "smallTags") Set<String> smallTags){
         return articleService.update(articleId, title, text, file,tag,smallTags);
+    }
+
+    @PostMapping("articles/enable/{articleId}")
+    public ResultVo enableArticles(@PathVariable Long articleId,
+                                   @RequestParam(required = false) String reason){
+        return articleService.enable(articleId,reason);
     }
 
     @DeleteMapping("articles/{articleId}")

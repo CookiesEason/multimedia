@@ -1,8 +1,9 @@
-package com.example.multimedia.service;
+package com.example.multimedia.service.impl;
 
 import com.example.multimedia.domian.Picture;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.repository.PictureRepository;
+import com.example.multimedia.service.PictureService;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

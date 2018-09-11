@@ -47,9 +47,10 @@ public interface ArticleService {
      * @param size
      * @param order
      * @param sort
+     * @param enable
      * @return
      */
-    ResultVo findAll(int page,int size,String order,String sort);
+    ResultVo findAll(int page,int size,String order,String sort,Boolean enable);
 
     /**
      * 分类查找文章
@@ -70,7 +71,7 @@ public interface ArticleService {
      * @param sort
      * @return
      */
-    ResultVo findMyAll(int page,int size,String order,String sort);
+    ResultVo findMyAll(int page,int size,String order,String sort,Boolean enable);
 
     /**
      * 查看他人所有文章
@@ -130,4 +131,11 @@ public interface ArticleService {
      * @return
      */
     ResultVo countWorksProportion(Long userId);
+
+    /**
+     * 撤销/恢复 文章
+     * @param id
+     * @return
+     */
+    ResultVo enable(Long id,String reasons);
 }

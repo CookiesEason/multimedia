@@ -25,9 +25,6 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Autowired
-    private ProblemService problemService;
-
-    @Autowired
     @Qualifier(value = "LikeService")
     private LikeService likeService;
 
@@ -124,7 +121,7 @@ public class ArticleController {
 
     @GetMapping("/problems/{articleId}")
     public ResultVo problems(@PathVariable Long articleId){
-        return problemService.getById(articleId,Topic.ARTICLE);
+        return articleService.problems(articleId);
     }
 
 }

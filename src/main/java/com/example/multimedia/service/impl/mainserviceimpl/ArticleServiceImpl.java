@@ -250,6 +250,11 @@ public class ArticleServiceImpl implements ArticleService {
         return ResultVoUtil.success();
     }
 
+    @Override
+    public ResultVo problems(Long id) {
+        return problemService.getById(id,Topic.ARTICLE);
+    }
+
     private ResultVo getResultVo(Page<Article> articlePage) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         articlePage.getContent().forEach(article -> {

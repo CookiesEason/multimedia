@@ -138,4 +138,12 @@ public interface ArticleService {
      * @return
      */
     ResultVo enable(Long id,String reasons);
+
+
+    /**
+     * 文章问题
+     * @param id
+     * @return
+     */
+    ResultVo problems(Long id);
 }

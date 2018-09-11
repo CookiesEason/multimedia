@@ -36,17 +36,18 @@ public interface VideoService {
      * 查找自己所有视频(已通过，和未通过)
      * @return ResultVo
      */
-    ResultVo findMyVideos(int page,String order,boolean isEnable);
+    ResultVo findMyVideos(int page,int size,String order,boolean isEnable,boolean isAuditing);
 
     /**
      * 展示所有视频(不分类)
      * @param page 页数
      * @param size 每页显示数量
      * @param order 排序字段
-     * @param enable 审核通过与否
+     * @param enable 禁用
+     * @param auditing 审核状态
      * @return ResultVo
      */
-    ResultVo findVideos(int page, int size,String order,String sort,Boolean enable);
+    ResultVo findVideos(int page, int size,String order,String sort,Boolean enable,Boolean auditing);
 
     /**
      * 分类查找视频
@@ -176,4 +177,11 @@ public interface VideoService {
      * @return
      */
     ResultVo count();
+
+    /**
+     * 问题
+     * @param id
+     * @return
+     */
+    ResultVo problems(Long id);
 }

@@ -19,33 +19,33 @@ import java.util.List;
  */
 public interface VideoRepository extends JpaRepository<Video,Long> {
 
-    Video findById(long id);
+    Video findByIdAndAuditingAndEnable(long id,boolean enable, boolean auditing);
 
     void deleteByIdAndUserId(long id,long userId);
 
     Video findByIdAndUserId(long id,long userId);
 
-    Page<Video> findAllByUserIdAndEnable(Pageable pageable, Long userId,boolean enable);
+    Page<Video> findAllByUserIdAndEnableAndAuditing(Pageable pageable, Long userId,boolean enable,boolean auditing);
 
-    Page<Video> findAllByEnable(Pageable pageable, boolean enable);
+    Page<Video> findAllByEnableAndAuditing(Pageable pageable, boolean enable, boolean auditing);
 
-    Page<Video> findAllByEnableAndTagsTag(Pageable pageable,boolean enable,String tag);
+    Page<Video> findAllByEnableAndTagsTagAndAuditing(Pageable pageable,boolean enable,String tag,boolean auditing);
 
     List<Video> findAllBySmallTags(SmallTags smallTags);
 
-    Page<Video> findAllBySmallTags(SmallTags smallTags, Pageable pageable);
+    Page<Video> findAllBySmallTagsAndEnableAndAuditing(SmallTags smallTags, Pageable pageable,boolean enable, boolean auditing);
 
-    Page<Video> findAllByIdIn(long[] ids,Pageable pageable);
+    Page<Video> findAllByIdInAndEnableAndAuditing(long[] ids,Pageable pageable,boolean enable, boolean auditing);
 
     List<Video> findAllByIdIn(long[] ids);
 
     @Query(value = "SELECT count(*) FROM video WHERE TO_DAYS(NOW()) - TO_DAYS(create_date) <= :day",nativeQuery = true)
     int countVideosForDays(@Param("day") int day);
 
-    Long countAllByTagsTagAndUserId(String tag,Long userId);
+    Long countAllByTagsTagAndUserIdAndEnableAndAuditing(String tag,Long userId,boolean enable, boolean auditing);
 
-    Long countAllByCreateDateAfter(Date date);
+    Long countAllByCreateDateAfterAndEnableAndAuditing(Date date,boolean enable, boolean auditing);
 
-    Long countAllByTagsTag(String tag);
+    Long countAllByTagsTagAndEnableAndAuditing(String tag,boolean enable, boolean auditing);
 
 }

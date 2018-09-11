@@ -88,7 +88,7 @@ public class SearchServiceImpl implements SearchService {
                 User user = userService.findById(video.getUserId());
                 VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
                         user.getUserInfo().getHeadImgUrl()),
-                        video,null);
+                        video,null,commentService.num(video.getId(),Topic.VIDEO));
                 videoDTOS.add(videoDTO);
             }
         });

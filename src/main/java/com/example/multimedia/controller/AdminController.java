@@ -170,8 +170,9 @@ public class AdminController {
                                @RequestParam(defaultValue = "10") int size,
                                @RequestParam(defaultValue = "asc") String order,
                                @RequestParam(defaultValue = "createDate") String sort,
-                               @RequestParam Boolean enable){
-        return videoService.findVideos(page,size,order,sort,enable);
+                               @RequestParam(defaultValue = "true") Boolean enable,
+                               @RequestParam(defaultValue = "true") Boolean auditing){
+        return videoService.findVideos(page,size,order,sort,enable,auditing);
     }
 
     @GetMapping("videos/search")
@@ -194,7 +195,7 @@ public class AdminController {
     }
 
     @PostMapping("videos/enable/{videoId}")
-    private ResultVo enableVideo(@PathVariable Long videoId,@RequestParam Boolean enable){
+    private ResultVo enableVideo(@PathVariable Long videoId,@RequestParam(defaultValue = "true") Boolean enable){
         return videoService.enableVideo(videoId,enable);
     }
 

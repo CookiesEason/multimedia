@@ -347,7 +347,7 @@ public class UserServiceImpl implements UserService {
                 kv.put(smallTags.getSmallTag(),1);
             }
         }));
-        Page<Video> videoPage = videoRepository.findAllByUserIdAndEnable(pageable,userId,true);
+        Page<Video> videoPage = videoRepository.findAllByUserIdAndEnableAndAuditing(pageable,userId,true,true);
         videoPage.getContent().forEach(video -> video.getSmallTags().forEach(smallTags -> {
             if (kv.containsKey(smallTags.getSmallTag())){
                 kv.put(smallTags.getSmallTag(),kv.get(smallTags.getSmallTag())+1);

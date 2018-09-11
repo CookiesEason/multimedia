@@ -78,10 +78,12 @@ public class VideoController {
     @GetMapping("/me")
     @ResponseBody
     private ResultVo findMyVideos(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size,
                                   @RequestParam(defaultValue = "createDate") String sort,
-                                  @RequestParam(defaultValue = "true") boolean enable){
+                                  @RequestParam(defaultValue = "true") boolean enable,
+                                  @RequestParam(defaultValue = "true") boolean isAuditing){
         // TODO: 2018/08/08  可能按需求 对 视频也要进行分类 
-        return videoService.findMyVideos(page,sort,enable);
+        return videoService.findMyVideos(page,size,sort,enable,isAuditing);
     }
 
     @GetMapping("/user/{userId}")
@@ -104,7 +106,7 @@ public class VideoController {
                                 @RequestParam(defaultValue = "10") int size,
                                 @RequestParam(defaultValue = "desc") String order,
                                 @RequestParam(defaultValue = "createDate") String sort){
-       return videoService.findVideos(page,size,order,sort,true);
+       return videoService.findVideos(page,size,order,sort,true,true);
     }
 
     @GetMapping("/tag")
@@ -150,6 +152,11 @@ public class VideoController {
     @GetMapping("/proportion/{userId}")
     public ResultVo proportion(@PathVariable Long userId){
         return videoService.countWorksProportion(userId);
+    }
+
+    @GetMapping("/problems/{videoId}")
+    public ResultVo problems(@PathVariable Long videoId){
+        return videoService.problems(videoId);
     }
 
 }

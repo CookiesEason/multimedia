@@ -53,9 +53,6 @@ public class VideoServiceImpl implements VideoService {
     private static final String CONTENT_CHARSET = "UTF-8";
 
     @Autowired
-    private FileService fileService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -97,6 +94,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private TengXunProperties tengXunProperties;
+
+    @Autowired
+    private ProblemService problemService;
 
     @Override
     public String getUploadSignature() {
@@ -156,19 +156,18 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public ResultVo findMyVideos(int page,String order,boolean isEnable) {
-        int size = 10;
+    public ResultVo findMyVideos(int page,int size,String order,boolean isEnable,boolean isAuditing) {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
-        Page<Video> videos = videoRepository.findAllByUserIdAndEnable(pageable,getUid(),isEnable);
+        Page<Video> videos = videoRepository.findAllByUserIdAndEnableAndAuditing(pageable,getUid(),isEnable,isAuditing);
         VideosDTO videosDTO = getVideosDTO(videos);
         return ResultVoUtil.success(videosDTO);
     }
 
     @Override
-    public ResultVo findVideos(int page, int size,String order,String sort,Boolean enable) {
+    public ResultVo findVideos(int page, int size,String order,String sort,Boolean enable,Boolean auditing) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
-        Page<Video> videos = videoRepository.findAllByEnable(pageable,enable);
+        Page<Video> videos = videoRepository.findAllByEnableAndAuditing(pageable,enable,auditing);
         VideosDTO videosDTO = getVideosDTO(videos);
         return ResultVoUtil.success(videosDTO);
     }
@@ -177,7 +176,7 @@ public class VideoServiceImpl implements VideoService {
     public ResultVo findAllByTag(int page, int size, String order, String tag) {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
-        Page<Video> videos = videoRepository.findAllByEnableAndTagsTag(pageable,true,tag);
+        Page<Video> videos = videoRepository.findAllByEnableAndTagsTagAndAuditing(pageable,true,tag,true);
         VideosDTO videosDTO = getVideosDTO(videos);
         return ResultVoUtil.success(videosDTO);
     }
@@ -186,7 +185,7 @@ public class VideoServiceImpl implements VideoService {
     public ResultVo findAllByUserId(int page, int size, String order, Long userId) {
         Sort sort = new Sort(Sort.Direction.DESC,order);
         Pageable pageable = PageRequest.of(page,size,sort);
-        Page<Video> videos = videoRepository.findAllByUserIdAndEnable(pageable,userId,true);
+        Page<Video> videos = videoRepository.findAllByUserIdAndEnableAndAuditing(pageable,userId,true,true);
         VideosDTO videosDTO = getVideosDTO(videos);
         return ResultVoUtil.success(videosDTO);
     }
@@ -202,7 +201,7 @@ public class VideoServiceImpl implements VideoService {
             User user = userService.findById(video.getUserId());
             VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
                     user.getUserInfo().getHeadImgUrl()),
-                    video, smallTagDTOS);
+                    video, smallTagDTOS,commentService.num(video.getId(),Topic.VIDEO));
             videoDTOS.add(videoDTO);
         }
         return new VideosDTO(videoDTOS, videos.getTotalElements(),
@@ -243,7 +242,7 @@ public class VideoServiceImpl implements VideoService {
             isLike = topicLike.isStatus();
         }
         Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
-        Video video = videoRepository.findById(id);
+        Video video = videoRepository.findByIdAndAuditingAndEnable(id,true,true);
         video.getSmallTags().forEach(smallTags -> {
             SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
             smallTagDTOS.add(smallTagDTO);
@@ -259,7 +258,7 @@ public class VideoServiceImpl implements VideoService {
         List<SimpleArticleDTO> otherArticles = new ArrayList<>();
         List<SimpleVideoDTO> recommendVideos = new ArrayList<>();
         List<SimpleVideoDTO> relatedVideos = new ArrayList<>();
-        videoRepository.findAllByUserIdAndEnable(pageable,video.getUserId(),true).getContent()
+        videoRepository.findAllByUserIdAndEnableAndAuditing(pageable,video.getUserId(),true,true).getContent()
                 .forEach(simpleVideo -> {
                     SimpleVideoDTO simpleVideoDTO = new SimpleVideoDTO(simpleVideo);
                     otherVideos.add(simpleVideoDTO);
@@ -270,12 +269,12 @@ public class VideoServiceImpl implements VideoService {
                     otherArticles.add(simpleArticleDTO);
                 });
         pageable = PageRequest.of(0,5,sort);
-        videoRepository.findAllByEnable(pageable,true).getContent()
+        videoRepository.findAllByEnableAndAuditing(pageable,true,true).getContent()
                 .forEach(simpleVideo -> {
                     SimpleVideoDTO simpleVideoDTO = new SimpleVideoDTO(simpleVideo);
                     recommendVideos.add(simpleVideoDTO);
                 });
-        videoRepository.findAllByEnableAndTagsTag(pageable,true,video.getTags().getTag()).getContent()
+        videoRepository.findAllByEnableAndTagsTagAndAuditing(pageable,true,video.getTags().getTag(),true).getContent()
                 .forEach(simpleVideo -> {
                     SimpleVideoDTO simpleVideoDTO = new SimpleVideoDTO(simpleVideo);
                     relatedVideos.add(simpleVideoDTO);
@@ -328,6 +327,7 @@ public class VideoServiceImpl implements VideoService {
     public ResultVo enableVideo(Long videoId,Boolean enable) {
         Video video = findById(videoId);
         video.setEnable(enable);
+        video.setAuditing(true);
         save(video);
         if (enable){
             noticeService.saveNotice(Topic.VIDEO,videoId,video.getTitle(),null,null,null,
@@ -380,7 +380,8 @@ public class VideoServiceImpl implements VideoService {
     public ResultVo findAllBySmallTag(int page, int size, String smallTag, String sort) {
         Sort s = new Sort(Sort.Direction.DESC,sort);
         Pageable pageable = PageRequest.of(page,size,s);
-        Page<Video> videoPage = videoRepository.findAllBySmallTags(smallTagsService.findBySmallTag(smallTag),pageable);
+        Page<Video> videoPage = videoRepository.findAllBySmallTagsAndEnableAndAuditing(smallTagsService.findBySmallTag(smallTag),
+                pageable,true,true);
         VideosDTO videosDTO = getVideosDTO(videoPage);
         return ResultVoUtil.success(videosDTO);
     }
@@ -393,8 +394,8 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public ResultVo findAllByLike(Long userId,int page,int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Video> videoPage = videoRepository.findAllByIdIn(topicLikeRepository.ids(Topic.VIDEO.toString(),
-                userId),pageable);
+        Page<Video> videoPage = videoRepository.findAllByIdInAndEnableAndAuditing(topicLikeRepository.ids(Topic.VIDEO.toString(),
+                userId),pageable,true,true);
         VideosDTO videosDTO = getVideosDTO(videoPage);
         return ResultVoUtil.success(videosDTO);
     }
@@ -406,7 +407,8 @@ public class VideoServiceImpl implements VideoService {
         for (Tags t: tags) {
             JSONObject jsonObject=new JSONObject();
             jsonObject.put("name",t.getTag());
-            jsonObject.put("value",videoRepository.countAllByTagsTagAndUserId(t.getTag(),userId));
+            jsonObject.put("value",videoRepository.countAllByTagsTagAndUserIdAndEnableAndAuditing(t.getTag(),userId,
+                    true,true));
             jsonArray.add(jsonObject);
         }
         return ResultVoUtil.success(jsonArray);
@@ -419,7 +421,8 @@ public class VideoServiceImpl implements VideoService {
         JSONArray jsonArray=new JSONArray();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name","最热");
-        jsonObject.put("num",videoRepository.countAllByCreateDateAfter(calendar.getTime()));
+        jsonObject.put("num",videoRepository.countAllByCreateDateAfterAndEnableAndAuditing(calendar.getTime(),
+                true,true));
         jsonArray.add(jsonObject);
         jsonObject = new JSONObject();
         jsonObject.put("name","最新");
@@ -428,10 +431,16 @@ public class VideoServiceImpl implements VideoService {
         tagsService.getTags().forEach(tags -> {
             JSONObject jo=new JSONObject();
             jo.put("name",tags.getTag());
-            jo.put("num",videoRepository.countAllByTagsTag(tags.getTag()));
+            jo.put("num",videoRepository.countAllByTagsTagAndEnableAndAuditing(tags.getTag(),
+                    true,true));
             jsonArray.add(jo);
         });
         return ResultVoUtil.success(jsonArray);
+    }
+
+    @Override
+    public ResultVo problems(Long id) {
+        return problemService.getById(id,Topic.VIDEO);
     }
 
     private ResultVo saveVideo(Video video, Tags tags,Set<String> smallTags) {

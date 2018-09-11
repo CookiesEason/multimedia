@@ -46,6 +46,9 @@ public class VideoDTO {
 
     private Boolean enable;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+    private Long commentNum;
+
     public VideoDTO(SimpleUserDTO user, Video video,Boolean isLike,Set<SmallTagDTO> smallTags) {
         this.videoId = video.getId();
         this.user = user;
@@ -64,7 +67,7 @@ public class VideoDTO {
         this.isLike = isLike;
 }
 
-    public VideoDTO(SimpleUserDTO user, Video video,Set<SmallTagDTO> smallTags) {
+    public VideoDTO(SimpleUserDTO user, Video video,Set<SmallTagDTO> smallTags,Long commentNum) {
         this.videoId = video.getId();
         this.user = user;
         this.title = video.getTitle();
@@ -79,5 +82,6 @@ public class VideoDTO {
         this.tag = video.getTags().getTag();
         this.smallTags = smallTags;
         this.enable = video.isEnable();
+        this.commentNum = commentNum;
     }
 }

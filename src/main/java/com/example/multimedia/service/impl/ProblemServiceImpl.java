@@ -46,8 +46,11 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public ResultVo getById(Long topicId, Topic topic) {
         Problem problem = problemRepository.findByTopicIdAndTopic(topicId, topic);
-        List<String> reasons = Arrays.asList(problem.getReasons().split(";"));
-        return ResultVoUtil.success(reasons);
+        if (problem!=null){
+            List<String> reasons = Arrays.asList(problem.getReasons().split(";"));
+            return ResultVoUtil.success(reasons);
+        }
+       return ResultVoUtil.error(0,"发生错误");
     }
 
     @Override

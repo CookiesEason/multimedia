@@ -313,7 +313,11 @@ public class VideoServiceImpl implements VideoService {
         VideoHistory videoHistory = videoHistoryRepository.findByUserIdAndVideoId(userId,videoId);
         if (videoHistory==null){
             videoHistory = new VideoHistory();
-            videoHistory.setUserId(getUid());
+            Long uid = getUid();
+            if (uid==null){
+                return;
+            }
+            videoHistory.setUserId(uid);
             videoHistory.setVideoId(videoId);
             videoHistory.setTitle(findById(videoId).getTitle());
         }else {

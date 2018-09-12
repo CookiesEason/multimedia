@@ -9,10 +9,7 @@ import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.TopicLike;
 import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.domian.maindomian.tag.SmallTags;
-import com.example.multimedia.dto.ArticleDTO;
-import com.example.multimedia.dto.PageDTO;
-import com.example.multimedia.dto.SimpleUserDTO;
-import com.example.multimedia.dto.SmallTagDTO;
+import com.example.multimedia.dto.*;
 import com.example.multimedia.repository.ArticleRepository;
 import com.example.multimedia.repository.TopicLikeRepository;
 import com.example.multimedia.service.*;
@@ -69,6 +66,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ProblemService problemService;
+
+    @Autowired
+    private FollowerService followerService;
 
     @Override
     public ResultVo save(String title, String text, String tag, MultipartFile multipartFile, Set<String> smallTags) {
@@ -158,7 +158,6 @@ public class ArticleServiceImpl implements ArticleService {
     public ResultVo findById(Long id) {
         Optional<Article> articleOptional = articleRepository.findByIdAndEnable(id,true);
         if (articleOptional.isPresent()){
-
             boolean isLike = false;
             Long userId = getUid();
             TopicLike topicLike = (TopicLike) likeService.status(id,userId,Topic.ARTICLE);
@@ -173,8 +172,33 @@ public class ArticleServiceImpl implements ArticleService {
                 SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
                 smallTagDTOS.add(smallTagDTO);
             });
-            return ResultVoUtil.success(new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId())),
-                    article,isLike,smallTagDTOS));
+            Sort sort = Sort.by(Sort.Direction.DESC,"createDate");
+            Pageable pageable = PageRequest.of(0,5,sort);
+            ArticleWorkDTO articleWorkDTO = new ArticleWorkDTO();
+            List<SimpleArticleDTO> recommendArticles = new ArrayList<>();
+            List<SimpleArticleDTO> hotArticles = new ArrayList<>();
+            ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(userService.findById(article.getUserId()),
+                    followerService.checkFollow(article.getUserId())),
+                    article,isLike,smallTagDTOS,commentService.num(article.getId(),Topic.ARTICLE));
+            articleWorkDTO.setArticle(articleDTO);
+
+            Page<Article> articlePage = articleRepository.findAllByTagsTagAndEnable(article.getTags().getTag(),pageable,true);
+            articlePage.getContent().forEach(recommendArticle -> {
+                SimpleArticleDTO simpleArticleDTO = new SimpleArticleDTO(recommendArticle);
+                recommendArticles.add(simpleArticleDTO);
+            });
+            articleWorkDTO.setRecommendArticles(recommendArticles);
+
+            sort = Sort.by(Sort.Direction.DESC,"likeCount");
+            pageable = PageRequest.of(0,5,sort);
+            articlePage = articleRepository.findAllByEnable(pageable,true);
+            articlePage.forEach(hotArticle -> {
+                SimpleArticleDTO simpleArticleDTO = new SimpleArticleDTO(hotArticle);
+                hotArticles.add(simpleArticleDTO);
+            });
+            articleWorkDTO.setHotArticles(hotArticles);
+
+            return ResultVoUtil.success(articleWorkDTO);
         }
         return ResultVoUtil.error(404,"发生未知的错误");
     }

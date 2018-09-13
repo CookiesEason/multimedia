@@ -282,6 +282,12 @@ public class ArticleServiceImpl implements ArticleService {
     private ResultVo getResultVo(Page<Article> articlePage) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         articlePage.getContent().forEach(article -> {
+            boolean isLike = false;
+            Long userId = getUid();
+            TopicLike topicLike = (TopicLike) likeService.status(article.getId(),userId,Topic.ARTICLE);
+            if (topicLike !=null){
+                isLike = topicLike.isStatus();
+            }
             Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
             article.getSmallTags().forEach(smallTags -> {
                 SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
@@ -290,7 +296,7 @@ public class ArticleServiceImpl implements ArticleService {
             User user = userService.findById(article.getUserId());
             ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
                     user.getUserInfo().getHeadImgUrl()),
-                    article,smallTagDTOS,commentService.num(article.getId(),Topic.ARTICLE));
+                    article,isLike,smallTagDTOS,commentService.num(article.getId(),Topic.ARTICLE));
             articleDTOList.add(articleDTO);
         });
         return ResultVoUtil.success(new PageDTO<>(articleDTOList, articlePage.getTotalElements(),

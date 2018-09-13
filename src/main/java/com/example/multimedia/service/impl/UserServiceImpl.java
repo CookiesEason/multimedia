@@ -2,6 +2,7 @@ package com.example.multimedia.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.multimedia.domian.Follower;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.domian.UserRole;
@@ -13,6 +14,7 @@ import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.dto.UsersDTO;
 import com.example.multimedia.repository.*;
 import com.example.multimedia.service.FileService;
+import com.example.multimedia.service.FollowerService;
 import com.example.multimedia.service.MailService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.EmailUtil;
@@ -72,6 +74,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TopicLikeRepository topicLikeRepository;
+
+    @Autowired
+    private FollowerRepository followerRepository;
 
     @Override
     @Cacheable(value = "user", key = "#id",unless = "#result==null ")
@@ -266,8 +271,15 @@ public class UserServiceImpl implements UserService {
         List<SimpleUserDTO> simpleUserDTOS = new ArrayList<>();
         Page<User> users = userRepository.getHotUsers(pageable);
         users.getContent().forEach(user -> {
-            SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user,(long)getUserHot(user.getId()));
-            simpleUserDTOS.add(simpleUserDTO);
+            Follower follower = followerRepository.findByUserIdAndFollowerId(getUid(), user.getId());
+            SimpleUserDTO simpleUserDTO;
+            if (follower!=null){
+                 simpleUserDTO = new SimpleUserDTO(user,getUserHot(user.getId()),follower.getStatus());
+                 simpleUserDTOS.add(simpleUserDTO);
+            }else {
+                simpleUserDTO = new SimpleUserDTO(user,getUserHot(user.getId()),false);
+                simpleUserDTOS.add(simpleUserDTO);
+            }
         });
         PageDTO<SimpleUserDTO> userDTOPageDTO = new PageDTO<>(simpleUserDTOS,users.getTotalElements(),
                 (long)users.getTotalPages());
@@ -393,6 +405,14 @@ public class UserServiceImpl implements UserService {
 
     private boolean checkNickName(UserInfo userInfo){
         return findByUserInfoNickname(userInfo.getNickname()) == null;
+    }
+
+    private Long getUid(){
+        User user = findByUsername(UserUtil.getUserName());
+        if (user!=null){
+            return user.getId();
+        }
+        return null;
     }
 
 }

@@ -50,12 +50,13 @@ public class SimpleUserDTO {
         this.hot = hot;
     }
 
-    public SimpleUserDTO(User user, Long hot) {
+    public SimpleUserDTO(User user, Long hot,Boolean isLike) {
         this.id = user.getId();
         this.nickname = user.getUserInfo().getNickname();
         this.headUrl = user.getUserInfo().getHeadImgUrl();
         this.introduction = user.getUserInfo().getIntroduction();
         this.hot = hot;
+        this.isLike = isLike;
     }
 
     public SimpleUserDTO(User user,Boolean isLike) {

@@ -63,4 +63,9 @@ public class TagsServiceImpl implements TagsService{
         return tagsRepository.findByTag(tag);
     }
 
+    @Override
+    public ResultVo hotWorksByTag(String tag) {
+        return ResultVoUtil.success(tagsRepository.getHotSimpleWorks(tag));
+    }
+
 }

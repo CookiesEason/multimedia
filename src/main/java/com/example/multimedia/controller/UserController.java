@@ -147,4 +147,9 @@ public class UserController {
         noticeService.deleteById(messageId);
     }
 
+    @GetMapping("/api/user/circle")
+    public ResultVo getCircle(@RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "3") int size){
+        return userService.userCircle(page, size);
+    }
 }

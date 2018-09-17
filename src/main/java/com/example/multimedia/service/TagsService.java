@@ -38,4 +38,6 @@ public interface TagsService {
 
     Tags findByTag(String tag);
 
+    ResultVo hotWorksByTag(String tag);
+
 }

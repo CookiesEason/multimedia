@@ -9,9 +9,7 @@ import com.example.multimedia.domian.UserRole;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Video;
-import com.example.multimedia.dto.PageDTO;
-import com.example.multimedia.dto.SimpleUserDTO;
-import com.example.multimedia.dto.UsersDTO;
+import com.example.multimedia.dto.*;
 import com.example.multimedia.repository.*;
 import com.example.multimedia.service.FileService;
 import com.example.multimedia.service.FollowerService;
@@ -369,6 +367,22 @@ public class UserServiceImpl implements UserService {
         }));
         JSONObject rs = getJsonObject(kv);
         return ResultVoUtil.success(rs);
+    }
+
+    @Override
+    public ResultVo userCircle(int page,int size) {
+        PageDTO<SimpleUserDTO> userDTOPageDTO = (PageDTO<SimpleUserDTO>) findHotUsers(page,size).getData();
+        List<SimpleUserWorkDTO> simpleUserWorkDTOS = new ArrayList<>();
+        for (SimpleUserDTO simpleUserDTO :userDTOPageDTO.getObjectList()){
+            SimpleUserWorkDTO simpleUserWorkDTO = new SimpleUserWorkDTO();
+            List<Object[]> simpleWorkDTOS = userRepository.getSimpleWorks(simpleUserDTO.getId());
+            simpleUserWorkDTO.setSimpleUserDTO(simpleUserDTO);
+            simpleUserWorkDTO.setSimpleWorkDTOs(simpleWorkDTOS);
+            simpleUserWorkDTOS.add(simpleUserWorkDTO);
+        }
+        PageDTO<SimpleUserWorkDTO> simpleUserWorkDTOPageDTO = new PageDTO<>(simpleUserWorkDTOS,
+                userDTOPageDTO.getTotalElements(),userDTOPageDTO.getTotalPages());
+        return ResultVoUtil.success(simpleUserWorkDTOPageDTO);
     }
 
     private JSONObject getJsonObject(Map<String, Integer> kv) {

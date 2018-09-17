@@ -34,8 +34,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Optional<Announcement> announcementOptional = announcementRepository.findById(id);
         if (announcementOptional.isPresent()){
             Announcement announcement = announcementOptional.get();
-            AnnouncementDTO announcementDTO = new AnnouncementDTO(announcement);
-            return ResultVoUtil.success(announcementDTO);
+            return ResultVoUtil.success(announcement);
         }
         return ResultVoUtil.error(0,"出错了");
     }

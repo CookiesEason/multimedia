@@ -177,4 +177,13 @@ public interface UserService {
      * @return
      */
     ResultVo hotWorksProportion(Long userId);
+
+
+    /**
+     * userCircle
+     * @param page
+     * @param size
+     * @return
+     */
+    ResultVo userCircle(int page,int size);
 }

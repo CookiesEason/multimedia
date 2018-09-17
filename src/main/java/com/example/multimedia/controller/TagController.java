@@ -33,4 +33,9 @@ public class TagController {
         return ResultVoUtil.success(smallTagsService.getSmallTagByTag(tag));
     }
 
+    @RequestMapping("/api/tags/hot")
+    private ResultVo getHotWorksByTag(@RequestParam String tag){
+        return tagsService.hotWorksByTag(tag);
+    }
+
 }

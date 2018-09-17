@@ -3,6 +3,7 @@ package com.example.multimedia.repository;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
 import com.example.multimedia.domian.UserRole;
+import com.example.multimedia.dto.SimpleWorkDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -61,4 +62,13 @@ public interface UserRepository extends JpaRepository<User,Long> {
            countQuery = "select count(*) from user"
            ,nativeQuery = true)
    Page<User> likeUserIds(@Param("userId")Long userId, Pageable pageable);
+
+   @Query(value = "SELECT id,title,type from (\n" +
+           "SELECT id,title,create_date,'article' as type from article WHERE user_id = :id\n" +
+           "UNION\n" +
+           "SELECT id,title,create_date,'video' as type from video WHERE user_id = :id\n" +
+           ") t\n" +
+           "ORDER BY create_date desc\n" +
+           "LIMIT 3 ",nativeQuery = true)
+   List<Object[]> getSimpleWorks(@Param("id") Long id);
 }

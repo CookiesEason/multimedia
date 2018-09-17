@@ -243,6 +243,9 @@ public class VideoServiceImpl implements VideoService {
         }
         Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
         Video video = videoRepository.findByIdAndAuditingAndEnable(id,true,true);
+        if (video == null){
+            return ResultVoUtil.error(404,"视频不存在");
+        }
         video.getSmallTags().forEach(smallTags -> {
             SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
             smallTagDTOS.add(smallTagDTO);

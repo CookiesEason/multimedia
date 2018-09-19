@@ -84,10 +84,14 @@ public class CommentServiceImpl implements CommentService {
         String title;
         if (topic.equals(Topic.VIDEO)){
             Video video = videoService.findById(topicId);
+            video.setCommentNum(video.getCommentNum()+1);
+            videoService.save(video);
             toUid = video.getUserId();
             title = video.getTitle();
         }else {
             Article article = articleService.findById((long)topicId);
+            article.setCommentNum(article.getCommentNum()+1);
+            articleService.save(article);
             toUid = article.getUserId();
             title = article.getTitle();
         }

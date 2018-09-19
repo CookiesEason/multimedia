@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class MultimediaApplication {
 
     public static void main(String[] args) {
+        System.setProperty("es.set.netty.runtime.available.processors","false");
         SpringApplication.run(MultimediaApplication.class, args);
     }
 }

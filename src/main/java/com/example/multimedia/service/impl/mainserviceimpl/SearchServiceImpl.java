@@ -6,26 +6,19 @@ import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.domian.maindomian.Comment;
 import com.example.multimedia.domian.maindomian.Reply;
-import com.example.multimedia.domian.maindomian.search.ArticleSearch;
-import com.example.multimedia.domian.maindomian.search.CommentSearch;
-import com.example.multimedia.domian.maindomian.search.ReplySearch;
-import com.example.multimedia.domian.maindomian.search.VideoSearch;
+import com.example.multimedia.domian.maindomian.search.*;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.repository.TagsRepository;
-import com.example.multimedia.repository.search.ArticleSearchRepository;
-import com.example.multimedia.repository.search.CommentSearchRepository;
-import com.example.multimedia.repository.search.ReplySearchRepository;
-import com.example.multimedia.repository.search.VideoSearchRepository;
-import com.example.multimedia.service.CommentService;
-import com.example.multimedia.service.LikeService;
-import com.example.multimedia.service.UserService;
-import com.example.multimedia.service.SearchService;
+import com.example.multimedia.repository.UserRepository;
+import com.example.multimedia.repository.search.*;
+import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.elasticsearch.common.lucene.search.function.FiltersFunctionScoreQuery;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -75,20 +68,53 @@ public class SearchServiceImpl implements SearchService {
     private UserService userService;
 
     @Autowired
-    private CommentService commentService;
+    private UserSearchRepository userSearchRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private FollowerService followerService;
 
     @Override
-    public ResultVo searchVideo(int page,String order,String sort,String searchContent,Boolean enable) {
+    public ResultVo searchUser(String searchContent) {
+        List<UserSearch> userList = userSearchRepository.findAllByNicknameLike(searchContent);
+        List<SimpleUserWorkDTO> simpleUserWorkDTOS = new ArrayList<>();
+        userList.forEach(userSearch -> {
+            User user = userService.findById(userSearch.getId());
+            Boolean isLike = followerService.checkFollow(user.getId());
+            SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user,isLike);
+            SimpleUserWorkDTO simpleUserWorkDTO = new SimpleUserWorkDTO();
+            List<Object[]> simpleWorkDTOS = userRepository.getSimpleWorks(simpleUserDTO.getId());
+            simpleUserWorkDTO.setSimpleUserDTO(simpleUserDTO);
+            simpleUserWorkDTO.setSimpleWorkDTOs(simpleWorkDTOS);
+            simpleUserWorkDTOS.add(simpleUserWorkDTO);
+        });
+        return ResultVoUtil.success(simpleUserWorkDTOS);
+    }
+
+    @Override
+    public ResultVo searchVideo(int page,String order,String sort,int startTime,int endTime,String tag,
+                                String searchContent,Boolean enable,Boolean auditing) {
         SearchQuery searchQuery = getVideoSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
-        Page<VideoSearch> videoSearchPage = videoSearchRepository.search(searchQuery);
+        Sort s = Sort.by(Sort.Direction.DESC,sort);
+        Pageable pageable = PageRequest.of(page,10,s);
+        Page<VideoSearch> videoSearchPage;
+        if (tag!=null){
+            videoSearchPage =  videoSearchRepository
+                    .findAllByTimeBetweenAndTagAndTitle(pageable,startTime,endTime,tag,searchContent);
+        }else {
+            videoSearchPage = videoSearchRepository.findAllByTimeBetweenAndTitle(pageable,startTime,endTime,
+                    searchContent);
+        }
         List<VideoDTO> videoDTOS = new ArrayList<>();
         videoSearchPage.getContent().forEach(videoSearch -> {
-            if (enable.equals(videoSearch.getEnable())){
-                Video video = new Video(videoSearch,tagsRepository.findById(videoSearch.getTags_id()).get());
+            if (enable.equals(videoSearch.getEnable())&&auditing.equals(videoSearch.getAuditing())){
+                Video video = new Video(videoSearch,tagsRepository.findByTag(videoSearch.getTag()));
                 User user = userService.findById(video.getUserId());
                 VideoDTO videoDTO = new VideoDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
                         user.getUserInfo().getHeadImgUrl()),
-                        video,null,commentService.num(video.getId(),Topic.VIDEO));
+                        video,null,videoSearch.getComment_num());
                 videoDTOS.add(videoDTO);
             }
         });
@@ -98,20 +124,28 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public ResultVo searchArticle(int page, String order, String sort, String searchContent) {
-        SearchQuery searchQuery = getArticleSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
-        Page<ArticleSearch> articleSearchPage = articleSearchRepository.search(searchQuery);
+    public ResultVo searchArticle(int page, String order, String sort, String searchContent,String tag) {
+        //SearchQuery searchQuery = getArticleSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
+        Page<ArticleSearch> articleSearchPage ;
+        Sort s = Sort.by(Sort.Direction.DESC,sort);
+        Pageable pageable = PageRequest.of(page,10,s);
+        if (tag!=null){
+            articleSearchPage = articleSearchRepository.findAllByTagAndTitleOrText(pageable,
+                    tag, searchContent,searchContent);
+        }else {
+            articleSearchPage = articleSearchRepository.findAllByTitleOrText(pageable,searchContent,searchContent);
+        }
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         articleSearchPage.getContent().forEach(articleSearch -> {
-            Article article = new Article(articleSearch,tagsRepository.findById(articleSearch.getTags_id()).get());
+            Article article = new Article(articleSearch,tagsRepository.findByTag(articleSearch.getTag()));
             User user = userService.findById(article.getUserId());
             ArticleDTO articleDTO = new ArticleDTO(new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
                     user.getUserInfo().getHeadImgUrl()),
-                    article,null,commentService.num(article.getId(),Topic.ARTICLE));
+                    article,null,articleSearch.getComment_num());
             articleDTOList.add(articleDTO);
         });
         PageDTO<ArticleDTO> articleDTOPageDTO = new PageDTO<>(articleDTOList,articleSearchPage.getTotalElements(),
-                articleSearchPage.getTotalElements());
+                (long) articleSearchPage.getTotalPages());
         return ResultVoUtil.success(articleDTOPageDTO);
     }
 

@@ -48,6 +48,8 @@ public class Article {
 
     private Boolean enable = true;
 
+    private Long commentNum = 0L;
+
     @CreatedDate
     private Timestamp createDate;
 

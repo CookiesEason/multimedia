@@ -180,8 +180,10 @@ public class AdminController {
                                  @RequestParam(defaultValue = "asc") String order,
                                  @RequestParam(defaultValue = "create_date") String sort,
                                  @RequestParam Boolean enable,
+                                 @RequestParam Boolean auditing,
                                  @RequestParam String searchContent){
-        return searchService.searchVideo(page,order,sort,searchContent,enable);
+        return searchService.searchVideo(page,order,sort,0,-1,null,
+                searchContent,enable,auditing);
     }
 
     @PostMapping("videos/updateVideo/{videoId}")
@@ -218,7 +220,7 @@ public class AdminController {
                                   @RequestParam(defaultValue = "asc") String order,
                                   @RequestParam(defaultValue = "create_date") String sort,
                                   @RequestParam String searchContent){
-        return searchService.searchArticle(page, order, sort, searchContent);
+        return searchService.searchArticle(page, order, sort, searchContent,null);
     }
 
     @PostMapping("articles/update/{articleId}")

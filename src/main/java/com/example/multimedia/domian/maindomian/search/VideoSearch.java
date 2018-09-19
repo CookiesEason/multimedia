@@ -25,15 +25,21 @@ public class VideoSearch implements Serializable {
 
     private Long user_id;
 
-    private Long tags_id;
+    private String tag;
 
     private String img_url;
 
+    private Boolean auditing;
+
     private Boolean enable;
+
+    private Long time;
 
     private Long like_count;
 
     private Long play_count;
+
+    private Long comment_num;
 
     private Timestamp create_date;
 

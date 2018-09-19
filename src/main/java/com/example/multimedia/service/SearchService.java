@@ -12,6 +12,13 @@ import java.util.List;
 public interface SearchService {
 
     /**
+     * 搜索用户
+     * @param searchContent
+     * @return
+     */
+    ResultVo searchUser(String searchContent);
+
+    /**
      *搜索视频
      * @param page
      * @param order
@@ -19,7 +26,8 @@ public interface SearchService {
      * @param searchContent
      * @return
      */
-    ResultVo searchVideo(int page,String order,String sort,String searchContent,Boolean enable);
+    ResultVo searchVideo(int page,String order,String sort,int startTime,int endTime,String tag,
+                         String searchContent,Boolean enable,Boolean auditing);
 
     /**
      * 搜索文章
@@ -27,10 +35,9 @@ public interface SearchService {
      * @param order
      * @param sort
      * @param searchContent
-     * @param enable
      * @return
      */
-    ResultVo searchArticle(int page,String order,String sort,String searchContent);
+    ResultVo searchArticle(int page,String order,String sort,String searchContent,String tag);
 
     /**
      *搜索评论

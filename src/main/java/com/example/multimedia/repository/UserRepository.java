@@ -28,6 +28,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     List<User> findByUsernameOrUserInfoNickname(String username,String nickname);
 
+    List<User> findByUsernameLikeOrUserInfoNicknameLike(String username,String nickname);
+
     List<User> findUsersByIdIn(List<Long> ids);
 
     @Query(value = "SELECT SUM(like_count) FROM (select SUM(like_count) as like_count from video where user_id = :id\n" +

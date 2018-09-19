@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
  * 2018/08/12 13:42
  */
 @Slf4j
-@Component
 public class ElasticSearchConfiguration implements InitializingBean {
 
     static {

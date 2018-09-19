@@ -20,7 +20,7 @@ public class ArticleSearch implements Serializable {
 
     private Long user_id;
 
-    private Long tags_id;
+    private String tag;
 
     private String bg_img;
 
@@ -32,6 +32,9 @@ public class ArticleSearch implements Serializable {
 
     private Long like_count;
 
+    private Long comment_num;
+
     private Timestamp create_date;
+
 
 }

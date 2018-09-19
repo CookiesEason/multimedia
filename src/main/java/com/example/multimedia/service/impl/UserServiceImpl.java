@@ -9,8 +9,10 @@ import com.example.multimedia.domian.UserRole;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Video;
+import com.example.multimedia.domian.maindomian.search.UserSearch;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.repository.*;
+import com.example.multimedia.repository.search.UserSearchRepository;
 import com.example.multimedia.service.FileService;
 import com.example.multimedia.service.FollowerService;
 import com.example.multimedia.service.MailService;
@@ -89,6 +91,7 @@ public class UserServiceImpl implements UserService {
             UserInfo userInfo = new UserInfo();
             user.setPassword(encryptPassword(user.getPassword()));
             userInfo.setNickname(user.getUsername());
+            userInfo.setHeadImgUrl("https://zone-1253231183.cos.ap-shanghai.myqcloud.com/user.jpg");
             user.setUserInfo(userInfo);
             String activateCode = EmailUtil.generateActivateCode(user.getUsername());
             user.setRoleList(Arrays.asList(userRoleRepository.findByRole(role)));

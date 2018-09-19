@@ -56,7 +56,7 @@ public class UserController {
             });
             return ResultVoUtil.error(0,errors);
         }
-        String role = "ROLE_PRIMARY_USER";
+        String role = "ROLE_SENIOR_USER";
         return userService.save(user,role);
     }
 

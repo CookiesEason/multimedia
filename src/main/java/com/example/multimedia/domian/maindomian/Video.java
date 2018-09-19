@@ -52,6 +52,8 @@ public class Video {
 
     private boolean enable = true;
 
+    private Long commentNum = 0L;
+
     @OneToOne(fetch = FetchType.EAGER)
     private Tags tags;
 
@@ -68,6 +70,7 @@ public class Video {
         this.imgUrl = videoSearch.getImg_url();
         this.introduction = videoSearch.getIntroduction();
         this.videoUrl = videoSearch.getVideo_url();
+        this.time = videoSearch.getTime();
         this.playCount = videoSearch.getPlay_count();
         this.likeCount = videoSearch.getLike_count();
         this.createDate = videoSearch.getCreate_date();

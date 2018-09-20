@@ -42,7 +42,7 @@ public class ExceptionsHandler {
     @ExceptionHandler(UserException.class)
     @ResponseBody
     public ResultVo handleUserException(UserException e){
-        return ResultVoUtil.error(0,e.getMessage());
+        return ResultVoUtil.error(e.getCode(),e.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

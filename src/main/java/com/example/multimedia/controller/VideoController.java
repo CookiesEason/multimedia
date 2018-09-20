@@ -133,8 +133,8 @@ public class VideoController {
     }
 
     @PostMapping("/like/{videoId}")
-    private void videoLike(@PathVariable Long videoId){
-        videoLikeService.like(videoId, Topic.VIDEO);
+    private Long videoLike(@PathVariable Long videoId){
+        return videoLikeService.like(videoId, Topic.VIDEO);
     }
 
     @PostMapping("/play/{videoId}")

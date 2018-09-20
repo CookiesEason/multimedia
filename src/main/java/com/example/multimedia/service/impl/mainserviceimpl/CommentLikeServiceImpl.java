@@ -38,10 +38,10 @@ public class CommentLikeServiceImpl implements LikeService {
     private NoticeService noticeService;
 
     @Override
-    public void like(Long commentId,Topic topic) {
+    public Long like(Long commentId,Topic topic) {
         Comment comment = (Comment) commentService.findById(commentId);
         if (comment ==null){
-            return;
+            return null;
         }
         Long userId = getUid();
         CommentLike commentLike = status(commentId,userId,null);
@@ -69,6 +69,7 @@ public class CommentLikeServiceImpl implements LikeService {
         }
         commentLikeRepository.save(commentLike);
         commentService.save(comment);
+        return comment.getLikeCount();
     }
 
 

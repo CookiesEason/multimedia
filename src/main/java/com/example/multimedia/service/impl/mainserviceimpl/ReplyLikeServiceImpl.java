@@ -42,9 +42,9 @@ public class ReplyLikeServiceImpl implements LikeService {
     private NoticeService noticeService;
 
     @Override
-    public void like(Long replyId,Topic topic) {
+    public Long like(Long replyId,Topic topic) {
         if (replyService.findById(replyId)==null){
-            return;
+            return null;
         }
         Long userId = getUid();
         ReplyLike replyLike = status(replyId,userId,null);
@@ -69,6 +69,7 @@ public class ReplyLikeServiceImpl implements LikeService {
             replyLike.setStatus(!replyLike.isStatus());
         }
         replyLikeRepository.save(replyLike);
+        return 0L;
     }
 
     @Override

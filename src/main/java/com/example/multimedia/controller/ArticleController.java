@@ -103,8 +103,8 @@ public class ArticleController {
     }
 
     @PostMapping("/like/{articleId}")
-    public void likeArticle(@PathVariable Long articleId){
-        likeService.like(articleId, Topic.ARTICLE);
+    public Long likeArticle(@PathVariable Long articleId){
+        return likeService.like(articleId, Topic.ARTICLE);
     }
 
     @PostMapping("/report/{articleId}")

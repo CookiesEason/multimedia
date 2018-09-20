@@ -12,7 +12,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   data:
     elasticsearch:
-      cluster-name: master
+      cluster-name: elasticsearch
       cluster-nodes: 115.159.6.45:9300
   servlet:
     multipart:

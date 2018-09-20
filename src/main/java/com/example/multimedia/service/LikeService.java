@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface LikeService {
 
-    void like(Long id,Topic topic);
+    Long like(Long id,Topic topic);
 
     Long countAllById(Long id);
 

@@ -36,11 +36,11 @@ public class LikeServiceImpl implements LikeService {
     private NoticeService noticeService;
 
     @Override
-    public void like(Long topId, Topic topic) {
+    public Long like(Long topId, Topic topic) {
         if (topic.equals(Topic.VIDEO)){
             Video video = videoService.findById(topId);
             if (video==null){
-                return;
+                return null;
             }
             Long userId = getUid();
             TopicLike topicLike = status(topId,userId,topic);
@@ -52,10 +52,11 @@ public class LikeServiceImpl implements LikeService {
             }
             videoService.save(video);
             topicLikeRepository.save(topicLike);
+            return  video.getLikeCount();
         }else {
             Article article = articleService.findById((long) topId);
             if (article==null){
-                return;
+                return null;
             }
             Long userId = getUid();
             TopicLike topicLike = status(topId,userId,topic);
@@ -67,6 +68,7 @@ public class LikeServiceImpl implements LikeService {
             }
             articleService.save(article);
             topicLikeRepository.save(topicLike);
+            return  article.getLikeCount();
         }
     }
 

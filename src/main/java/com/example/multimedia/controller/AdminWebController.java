@@ -1,7 +1,11 @@
 package com.example.multimedia.controller;
 
+import com.example.multimedia.service.AdminNoticeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author CookiesEason
@@ -10,9 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AdminWebController {
 
-    @RequestMapping("/admin/login")
+    @Autowired
+    private AdminNoticeService adminNoticeService;
+
+    @RequestMapping("/adminLogin")
     public String adminLoginIndex(){
         return "login";
+    }
+
+    @RequestMapping("/admin/report")
+    public String adminReportIndex(@RequestParam(defaultValue = "0") int page, Model model){
+        model.addAttribute("reports",adminNoticeService.getReportNotice(page,"report"));
+        return "adminReport";
     }
 
 }

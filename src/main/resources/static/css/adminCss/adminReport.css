@@ -91,7 +91,7 @@
 }
 /* 影像板块 */
 .imgBox{
-	width: 670px;
+	width: 1000px;
 }
 .show-img-box{
 	margin:0 auto;
@@ -127,4 +127,11 @@
 .bottom-page{
 	padding-top: 0px;
 	text-align: right;
+}
+.imgBox .modal-body{
+	padding:0px;
+}
+#banner-video{
+    width: 998px;
+    height: 500px;
 }

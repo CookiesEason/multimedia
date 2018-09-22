@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>后台管理系统</title>
+	  <script src="js/html5.js" th:src="@{~/js/html5.js}"></script>
+    <!-- Bootstrap -->
+	  <link href="css/bootstrap.min.css" th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+      <link rel="stylesheet" href="http://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" th:href="@{~/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminNav.css" th:href="@{~/css/adminCss/adminNav.css}">
+    <link rel="stylesheet" type="text/css" href="css/animate.css" th:href="@{~/css/animate.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminReport.css" th:href="@{~/css/adminCss/adminReport.css}">
+      <link rel="stylesheet" href="css/myPagination.css" th:href="@{~/css/myPagination.css}">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <!-- 导航样式 -->
+    <div class="admin-top-nav"> 
+      <div class="top-nav-logo">
+        Wider Auth
+      </div>
+      <a href="javascript:void(0);" class="login-out">
+        <i class="glyphicon glyphicon-log-out">
+          
+        </i>
+        <span>
+          退出
+        </span>
+      </a> 
+      <span href="javascript:void(0);" class="remind-msg msg-email">
+        <i class="glyphicon glyphicon-envelope">
+          <span class="remind-msg-bubble">
+            99+
+          </span>
+        </i>
+        <ul class="remind-ul">
+         <li class="admin-operation">
+            <div class="admin-head">
+              <img src="images/head/browse-head-2.jpg" th:src="@{~/images/head/browse-head-2.jpg}">
+            </div>
+            <div class="admin-main-operate">
+              <a href="adminRecord.html">
+                <span class="operate-name">
+                  老李头
+                </span>
+                <span class="operate-text">
+                  删除了名为“西风野马”的图文内容
+                </span>
+                <span class="operate-time">
+                  2017-09-08 下午 14:52
+                </span>
+              </a>
+            </div>
+         </li> 
+         <li class="admin-operation">
+            <div class="admin-head">
+                <img src="images/head/browse-head-1.jpg">
+              </div>
+              <div class="admin-main-operate">
+                <a href="adminRecord.html">
+                  <span class="operate-name">
+                    管理员
+                  </span>
+                  <span class="operate-text">
+                    删除了名为“我在北边看到你”的影像内容
+                  </span>
+                  <span class="operate-time">
+                    2017-09-08 下午 14:52
+                  </span>
+                </a>   
+              </div>
+         </li>
+         <li class="enter-list">
+          <a href="adminRecord.html">
+            <i class="glyphicon glyphicon-cog"></i>
+              进入列表
+          </a>
+         </li>
+        </ul>
+      </span>
+      <span href="javascript:void(0);" class="remind-msg msg-bell">
+        <i class="glyphicon glyphicon-bell">
+          <span class="remind-msg-bubble add-green">
+            99+
+          </span>
+        </i>
+        <ul class="remind-ul">
+         <li class="web-msg">
+           <a href="adminHomepage.html">
+            <i class="glyphicon glyphicon-cloud-upload"></i>
+             最新访问量数据已经更新
+             <span>
+               30分钟前
+             </span>  
+           </a>   
+         </li> 
+         <li class="web-msg">
+          <a href="adminReport.html">
+            <i class="glyphicon glyphicon-info-sign"></i>
+             有新的举报内容
+             <span>
+               30分钟前
+             </span>
+          </a> 
+         </li>
+         <li class="web-msg">
+          <a href="adminHomepage.html">
+            <i class="glyphicon glyphicon-fire"></i>
+             月最佳员工数据更新
+             <span>
+               30分钟前
+             </span>
+          </a> 
+         </li>
+        </ul>
+      </span>
+      <span class="welcome-msg">
+        欢迎你,管理员
+      </span>
+    </div>
+    <div class="admin-left-nav">
+      <div class="left-nav-head">
+        <div class="head-picture">
+          <img src="images/head/browse-head-1.jpg" alt="head-1"> 
+        </div>
+        <span class="head-msg">
+          <i class="glyphicon glyphicon-unchecked"></i>
+          普通管理员
+        </span>
+      </div>
+      <ul class="main-menu">
+        <li>
+          <a href="adminHomepage.html">
+            <i class="glyphicon glyphicon-home"></i>
+            <span>首页</span>
+          </a> 
+        </li>
+        <li class="nav-user-btn user">
+          <a href="javascript:void(0);">
+            <i class="glyphicon glyphicon-list-alt"></i>
+            <span>主页</span>
+            <i class="glyphicon glyphicon-plus"></i>
+          </a>
+          <ul>
+            <li>
+              <a href="adminIndexHot.html">
+                热门内容更换
+              </a>
+            </li>
+            <li>
+              <a href="adminIndexTag.html">
+                专题内容管理
+              </a>
+            </li>
+          </ul> 
+        </li>
+        <li class="user">
+          <a href="adminImgTxt.html">
+            <i class="glyphicon glyphicon-tasks"></i>
+            <span>图文</span>
+          </a>  
+        </li>
+        <li class="user">
+          <a href="adminImg.html">
+            <i class="glyphicon glyphicon-picture"></i>
+            <span>影像</span>
+          </a>
+        </li>
+        <li class="user">
+          <a href="adminSpecial.html">
+            <i class="glyphicon glyphicon-th-list"></i>
+            <span>专题</span>
+          </a> 
+        </li>
+        <li class="user">
+          <a href="adminLabel.html">
+            <i class="glyphicon glyphicon-tags"></i>
+            <span>标签</span>
+          </a> 
+        </li>
+        <li class="user">
+          <a href="adminUser.html">
+            <i class="glyphicon glyphicon-user"></i>
+            <span>用户</span>
+          </a> 
+        </li>
+        <li>
+          <a href="/admin/record">
+            <i class="glyphicon glyphicon-file"></i>
+            <span>记录</span>
+          </a>
+        </li>
+        <li>
+          <a href="/admin/report" class="nav-active">
+            <i class="glyphicon glyphicon-warning-sign"></i>
+            <span>举报</span>
+          </a> 
+        </li>
+      </ul>
+    </div>
+	<!-- 图文管理 -->
+	<div class="container">
+		<div class="box-container">
+			<div class="title">
+				举报内容
+			</div>
+     <table class="table">
+      	<thead>
+      		<tr>
+				<th>#</th>
+				<th>标题</th>
+				<th>类型</th>
+				<th>举报时间</th>
+				<th>操作</th>
+			</tr>
+      	</thead>
+      	<tbody>
+      		<tr th:each="report : ${reports.getObjectList()}">
+      			<td th:text="${report.topicId}">
+      				1
+      			</td>
+      			<td th:text="${report.title}">
+      				背锅侠
+      			</td>
+      			<td th:if="${report.topic.toString()}=='VIDEO'">
+      				视频
+      			</td>
+                <td th:if="${report.topic.toString()}=='ARTICLE'">
+                    图文
+                </td>
+      			<td th:text="${report.date}">
+      			</td>
+      			<td data-th-data-reportId="${report.getId()}" data-th-data-topicId="${report.getTopicId()}"
+                    data-th-data-type="${report.getTopic().toString()}" data-th-data-reason="${report.getReason()}"
+                    data-th-data-content="${report.getReasonContent()}">
+      				<button  th:if="${report.topic.toString()}=='ARTICLE'" class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#imgTxtBox">
+								
+					</button>
+                    <button  th:if="${report.topic.toString()}=='VIDEO'" class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#imgBox">
+
+                    </button>
+					<button class="btn btn-danger btn-delete glyphicon glyphicon-ban-circle btn-xs">
+								
+					</button>
+					<button class="btn btn-info btn-show glyphicon glyphicon-resize-full btn-xs" data-toggle="modal" data-target="#detailedBox">
+								
+					</button>
+      			</td>
+      		</tr>
+      	</tbody>
+     </table>
+    </div>
+   </div>
+   <div class="container bottom-page">
+       <div id="pagination" class="pagination" data-th-data-size="${reports.getTotalElements()}"
+            data-th-data-page="${reports.getTotalPages()}"
+       ></div>
+  </div>
+   <!-- 图文展示面板 -->
+   <div class="modal fade" id="imgTxtBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog imgTxtBoxWidth" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">图文内容</h4>
+	      </div>
+	      <div class="modal-body">
+		   <div class="main-browse">
+	   		<!-- 标题部分 -->
+	   		<h1 class="browse-title">
+	   			面试巧答考官13个问题，总有一个，值得你去借鉴
+	   		</h1>
+	   		<!-- 作者部分 -->
+	   		<div class="browse-author clearfix">
+	   			<a href="javascript:void(0);" class="browse-author-head">
+	   				<img src="images/head/browse-head-1.jpg" alt="browse-head">
+	   			</a>
+	   			<div class="browse-author-info">
+	   				<div class="browse-author-name">
+	   					<span href="javascript:void(0);">
+	   						火火火火火火
+	   					</span>
+	   				</div>
+	   				<div class="browse-author-time">
+	   					<span>
+	   						2017年6月12日
+	   					</span>
+	   					<span>
+	   						评论 0
+	   					</span>
+	   					<span>
+	   						喜欢 0
+	   					</span>
+	   				</div>
+
+	   			</div>
+	   		</div>
+	   		<!-- 文章部分 -->
+	   		<div class="browse-content">
+	   			<p>一战真正开启了现代史的进程</p>
+	   			<p>至今我们仍活在一战的百年遗绪中</p>
+	   			<p>这些在近年来已成为耳熟能详的的共识性新常识，却并不为太多人知道</p>
+	   			<p>那些在一战中发生的深刻影响到其后百年全球政治格局的事件，大多集中出现在 1916 年</p>
+	   			<p>1916 年发生的事件，或者通过影响一战的结局进而影响了其后的历史</p>
+	   			<p>或者当时并未对一战的结果产生决定性影响，然而却对后来的全球政治格局演变产生了意想不到的触发作用。</p>
+	   			<p>也因此，1916 年不仅仅是一战史视域中的分割线，更是全球史视野中的关键年份。</p>
+	   			<p>一战真正开启了现代史的进程</p>
+	   			<p>至今我们仍活在一战的百年遗绪中</p>
+	   			<p>这些在近年来已成为耳熟能详的的共识性新常识，却并不为太多人知道</p>
+	   			<p>那些在一战中发生的深刻影响到其后百年全球政治格局的事件，大多集中出现在 1916 年</p>
+	   			<p>1916 年发生的事件，或者通过影响一战的结局进而影响了其后的历史</p>
+	   			<p>或者当时并未对一战的结果产生决定性影响，然而却对后来的全球政治格局演变产生了意想不到的触发作用。</p>
+	   			<p>也因此，1916 年不仅仅是一战史视域中的分割线，更是全球史视野中的关键年份。</p>
+	   			<p>一战真正开启了现代史的进程</p>
+	   			<p>至今我们仍活在一战的百年遗绪中</p>
+	   			<p>这些在近年来已成为耳熟能详的的共识性新常识，却并不为太多人知道</p>
+	   			<p>那些在一战中发生的深刻影响到其后百年全球政治格局的事件，大多集中出现在 1916 年</p>
+	   			<p>1916 年发生的事件，或者通过影响一战的结局进而影响了其后的历史</p>
+	   			<p>或者当时并未对一战的结果产生决定性影响，然而却对后来的全球政治格局演变产生了意想不到的触发作用。</p>
+	   			<p>也因此，1916 年不仅仅是一战史视域中的分割线，更是全球史视野中的关键年份。</p>
+	   		</div>
+	   		<div class="browse-foot">
+	   			© 著作权归作者所有
+	   		</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+   </div>
+    <!-- 影像展示板块 -->
+    <div class="modal fade" id="imgBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog imgBox" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">影像内容</h4>
+                </div>
+                <div class="modal-body">
+                    <video id="banner-video" src=""></video>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 举报详细内容 -->
+    <div class="modal fade" id="detailedBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog detailedBox" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">图文具体信息</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<form class="form-horizontal">
+	      	  <!-- 举报原因 -->
+			  <div class="form-group">
+			    <label class="col-sm-4 control-label">举报原因</label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static">色情低俗</p>
+			    </div>
+			  </div>
+			  <!-- 具体原因 -->
+			  <div class="form-group">
+			    <label class="col-sm-4 control-label">具体原因</label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static">测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容
+			      </p>
+			    </div>
+			  </div>
+			</form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.min.js"></script>
+    <script src="http://imgcache.qq.com/open/qcloud/video/tcplayer/lib/hls.min.0.8.8.js"></script>
+    <script type="text/javascript" src="js/plug-ins.js" th:src="@{~/js/plug-ins.js}"></script>
+    <script type="text/javascript" src="js/layer-plug/layer.js" th:src="@{~/js/layer-plug/layer.js}"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.min.js" th:src="@{~//bootstrap-datetimepicker.min.js}"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.fr.js" th:src="@{~/js/bootstrap-datetimepicker.fr.js}"></script>
+    <script type="text/javascript" src="js/zhang.js" th:src="@{~/js/zhang.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminNav.js" th:src="@{~/js/adminJs/adminNav.js}"></script>
+    <script type="text/javascript" src="js/adminJs/pageNav.js" th:src="@{~/js/adminJs/pageNav.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminReport.js" th:src="@{~/js/adminJs/adminReport.js}"></script>
+    <script type="text/javascript" src="/js/axios.min.js" th:src="@{~/js/axios.min.js}"></script>
+    <script src="/js/myPagination.js" th:src="@{~/js/myPagination.js}"></script>
+    <script>
+        $(".btn-browse").click(function () {
+            if($(this).parent().data('type')==='ARTICLE'){
+                axios.get("/api/articles/"+$(this).parent().data('topicid')).then(function (res) {
+                    let data  = res.data.data;
+                    $("#imgTxtBox .browse-title").html(data.article.title);
+                    $("#imgTxtBox .browse-author img").attr('src',data.article.user.headUrl);
+                    $("#imgTxtBox .browse-author-name").html(data.article.user.nickname);
+                    $("#imgTxtBox .browse-author-time span:eq(0)").html(data.article.createDate);
+                    $("#imgTxtBox .browse-author-time span:eq(1)").html("评论 "+data.article.commentNum);
+                    $("#imgTxtBox .browse-author-time span:eq(2)").html("喜欢 "+data.article.likeCount);
+                    $("#imgTxtBox .browse-content").html(data.article.text);
+                })
+            }else {
+                axios.get("/api/video/"+$(this).parent().data('topicid')).then(function (res) {
+                    let data  = res.data.data;
+                    var player =new TCPlayer("banner-video", { // player-container-id 为播放器容器ID，必须与html中一致
+                        fileID: data.video.fileId, // 请传入需要播放的视频filID 必须
+                        appID: "1253231183", // 请传入点播账号的appID 必须
+                        autoplay: false //是否自动播放
+                        //其他参数请在开发文档中查看
+                    });
+                });
+            }
+        });
+        $(".btn-show").click(function () {
+            if ($(this).parent().data('type')==='VIDEO'){
+                $("#detailedBox .modal-title").html("视频具体信息")
+            }
+            $("#detailedBox .form-group:eq(0) .form-control-static").html($(this).parent().data('reason'));
+            $("#detailedBox .form-group:eq(1) .form-control-static").html($(this).parent().data('content'))
+        });
+        window.onload = function () {
+            new myPagination({
+                id: 'pagination',
+                curPage:getQueryString('page'), //初始页码
+                pageTotal:  $("#pagination").data('page'), //总页数
+                pageAmount: 16,  //每页多少条
+                dataTotal:  $("#pagination").data('size'), //总共多少条数据
+                pageSize: 5, //可选,分页个数
+                showPageTotalFlag:false, //是否显示数据统计
+                showSkipInputFlag:true, //是否支持跳转
+                getPage: function (page) {
+                    location.href = "/admin/report?page="+page;
+                }
+            })
+
+        }
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
+    </script>
+  </body>
+</html>

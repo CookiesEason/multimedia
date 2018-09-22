@@ -43,8 +43,10 @@
           let f = new FormData();
           f.append("username",$(".account").val());
           f.append("password",$(".password").val());
-          axios.post('/api/user/login',{
-              'data':f
+          axios({
+              method: 'post',
+              url: '/api/user/login',
+              data:f
           }).then(function (res) {
               let data = res.data;
               if (data.code==0){

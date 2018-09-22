@@ -67,6 +67,14 @@ public class AdminNoticeServiceImpl implements AdminNoticeService {
     }
 
     @Override
+    public  PageDTO<AdminNotice> getReportNotice(int page, String type) {
+        Pageable pageable = PageRequest.of(page-1,16, Sort.Direction.DESC,"date");
+        Page<AdminNotice> adminNotices = adminNoticeRepository.findAllByType(type,pageable);
+        return new PageDTO<>(adminNotices.getContent(),adminNotices.getTotalElements(),
+                (long)adminNotices.getTotalPages());
+    }
+
+    @Override
     public void deleteById(Long id) {
         adminNoticeRepository.deleteById(id);
     }

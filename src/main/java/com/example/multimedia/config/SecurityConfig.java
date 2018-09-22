@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             "/api/data/**",
                             "/api/announcements/**",
                             "/api/user/register","/api/user/activateEmail",
-                            "/api/search/**","/admin/login")
+                            "/api/search/**","/adminLogin")
                     .permitAll()
                 .antMatchers(HttpMethod.GET,"/api/follower/**").permitAll()
                 .antMatchers("/api/user/messages","/api/user/messages/count").authenticated()
@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/tags","/api/smallTags","/api/tags/hot").permitAll()
                 .antMatchers("/api/articles/report/**", "/api/video/report/**",
                         "/api/video/play/**").permitAll()
-                .antMatchers("/api/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/api/admin/**","/admin/**").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

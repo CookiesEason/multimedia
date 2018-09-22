@@ -48,4 +48,6 @@ public interface VideoRepository extends JpaRepository<Video,Long> {
 
     Long countAllByTagsTagAndEnableAndAuditing(String tag,boolean enable, boolean auditing);
 
+    Long countAllByUserIdAndEnable(Long userId,Boolean enable);
+
 }

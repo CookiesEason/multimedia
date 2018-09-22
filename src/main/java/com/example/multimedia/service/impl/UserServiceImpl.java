@@ -103,6 +103,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResultVo save(User user, String role, Boolean active) {
+        if (findByUsername(user.getUsername())==null){
+            UserInfo userInfo = new UserInfo();
+            user.setPassword(encryptPassword(user.getPassword()));
+            user.setActive(active);
+            userInfo.setNickname(user.getUsername());
+            userInfo.setHeadImgUrl("https://zone-1253231183.cos.ap-shanghai.myqcloud.com/user.jpg");
+            user.setUserInfo(userInfo);
+            user.setRoleList(Arrays.asList(userRoleRepository.findByRole(role)));
+            userRepository.save(user);
+            return ResultVoUtil.success();
+        }
+        return ResultVoUtil.error(0,"邮箱已经存在");
+    }
+
+    @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -209,18 +225,37 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public ResultVo findUsers(int page,String role) {
-        int size=10;
-        Pageable pageable = PageRequest.of(page,size);
-        List<UserRole> roles = userRoleRepository.findAllByRoleLike(role);
-        Page<User> users = userRepository.findAllByRoleListIn(pageable,roles);
-        UsersDTO usersDTO = new UsersDTO(users.getContent(),(int) users.getTotalElements(),users.getTotalPages());
-        return ResultVoUtil.success(usersDTO);
+    public PageDTO<AdminUserDTO> findUsers(int page) {
+        int size=16;
+        Pageable pageable = PageRequest.of(page-1,size);
+        Page<User> users = userRepository.findAll(pageable);
+        List<AdminUserDTO> adminUserDTOS = new ArrayList<>();
+        users.forEach(user -> {
+            AdminUserDTO adminUserDTO = new AdminUserDTO(user,
+                    articleRepository.countAllByUserIdAndEnable(user.getId(),true),
+                    videoRepository.countAllByUserIdAndEnable(user.getId(),true),
+                    getUserHot(user.getId()),followerRepository.countAllByFollowerIdAndStatus(user.getId(),true),
+                    followerRepository.countAllByUserIdAndStatus(user.getId(),true));
+            adminUserDTOS.add(adminUserDTO);
+        });
+        PageDTO<AdminUserDTO> usersDTO = new PageDTO<>(adminUserDTOS,users.getTotalElements(),(long)users.getTotalPages());
+        return usersDTO;
     }
 
     @Override
-    public ResultVo findByUsernameOrUserInfoNickname(String username,String nickname) {
-        return ResultVoUtil.success(userRepository.findByUsernameOrUserInfoNickname(username,nickname));
+    public PageDTO<AdminUserDTO> findByUsernameOrUserInfoNickname(String searchContent) {
+        List<AdminUserDTO> adminUserDTOS = new ArrayList<>();
+        List<User> userList = userRepository.findByUsernameOrUserInfoNickname(searchContent,searchContent);
+        userList.forEach(user -> {
+            AdminUserDTO adminUserDTO = new AdminUserDTO(user,
+                    articleRepository.countAllByUserIdAndEnable(user.getId(),true),
+                    videoRepository.countAllByUserIdAndEnable(user.getId(),true),
+                    getUserHot(user.getId()),followerRepository.countAllByFollowerIdAndStatus(user.getId(),true),
+                    followerRepository.countAllByUserIdAndStatus(user.getId(),true));
+            adminUserDTOS.add(adminUserDTO);
+        });
+        PageDTO<AdminUserDTO> usersDTO = new PageDTO<>(adminUserDTOS,(long)userList.size(),(long)1);
+        return usersDTO;
     }
 
     @Override

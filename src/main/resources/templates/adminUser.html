@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+    <script src="js/html5.js" th:src="@{~/js/html5.js}"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="http://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.css">
+    <link href="css/bootstrap.min.css" th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" th:href="@{~/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminNav.css" th:href="@{~/css/adminCss/adminNav.css}">
+    <link rel="stylesheet" type="text/css" href="css/animate.css" th:href="@{~/css/animate.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminUser.css" th:href="@{~/css/adminCss/adminUser.css}">
+    <link rel="stylesheet" href="css/myPagination.css" th:href="@{~/css/myPagination.css}">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <!-- 导航样式 -->
+    <div class="admin-top-nav"> 
+      <div class="top-nav-logo">
+        Wider Auth
+      </div>
+      <a href="javascript:void(0);" class="login-out">
+        <i class="glyphicon glyphicon-log-out">
+          
+        </i>
+        <span>
+          退出
+        </span>
+      </a> 
+      <span href="javascript:void(0);" class="remind-msg msg-email">
+        <i class="glyphicon glyphicon-envelope">
+          <span class="remind-msg-bubble">
+            99+
+          </span>
+        </i>
+        <ul class="remind-ul">
+         <li class="admin-operation">
+            <div class="admin-head">
+              <img src="images/head/browse-head-2.jpg">
+            </div>
+            <div class="admin-main-operate">
+              <a href="adminRecord.html">
+                <span class="operate-name">
+                  老李头
+                </span>
+                <span class="operate-text">
+                  删除了名为“西风野马”的图文内容
+                </span>
+                <span class="operate-time">
+                  2017-09-08 下午 14:52
+                </span>
+              </a>
+            </div>
+         </li> 
+         <li class="admin-operation">
+            <div class="admin-head">
+                <img src="images/head/browse-head-1.jpg">
+              </div>
+              <div class="admin-main-operate">
+                <a href="adminRecord.html">
+                  <span class="operate-name">
+                    管理员
+                  </span>
+                  <span class="operate-text">
+                    删除了名为“我在北边看到你”的影像内容
+                  </span>
+                  <span class="operate-time">
+                    2017-09-08 下午 14:52
+                  </span>
+                </a>   
+              </div>
+         </li>
+         <li class="enter-list">
+          <a href="adminRecord.html">
+            <i class="glyphicon glyphicon-cog"></i>
+              进入列表
+          </a>
+         </li>
+        </ul>
+      </span>
+      <span href="javascript:void(0);" class="remind-msg msg-bell">
+        <i class="glyphicon glyphicon-bell">
+          <span class="remind-msg-bubble add-green">
+            99+
+          </span>
+        </i>
+        <ul class="remind-ul">
+         <li class="web-msg">
+           <a href="adminHomepage.html">
+            <i class="glyphicon glyphicon-cloud-upload"></i>
+             最新访问量数据已经更新
+             <span>
+               30分钟前
+             </span>  
+           </a>   
+         </li> 
+         <li class="web-msg">
+          <a href="adminReport.html">
+            <i class="glyphicon glyphicon-info-sign"></i>
+             有新的举报内容
+             <span>
+               30分钟前
+             </span>
+          </a> 
+         </li>
+         <li class="web-msg">
+          <a href="adminHomepage.html">
+            <i class="glyphicon glyphicon-fire"></i>
+             月最佳员工数据更新
+             <span>
+               30分钟前
+             </span>
+          </a> 
+         </li>
+        </ul>
+      </span>
+      <span class="welcome-msg">
+        欢迎你,管理员
+      </span>
+    </div>
+    <div class="admin-left-nav">
+      <div class="left-nav-head">
+        <div class="head-picture">
+          <img src="images/head/browse-head-1.jpg" alt="head-1"> 
+        </div>
+        <span class="head-msg">
+          <i class="glyphicon glyphicon-unchecked"></i>
+          普通管理员
+        </span>
+      </div>
+      <ul class="main-menu">
+        <li>
+          <a href="adminHomepage.html">
+            <i class="glyphicon glyphicon-home"></i>
+            <span>首页</span>
+          </a> 
+        </li>
+        <li class="nav-user-btn user">
+          <a href="javascript:void(0);">
+            <i class="glyphicon glyphicon-list-alt"></i>
+            <span>主页</span>
+            <i class="glyphicon glyphicon-plus"></i>
+          </a>
+          <ul>
+            <li>
+              <a href="adminIndexHot.html">
+                热门内容更换
+              </a>
+            </li>
+            <li>
+              <a href="adminIndexTag.html">
+                专题内容管理
+              </a>
+            </li>
+          </ul> 
+        </li>
+        <li class="user">
+          <a href="adminImgTxt.html">
+            <i class="glyphicon glyphicon-tasks"></i>
+            <span>图文</span>
+          </a>  
+        </li>
+        <li class="user">
+          <a href="adminImg.html">
+            <i class="glyphicon glyphicon-picture"></i>
+            <span>影像</span>
+          </a>
+        </li>
+        <li class="user">
+          <a href="adminSpecial.html">
+            <i class="glyphicon glyphicon-th-list"></i>
+            <span>专题</span>
+          </a> 
+        </li>
+        <li class="user">
+          <a href="adminLabel.html">
+            <i class="glyphicon glyphicon-tags"></i>
+            <span>标签</span>
+          </a> 
+        </li>
+        <li class="user">
+          <a href="/admin/users" class="nav-active">
+            <i class="glyphicon glyphicon-user"></i>
+            <span>用户</span>
+          </a> 
+        </li>
+        <li>
+          <a href="adminRecord.html">
+            <i class="glyphicon glyphicon-file"></i>
+            <span>记录</span>
+          </a>
+        </li>
+        <li>
+          <a href="/admin/report">
+            <i class="glyphicon glyphicon-warning-sign"></i>
+            <span>举报</span>
+          </a> 
+        </li>
+      </ul>
+    </div>
+	<!-- 标签内容 -->
+	<div class="container">
+		<div class="box-container">
+      <div class="title">
+        用户管理
+      </div>
+      <div class="top-nav-search">
+        <i class="glyphicon glyphicon-search">
+            
+        </i>
+        <input type="text" placeholder="搜索内容...">
+        <!-- 下拉菜单 -->
+        <div class="btn-group search" role="group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            搜索
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#">ID</a></li>
+            <li><a href="#">权限</a></li>
+            <li><a class='userSearch' href="#">用户名</a></li>
+            <li><a href="#">注册时间</a></li>
+          </ul>
+        </div>
+        <button type="button" class="btn btn-info add-tag-btn" data-toggle="modal" data-target="#addUser">新建用户</button>
+        <!-- 条件检索 -->
+        <div class="btn-group condition">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              条件筛选 <span class="caret"></span>
+              </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" id="hot-top-bottom">按热度从高到低</a></li>
+              <li><a href="#" id="time-sooner-later">按发布时间从早到晚</a></li>
+              <li><a href="#" id="ID-small-big">按ID从小到大</a></li>
+              <li><a href="#" id="power-top-bottom">按权限从高到低</a></li>
+            </ul>
+        </div>
+      </div>
+      <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>权限</th>
+              <th>用户名</th>
+              <th>注册时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="user : ${users.getObjectList()}">
+              <td th:text="${user.getId()}">1</td>
+              <td th:if="${user.getRole()=='ROLE_ADMIN'}">开发者</td>
+              <td th:if="${user.getRole()=='ROLE_SENIOR_USER'}">普通用户</td>
+              <td th:if="${user.getRole()=='ROLE_VIDEO_ADMIN'}">影像管理者</td>
+              <td th:if="${user.getRole()=='ROLE_IMGTXT_ADMIN'}">图文管理者</td>
+              <td th:text="${user.getNickname()}">房东家的猫</td>
+              <td th:text="${user.getTimestamp()}">2017-09-10 21:18:37</td>
+              <td data-th-data-id="${user.getId()}" data-th-data-enable="${user.getEnable()}" data-th-data-article="${user.getArticleNum()}"
+              data-th-data-video="${user.getVideoNum()}" data-th-data-hot="${user.getHot()}" data-th-data-follow="${user.getFollows()}"
+              data-th-data-fans="${user.getFans()}" data-th-data-email="${user.getUsername()}">
+                  <button class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#userInfoBox">
+
+                  </button>
+                  <button class="btn btn-info btn-power glyphicon glyphicon-credit-card btn-xs" data-toggle="modal" data-target="#power-control">
+
+                  </button>
+                  <button th:if="${user.getEnable()}" class="btn btn-warning btn-kick glyphicon glyphicon-ban-circle btn-xs" data-toggle="modal">
+
+                  </button>
+                <button th:if="${!user.getEnable()}" class="btn btn-warning glyphicon btn-xs btn-check glyphicon-share-alt" data-toggle="modal"
+                        data-target="#reviseTagBox">
+
+                </button>
+                  <button class="btn btn-danger btn-delete glyphicon glyphicon-trash btn-xs">
+
+                  </button>
+              </td>
+            </tr>
+          </tbody>
+      </table>
+	 </div>
+  </div>
+  <div class="container bottom-page">
+    <div id="pagination" class="pagination" data-th-data-size="${users.getTotalElements()}"
+         data-th-data-page="${users.getTotalPages()}"
+    ></div>
+  </div>
+  <!-- 详细用户信息内容 -->
+    <div class="modal fade" id="userInfoBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">用户具体信息</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <!-- 账号状态 -->
+              <div class="form-group">
+                <label class="col-sm-4 control-label">账号状态</label>
+                <div class="col-sm-8">
+                  <p class="form-control-static">封号剩余4天</p>
+                </div>
+              </div>
+              <!-- 作品数 -->
+              <div class="form-group">
+                <label class="col-sm-4 control-label">作品数</label>
+                <div class="col-sm-8">
+                  <p class="form-control-static">102</p>
+                </div>
+              </div>
+              <!-- 图文数 -->
+              <div class="form-group">
+                <label class="col-sm-4 control-label">图文数</label>
+                <div class="col-sm-8">
+                  <p class="form-control-static">32</p>
+                </div>
+              </div>
+              <!-- 影集数 -->
+              <div class="form-group">
+                <label class="col-sm-4 control-label">影集数</label>
+                <div class="col-sm-8">
+                  <p class="form-control-static">70</p>
+                </div>
+              </div>
+              <!-- 点赞数 -->
+              <div class="form-group">
+                <label class="col-sm-4 control-label">收获的赞</label>
+                <div class="col-sm-8">
+                  <p class="form-control-static">1.7k</p>
+                </div>
+              </div>
+              <!-- 关注数 -->
+              <div class="form-group">
+                <label class="col-sm-4 control-label">关注数</label>
+                <div class="col-sm-8">
+                  <p class="form-control-static">33</p>
+                </div>
+              </div>
+              <!-- 粉丝数 -->
+              <div class="form-group">
+                <label class="col-sm-4 control-label">粉丝数</label>
+                <div class="col-sm-8">
+                  <p class="form-control-static">27</p>
+                </div>
+              </div>
+              <!-- 绑定邮箱 -->
+              <div class="form-group">
+                <label class="col-sm-4 control-label">绑定邮箱</label>
+                <div class="col-sm-8">
+                  <p class="form-control-static">1057011973@qq.com</p>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 用户权限管理 -->
+    <div class="modal fade" id="power-control" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">用户权限管理</h4>
+          </div>
+          <div class="modal-body">
+          <!-- 权限管理表单 -->
+            <form class="form-horizontal form-power">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">当前权限</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static">普通用户</p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputPassword" class="col-sm-2 control-label">选择权限</label>
+                <div class="col-sm-10">
+                  <select class="form-control">
+                    <option>普通用户</option>
+                    <option>影像管理员</option>
+                    <option>图文管理员</option>
+                    <option>开发者</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary btn-save">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 新建用户 -->
+    <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+               <div class="form-group">
+                <label for="account" class="col-sm-2 control-label">账号</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="account" placeholder="账号需绑定邮箱或邮箱">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" id="password" placeholder="输入密码">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary btn-save">注册新用户</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script type="text/javascript" src="js/plug-ins.js" th:src="@{~/js/plug-ins.js}"></script>
+    <script type="text/javascript" src="js/layer-plug/layer.js" th:src="@{~/js/layer-plug/layer.js}"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.min.js" th:src="@{~/js/bootstrap-datetimepicker.min.js}"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.fr.js" th:src="@{~/js/bootstrap-datetimepicker.fr.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminNav.js" th:src="@{~/js/adminJs/adminNav.js}"></script>
+    <script type="text/javascript" src="js/adminJs/pageNav.js" th:src="@{~/js/adminJs/pageNav.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminUser.js" th:src="@{~/js/adminJs/adminUser.js}"></script>
+    <script type="text/javascript" src="/js/axios.min.js" th:src="@{~/js/axios.min.js}"></script>
+    <script src="/js/myPagination.js" th:src="@{~/js/myPagination.js}"></script>
+    <script>
+      $(".btn-browse").click(function () {
+          if ($(this).parent().data('enable')){
+              $("#userInfoBox .form-group:eq(0) .form-control-static").html("正常")
+          } else {
+              $("#userInfoBox .form-group:eq(0) .form-control-static").html("不可用")
+          }
+          let artcile = $(this).parent().data('video');
+          let video = $(this).parent().data('article');
+          let totalWorks = artcile+video
+          $("#userInfoBox .form-group:eq(1) .form-control-static").html(totalWorks)
+          $("#userInfoBox .form-group:eq(2) .form-control-static").html(artcile)
+          $("#userInfoBox .form-group:eq(3) .form-control-static").html(video)
+          $("#userInfoBox .form-group:eq(4) .form-control-static").html($(this).parent().data('hot'))
+          $("#userInfoBox .form-group:eq(5) .form-control-static").html($(this).parent().data('follow'))
+          $("#userInfoBox .form-group:eq(6) .form-control-static").html($(this).parent().data('fans'))
+          $("#userInfoBox .form-group:eq(7) .form-control-static").html($(this).parent().data('email'))
+      })
+      $(".btn-power").click(function () {
+          $("#power-control .form-control-static:eq(0)").html($(this).parent().prev().prev().prev().html());
+          $("#power-control .modal-footer .btn-save").data('id',$(this).parent().data('id'))
+      })
+      window.onload = function () {
+          new myPagination({
+              id: 'pagination',
+              curPage:getQueryString('page'), //初始页码
+              pageTotal:  $("#pagination").data('page'), //总页数
+              pageAmount: 16,  //每页多少条
+              dataTotal:  $("#pagination").data('size'), //总共多少条数据
+              pageSize: 5, //可选,分页个数
+              showPageTotalFlag:false, //是否显示数据统计
+              showSkipInputFlag:true, //是否支持跳转
+              getPage: function (page) {
+                  location.href = "/admin/users?page="+page;
+              }
+          })
+
+      }
+      $(".userSearch").click(function () {
+          location.href = "/admin/users/search?searchContent="+$(".top-nav-search input:eq(0)").val();
+      });
+      function getQueryString(name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+          var r = window.location.search.substr(1).match(reg);
+          if (r != null) return decodeURI(r[2]); return null;
+      }
+    </script>
+  </body>
+</html>

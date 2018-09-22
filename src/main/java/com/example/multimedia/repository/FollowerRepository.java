@@ -37,5 +37,8 @@ public interface FollowerRepository extends JpaRepository<Follower,Long> {
             "LIMIT 5",nativeQuery = true)
     long [] fansNumByDays(@Param("userId") Long userId);
 
+    Long countAllByUserIdAndStatus(Long userId,Boolean status);
+
+    Long countAllByFollowerIdAndStatus(Long userId,Boolean status);
 
 }

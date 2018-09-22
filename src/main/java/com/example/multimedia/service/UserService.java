@@ -2,6 +2,8 @@ package com.example.multimedia.service;
 
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.UserInfo;
+import com.example.multimedia.dto.AdminUserDTO;
+import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,6 +26,13 @@ public interface UserService {
      * @return ResultVo
      */
     ResultVo save(User user,String role);
+
+    /**
+     * 后台用户注册
+     * @param user
+     * @return ResultVo
+     */
+    ResultVo save(User user,String role,Boolean active);
 
     /**
      * 用户查询
@@ -89,7 +98,7 @@ public interface UserService {
      * 查询所有用户
      * @return
      */
-    ResultVo findUsers(int page,String role);
+    PageDTO<AdminUserDTO> findUsers(int page);
 
     /**
      * 搜索用户
@@ -97,7 +106,7 @@ public interface UserService {
      * @param nickname
      * @return
      */
-    ResultVo findByUsernameOrUserInfoNickname(String username, String nickname);
+    PageDTO<AdminUserDTO> findByUsernameOrUserInfoNickname(String searchContent);
 
     /**
      * 禁用,启用用户

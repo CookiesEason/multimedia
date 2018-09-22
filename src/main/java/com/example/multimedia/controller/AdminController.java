@@ -2,6 +2,8 @@ package com.example.multimedia.controller;
 
 import com.example.multimedia.domian.Question;
 import com.example.multimedia.domian.User;
+import com.example.multimedia.dto.AdminUserDTO;
+import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.service.*;
 import com.example.multimedia.service.QuestionService;
 import com.example.multimedia.service.UserService;
@@ -76,9 +78,8 @@ public class AdminController {
     }
 
     @GetMapping("users")
-    private ResultVo findUsers(@RequestParam(defaultValue = "0") int page){
-        String role = "%USER%";
-        return userService.findUsers(page,role);
+    private PageDTO<AdminUserDTO> findUsers(@RequestParam(defaultValue = "1") int page){
+        return userService.findUsers(page);
     }
 
     @PostMapping("users/{userId}")
@@ -98,15 +99,8 @@ public class AdminController {
     }
 
     @GetMapping("users/search")
-    private ResultVo findUser(@RequestParam(required = false) String username,
-                              @RequestParam(required = false) String nickname){
-        return userService.findByUsernameOrUserInfoNickname(username,nickname);
-    }
-
-    @GetMapping("users/admins")
-    private ResultVo getAdmins(@RequestParam(defaultValue = "0") int page){
-        String role = "%ADMIN%";
-        return userService.findUsers(page,role);
+    private PageDTO<AdminUserDTO> findUser(@RequestParam String searchContent){
+        return userService.findByUsernameOrUserInfoNickname(searchContent);
     }
 
     @GetMapping("users/roles")
@@ -117,7 +111,7 @@ public class AdminController {
     @PostMapping("users/addAdmin")
     private ResultVo addAdmin(@RequestBody @Validated User user){
         // TODO: 2018/08/11 暂时未定 
-        return userService.save(user,user.getRoleList().get(1).getRole());
+        return userService.save(user,"ROLE_SENIOR_USER",true);
     }
 
     @PostMapping("users/changeRole")

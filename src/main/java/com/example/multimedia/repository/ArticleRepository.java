@@ -41,4 +41,6 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
 
     Long countAllByTagsTagAndUserId(String tag,Long userId);
 
+    Long countAllByUserIdAndEnable(Long userId,Boolean enable);
+
 }

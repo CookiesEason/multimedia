@@ -14,49 +14,81 @@ $(function(){
 		layer.confirm('是否删除此用户信息？', {
 		  btn: ['确定','取消'] //按钮
 		}, function(){
-			this_El.closest('tr').remove();
-			layer.msg('删除成功')
+			axios({
+				'url':'/api/admin/users/'+this_El.parent().data('id'),
+				'method':'delete'
+			}).then(function () {
+                this_El.closest('tr').remove();
+                layer.msg('删除成功')
+            });
 		});
 	})
 	$('#power-control .btn-save').click(function(){
-		if ($(this).closest('#power-control').find('select').val()=='开发者') {
-			$('#power-control').modal('hide');
-			$('#code-box').modal('show');
-		}
-		else{
-			layer.msg('设置权限成功');
-			$('#power-control').modal('hide');
-		}
-	})
-	$('#code-box .btn-save').click(function(){
-		layer.msg('设置权限成功');
-		$('#code-box').modal('hide');	
-	})		
+			let role = $(this).closest('#power-control').find('select').val();
+			if (role==="开发者"){
+				role = "ROLE_ADMIN"
+			} else if (role==="图文管理者"){
+				role = "ROLE_IMGTXT_ADMIN"
+			}else if (role==="影像管理者") {
+				role = "ROLE_VIDEO_ADMIN"
+			}else {
+				role = "ROLE_SENIOR_USER"
+			}
+			let f = new FormData();
+			f.append('userId',$(this).data('id'));
+			f.append('role',role);
+			axios({
+				'url':'/api/admin/users/changeRole',
+				'method':'post',
+				'data':f
+			}).then(function () {
+                layer.msg('设置权限成功');
+                $('#power-control').modal('hide');
+            });
+	});
+
 	$(document).on('click','.btn-kick',function(){
 		var thisEl=$(this);
-		$('#kick-box').modal('show').data('thisEl',thisEl);
+		layer.confirm('是否封号此用户', {
+			btn: ['确定','取消'] //按钮
+		}, function(){
+			axios.post('/api/admin/users/enable/'+thisEl.parent().data('id')).then(function () {
+                thisEl.removeClass('btn-click glyphicon-ban-circle').addClass('btn-check glyphicon-share-alt');
+                layer.msg('封号成功', {icon: 1});
+            })
+		});
 	})
 	$(document).on('click','.btn-check',function(){
 		var thisEl=$(this);
 		layer.confirm('是否解封该用户？', {
 		  btn: ['确定','取消'] //按钮
 		}, function(){
-		  layer.msg('解封成功');
-		  thisEl.removeClass('btn-check').addClass('btn-kick');
-		  thisEl.removeClass('glyphicon-share-alt').addClass('glyphicon-ban-circle');
+            axios.post('/api/admin/users/enable/'+thisEl.parent().data('id')).then(function () {
+                layer.msg('解封成功');
+                thisEl.removeClass('btn-check glyphicon-share-alt').addClass('btn-kick glyphicon-ban-circle');
+            })
 		});
 	})
-	$('#kick-box .btn-save').click(function(){
-		$('#kick-box').data('thisEl').removeClass('btn-kick').addClass('btn-check');
-		$('#kick-box').data('thisEl').removeClass('glyphicon-ban-circle').addClass('glyphicon-share-alt');
-		layer.msg('封号成功');
-		$('#kick-box').modal('hide');
-	})
     $('#addUser .btn-save').click(function(){
-    	var account=$(this).closest('.modal-body').find('#account').val();
-    	var password=$(this).closest('.modal-body').find('#password').val();
-    	layer.msg('注册用户成功');
-		$('#addUser').modal('hide');
+    	var account=$('#account').val();
+    	var password=$('#password').val();
+		console.log(account+password)
+    	axios({
+			'url':'/api/admin/users/addAdmin',
+			'method':'post',
+			'data':{
+				'username':account,
+				'password':password
+			}
+		}).then(function (res) {
+			if (res.data.code=="1"){
+                layer.msg('注册用户成功');
+                $('#addUser').modal('hide');
+			} else {
+                layer.msg(res.data.msg);
+			}
+
+        })
     })
     /* 账号密码格式判断 */
     var emailCheck = /^[a-zA-Z0-9_-]+((@(yeah)+(\.(net)))|(@(163|126|qq|sina)+(\.(cn|com)+)))+$/

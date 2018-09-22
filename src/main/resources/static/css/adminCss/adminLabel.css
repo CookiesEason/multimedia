@@ -1,0 +1,92 @@
+.container{
+	width: 100%;
+	padding:15px;
+}
+.container .box-container{
+	width: 100%;
+	padding:15px;
+	background: white;
+	border-radius: 4px;
+}
+.bottom-page{
+	padding-top: 0px;
+	text-align: right;	
+}
+.tag-name{
+	width: 100%;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 30px;
+}
+.title-text{
+	font-size: 16px;
+	margin-right: 10px;
+}
+.title-text span{
+	font-size: 12px;
+}
+.tag-name input{
+	border: none;
+    outline: none;
+    height: 30px;
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-left: 10px;
+    border-bottom: 1px solid #c2cad8;
+    width: 200px;
+}
+.tag-text{
+	width: 100%;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 30px;
+
+}
+.tag-text textarea{
+	width: 200px;
+	height: 80px;
+	border:1px solid #c2cad8;
+	resize: none;
+	vertical-align: top;
+	outline: none;
+}
+.send-msg{
+	width: 330px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    background: #0e90d2;
+    display: block;
+    border-radius: 4px;
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+.tag-small-img .browse-show{
+	width: 164px;
+    height: 164px;
+    border: 1px solid #c2cad8;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+   	cursor: pointer;
+}
+.form-group p{
+	text-align: center;
+}
+#reviseTagBox .modal-dialog{
+	width: 400px;
+}
+
+.text-to-left{
+    text-align: left;
+}
+.text-to-right{
+    text-align: right;
+}
+.label-select{
+    width: 210px;
+}

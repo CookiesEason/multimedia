@@ -1,0 +1,138 @@
+/* 首页样式 */
+.index-main-box{
+	padding:20px;
+}
+.introduce-banner{
+	width: 100%;
+}
+.introduce-item{
+	padding:15px;
+}
+.item-container{
+	width: 100%;
+	padding:20px;
+	border-radius: 4px;
+}
+.item-container .top{
+	width: 100%;
+	height: 40px;
+	padding-top: 18px;
+	margin-bottom: 12px;
+	font-size: 14px;
+}
+.item-container .middle{
+	width: 100%;
+	height: 46px;
+	font-size: 46px;
+	font-weight: 300;
+	line-height: 46px;
+	margin-bottom: 8px;
+}
+.item-container .middle i{
+	margin-right: 10px;
+}
+.item-container .bottom{
+	width: 100%;
+	font-size: 14px;
+	padding-top: 10px;
+}
+.item-container .bottom span{
+	font-weight: bold;
+}
+.echarts-show{
+	width: 100%;
+	height: auto;
+}
+.echarts-show-box{
+	padding:15px;
+}
+.echarts-show-box .box-container{
+	border-radius: 4px;
+	background: white;
+	width: 100%;
+	padding:20px;
+	color: #838FA1;
+}
+.echarts-show-box .box-container .top{
+	width: 100%;
+	height: 56px;
+	padding:15px;
+	color: #838FA1;
+	font-size: 14px;
+	border-bottom: 1px solid #eef1f5;
+}
+#amount-of-access{
+	width: 100%;
+	height: 200px;
+	margin-top: 15px;
+}
+#hot-tags-chart{
+	width: 100%;
+	height: 200px;
+	margin-top: 15px;
+}
+.index-bottom-box{
+	width: 100%;
+}
+.index-bottom-box .box-container{
+	padding:15px;	
+}
+.best-admin-box{
+	background: #3598dc;
+	color: #ffffff;
+	height: 330px;
+	border-radius: 4px;
+	padding-top: 25px;
+}
+.best-admin-box img{
+	width: 100px;
+	height: 100px;
+	border-radius: 50px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -50px;
+	margin-left: -50px;
+}
+.best-admin-box .title{
+	font-size: 26px;
+	font-weight: 300;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 10px;
+}
+.best-admin-box .glory{
+	font-size: 12px;
+	text-align: center;
+}
+.best-admin-box .work{
+	margin-top: 150px;
+	font-size: 12px;
+	text-align: center;
+}
+.label-box{
+	width: 100%;
+	height: 330px;
+	background: white;
+	border-radius: 4px;
+	padding:20px;
+	box-sizing: border-box;
+}
+.label-box .table{
+	width: 100%;
+	height: 260px;
+	margin:0px;
+	font-size: 14px;
+	vertical-align: middle!important;
+}
+.label-box .table td{
+	vertical-align: middle!important;
+	padding:8px!important;
+}
+.label-box .top{
+	width: 100%;
+    height: 30px;
+    color: #838FA1;
+    font-size: 14px;
+    padding-bottom: 15px;
+}

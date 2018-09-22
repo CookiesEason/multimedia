@@ -1,0 +1,77 @@
+html{
+	width: 100%;
+	height: 100%;
+}
+body{
+	width: 100%;
+	height: 100%;
+}
+.main-box{
+	width: 300px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -150px;
+	margin-top: -300px;
+}
+.main-box img{
+	width: 220px;
+	height: 220px;
+	display: block;
+	margin:0 auto;
+}	
+input{
+	width: 100%;
+	height: 42px;
+	display: block;
+	border:1px solid #e1e6f0;
+	border-radius: 4px;
+	margin-top: 30px;
+	outline: none;
+	padding:6px 12px;
+}
+/* placeholder样式修改 */
+input::-webkit-input-placeholder { /* WebKit*/  
+    color:    #b8c7e5 !important;  
+}  
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */  
+    color:    #b8c7e5 !important;  
+}  
+input::-moz-placeholder { /* Mozilla Firefox 19+ */  
+    color:    #b8c7e5 !important;  
+}  
+input:-ms-input-placeholder { /* IE 10+ */  
+    color:    #b8c7e5 !important;  
+}  
+.btn-login{
+	width: 100%;
+	height: 42px;
+	color: white;
+	background:#1989fa;
+	border:0;
+	outline: none;
+	display: block;
+	margin-top: 30px;
+	border-radius: 4px;
+	text-align: center;
+	line-height: 42px;
+}
+.btn-login:hover{
+	background:#0577ea;
+}
+.btn-login:focus{
+	outline: none;
+}
+/* 错误提示 */
+.warning-msg{
+	display:none;
+	width: 100%;
+	margin-top: 10px;
+	color: #e55c5c;
+}
+.msg-active{
+	display: block!important;
+}
+.warning-border{
+	border:1px solid #e55c5c!important;
+}

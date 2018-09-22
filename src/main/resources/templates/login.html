@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>管理员登录界面</title>
+	  <script src="js/html5.js" th:src="@{~/js/html5.js}"></script>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminLogin.css" th:href="@{~/css/adminCss/adminLogin.css}">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>  
+    <div class="main-box">
+      <img src="images/main/logo.png" th:src="@{~/images/main/logo.png}"/>
+      <input type="text" class="account" placeholder="管理员账号" />
+      <span class="account-msg warning-msg">
+        账号不可为空
+      </span>
+      <input type="password" class="password" placeholder="管理员密码" />
+      <span class="password-msg warning-msg">
+        密码不可为空
+      </span>
+      <button class="btn-login">
+        登录
+      </button>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js" th:src="@{~/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminLogin.js" th:src="@{~/js/adminJs/adminLogin.js}"></script>
+    <script type="text/javascript" src="/js/axios.min.js" th:src="@{~/js/axios.min.js}"></script>
+    <script>
+      $(".btn-login").click(function () {
+          let f = new FormData();
+          f.append("username",$(".account").val());
+          f.append("password",$(".password").val());
+          axios.post('/api/user/login',{
+              'data':f
+          }).then(function (res) {
+              let data = res.data;
+              if (data.code==0){
+                  alert(data.msg)
+              }else {
+                alert("location")
+              }
+          })
+      })
+    </script>
+  </body>
+</html>

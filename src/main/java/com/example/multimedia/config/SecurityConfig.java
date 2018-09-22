@@ -48,11 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     .antMatchers(HttpMethod.OPTIONS).permitAll()
                     .antMatchers(
+                            "/js/**","/css/**","/images/**","/fonts/**",
                             "/api/pictures/**",
                             "/api/data/**",
                             "/api/announcements/**",
                             "/api/user/register","/api/user/activateEmail",
-                            "/api/search/**")
+                            "/api/search/**","/admin/login")
                     .permitAll()
                 .antMatchers(HttpMethod.GET,"/api/follower/**").permitAll()
                 .antMatchers("/api/user/messages","/api/user/messages/count").authenticated()

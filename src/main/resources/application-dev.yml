@@ -3,6 +3,9 @@ spring:
     type: redis
     redis:
       time-to-live: 1800000ms
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
   datasource:
     username: root
     password: '123456789a'
@@ -18,8 +21,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   data:
     elasticsearch:
-      cluster-name: master
-      cluster-nodes: 127.0.0.1:9300 #115.159.6.45:9300
+      cluster-name: elasticsearch
+      cluster-nodes: 115.159.6.45:9300 #127.0.0.1:9300 #
   servlet:
     multipart:
       max-file-size: 100Mb

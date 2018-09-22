@@ -1,0 +1,22 @@
+.container{
+	width: 100%;
+	padding:15px;
+}
+.container .box-container{
+	padding:15px;
+	border-radius: 4px;
+	width: 100%;
+	background:white;
+}
+.container .box-container .title{
+	width: 100%;
+    padding: 15px;
+    border-bottom: 1px solid #eef1f5;
+    font-size: 16px;
+    color: #838FA1;
+    margin-bottom: 8px;
+}
+.bottom-page{
+	text-align: right;
+	padding-top: 0px;
+}

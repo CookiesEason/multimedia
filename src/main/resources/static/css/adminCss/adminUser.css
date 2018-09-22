@@ -1,0 +1,41 @@
+.container{
+	padding:15px;
+	width: 100%;
+
+}
+.container .box-container{
+	width: 100%;
+	padding:15px;
+	background: white;
+	border-radius: 4px;
+}
+.container .box-container .title{
+	width: 100%;
+    padding: 15px;
+    border-bottom: 1px solid #eef1f5;
+    font-size: 16px;
+    color: #838FA1;
+    margin-bottom: 8px;
+}  
+#userInfoBox .modal-dialog{
+	width: 400px;
+}
+.form-group p{
+	text-align: center;
+}
+.form-power p{
+	text-align: left;
+}
+#kick-box .modal-dialog{
+	width: 600px;
+}
+.bottom-page{
+	padding-top: 0px;
+	text-align: right;
+}
+#addUser .modal-dialog{
+	width: 600px;
+}
+#addUser .modal-dialog{
+	width: 500px;
+}

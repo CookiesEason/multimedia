@@ -1,0 +1,38 @@
+.container{
+	padding:15px;
+	width: 100%;
+}
+.container .box-container{
+	padding:15px;
+	border-radius: 4px;
+	width: 100%;
+	background:white;
+}
+.container .box-container .title{
+	width: 100%;
+    padding: 15px;
+    border-bottom: 1px solid #eef1f5;
+    font-size: 16px;
+    color: #838FA1;
+    margin-bottom: 8px;
+}
+.detailedBox{
+	width: 400px;
+}
+.form-group p{
+	text-align: center;
+}
+.imgBox{
+	width: 1000px;
+}
+.bottom-page{
+	padding-top: 0px;
+	text-align: right;
+}
+.imgBox .modal-body{
+	padding:0px;
+}
+#banner-video{
+    width: 998px;
+    height: 500px;
+}

@@ -1,0 +1,373 @@
+html{
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+body{
+	background:#e9ecf3;
+	padding-top: 56px;
+	padding-left: 240px;
+	font-family:"Microsoft Yahei";
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+.admin-top-nav{
+	position: absolute;
+	width: 100%;
+	height: 56px;
+	background:white;
+	top: 0px;
+	left: 0px;
+	z-index: 100;
+}
+.admin-left-nav{
+	position: absolute;
+	left: 0px;
+	padding-top: 56px;
+	width: 240px;
+	height: 100%;
+	background:white;
+	top: 0px;
+	overflow:auto;
+	z-index: 99;
+}
+.top-nav-logo{
+	float: left;
+	width: 241px;
+	height: 57px;
+	line-height: 57px;
+	border-bottom: 1px solid #eee;
+	border-right: 1px solid #eee;
+	box-sizing: border-box;
+	color: #68c6de;
+	font-size: 30px;
+	font-weight: 600;
+	text-align: center;
+}
+.top-nav-search{
+	width: 100%;
+	padding-left: 15px;
+	height: 56px;
+	line-height: 56px;
+	vertical-align: middle;
+	padding-right: 100px;
+}
+.top-nav-search i{
+	font-size: 15px;
+	display: inline-block;
+	color: #848c90;
+	vertical-align: middle;
+}
+.top-nav-search input{
+	width: 140px;
+	height: 34px;
+	display: inline-block;
+	border:none;
+	margin-left: 10px;
+	outline: none;
+	border-bottom: 1px solid #adadad;
+}
+.search button{
+	color: black;
+}
+.condition{
+	float: right;
+	margin-top: 11px;
+}
+.login-out{
+	display: inline-block;
+	float: right;
+	margin-right: 30px;
+	width: 78px;
+	text-align: center;
+	height: 56px;
+	line-height: 56px;
+	font-size: 15px;
+	color: #848c90;
+}
+.login-out i{
+	margin-right: 5px;
+}
+.remind-msg{
+	float: right;
+	height: 56px;
+	width: 48px;
+	text-align: center;
+	line-height: 56px;
+	color:#848c90;
+	font-size: 15px;
+	position: relative;
+	cursor: pointer;
+}
+.remind-msg span{
+	cursor: pointer;
+}
+.remind-msg-bubble{
+	display: inline-block;
+	position: absolute;
+	padding:3px 5px;
+	font-size: 12px;
+	color: white;
+	background: #F37B1D;
+	font-family:"Microsoft Yahei";
+	border-radius: 9px;
+	top: -15px; 
+	right: -18px;
+}
+.add-green{
+	background:#5eb95e;
+}
+.welcome-msg{
+	height: 56px;
+	float: right;
+	margin-right: 20px;
+	line-height: 56px;
+	font-size: 13px;
+	color: #848c90;
+}
+.left-nav-head{
+	width: 100%;
+	height: 170px;
+	padding:20px;
+	padding-top: 26px;
+	padding-bottom: 20px;
+	border-bottom:1px solid #eee;
+}
+.head-picture{
+	width: 82px;
+	height: 82px;
+	border-radius: 50%;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+.head-picture img{
+	width: 100%;
+	height: 100%;
+}
+.head-msg{
+	font-size: 14px;
+	color: #cfcfcf;
+	display: block;
+	width: 100%;
+}
+.head-msg i{
+	color: #5eb95e;
+}
+.main-menu{
+	width: 100%;
+	padding:0px;
+	margin:0px;
+}
+.main-menu li{
+	width: 100%;
+	box-sizing: border-box;
+	position: relative;
+	overflow: hidden;
+	height: 45px;
+	line-height: 0px;
+}
+.main-menu li a{
+	border-left: 3px solid white;
+	display: block;
+	width: 100%;
+	height: 45px;
+	padding-left: 17px;
+	line-height: 45px;
+	color: #868E8E;
+	font-size:14px; 
+	margin-top: 0px;
+}
+.main-menu li a i{
+	margin-right: 20px;
+}
+.nav-active{
+	background:#f2f6f9;
+    border-left: #3bb4f2 3px solid!important;
+}
+.main-menu li a:hover{
+	background:#f2f6f9;
+    border-left: #3bb4f2 3px solid!important;
+}
+.user ul{
+	width: 100%;
+	margin:0px;
+	padding:0px;
+}
+.user ul li{
+	padding-left:30px;
+}
+.user ul li a{
+	font-size: 12px;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+.main-menu li a .glyphicon-plus{
+	float: right;
+	margin-top: 15px;
+}
+.main-menu li a .glyphicon-minus{
+	float: right;
+	margin-top: 15px;
+}
+.remind-ul{
+	width: 300px;
+	padding:10px;
+	position: absolute;
+	right: 0px;
+	padding:0px;
+	margin:0px;
+	top: 56px;
+	background: white;
+	display: none;
+}
+.remind-ul li{
+	list-style: none;
+	width: 100%;
+	height: 88px;
+	box-sizing: border-box;
+	border-bottom: 1px solid #eee;
+	color: #999;
+}
+.ul-active{
+	display: block;
+}
+.remind-ul li:hover{
+	background: #f5f5f5;
+}
+.enter-list{
+	width: 100%;
+	height: 44px!important;
+	line-height: 44px;
+	text-align: center;
+}
+.enter-list i{
+	margin-right: 8px;
+}
+.admin-operation{
+	padding:12px;
+}
+.admin-main-operate a{
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: #999;
+}
+.admin-head{
+	width: 63px;
+	height: 100%;
+	overflow: hidden;
+	border-radius: 32px;
+	float: left;
+}
+.admin-head img{
+	width: 100%;
+	height: 100%;
+}
+.admin-main-operate{
+	float: left;
+	width: 213px;
+	height: 100%;
+}
+.admin-main-operate span{
+	display: block;
+	width: 100%;
+	height: 21px;
+	line-height: 21px;
+	font-size: 13px;
+	text-align: left;
+	padding-left: 12px;
+}
+.operate-text{
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+.operate-time{
+	font-size: 12px;
+}
+.web-msg{
+	width: 100%;
+	height: 45px!important;
+	padding:12px;
+	line-height: 21px!important;
+	text-align: left;
+	font-size: 13px;
+}
+.web-msg i{
+	margin-right: 10px;
+}
+.web-msg span{
+	float: right;
+}
+.web-msg a{
+	width: 100%;
+	height: 100%;
+	display: block;
+	color: #999;	
+}
+.enter-list a{
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: #999;
+}
+/* 分页样式 */
+.bottom-page{
+	padding-top: 15px!important;
+}
+.pageable-item{
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.pageable-item:hover{
+	background: #eeeeee;
+}
+.pageable-active{
+	background: #337ab7;
+	color: white;
+}
+.pageable-active:hover{
+	background: #337ab7!important;
+}
+
+
+
+
+
+
+
+
+
+
+.color-white{
+	background: white;
+	color: #838fa1;
+}
+.color-green{
+	background: #32c5d2;
+	color: white;
+}
+.color-purple{
+	background: #8e44ad;
+	color: white;
+}
+
+
+
+
+
+
+/* a标签样式修改 */
+a:hover{
+	text-decoration: none;
+}
+a:focus{
+	text-decoration: none;
+}

@@ -1,5 +1,7 @@
 package com.example.multimedia.service.impl;
 
+import com.example.multimedia.domian.CommandHistory;
+import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.Video;
@@ -9,10 +11,14 @@ import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SmallTagDTO;
 import com.example.multimedia.repository.ArticleRepository;
 import com.example.multimedia.repository.SmallTagsRepository;
+import com.example.multimedia.repository.UserRepository;
 import com.example.multimedia.repository.VideoRepository;
+import com.example.multimedia.service.CommandHistoryService;
 import com.example.multimedia.service.SmallTagsService;
 import com.example.multimedia.service.TagsService;
+import com.example.multimedia.service.UserService;
 import com.example.multimedia.util.ResultVoUtil;
+import com.example.multimedia.util.UserUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -45,6 +51,12 @@ public class SmallTagsServiceImpl implements SmallTagsService {
     @Autowired
     private VideoRepository videoRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CommandHistoryService commandHistoryService;
+
     @Override
     @CacheEvict(value = "smallTags",allEntries = true)
     public ResultVo save(String smallTag, String tag) {
@@ -59,6 +71,13 @@ public class SmallTagsServiceImpl implements SmallTagsService {
         smallTags.setSmallTag(smallTag);
         smallTags.setTags(tags);
         smallTagsRepository.save(smallTags);
+        CommandHistory commandHistory = new CommandHistory();
+        commandHistory.setContent(smallTag);
+        commandHistory.setCommand("创建");
+        commandHistory.setType("标签");
+        User user = userRepository.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(user.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
         return ResultVoUtil.success();
     }
 
@@ -131,6 +150,13 @@ public class SmallTagsServiceImpl implements SmallTagsService {
         articleRepository.saveAll(articles);
         videoRepository.saveAll(videos);
         smallTagsRepository.deleteById(id);
+        CommandHistory commandHistory = new CommandHistory();
+        commandHistory.setContent(smallTags.getSmallTag());
+        commandHistory.setCommand("删除");
+        commandHistory.setType("标签");
+        User user = userRepository.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(user.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
         return ResultVoUtil.success();
     }
 

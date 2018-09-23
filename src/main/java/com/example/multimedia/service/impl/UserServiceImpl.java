@@ -2,10 +2,7 @@ package com.example.multimedia.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.multimedia.domian.Follower;
-import com.example.multimedia.domian.User;
-import com.example.multimedia.domian.UserInfo;
-import com.example.multimedia.domian.UserRole;
+import com.example.multimedia.domian.*;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Video;
@@ -13,10 +10,7 @@ import com.example.multimedia.domian.maindomian.search.UserSearch;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.repository.*;
 import com.example.multimedia.repository.search.UserSearchRepository;
-import com.example.multimedia.service.FileService;
-import com.example.multimedia.service.FollowerService;
-import com.example.multimedia.service.MailService;
-import com.example.multimedia.service.UserService;
+import com.example.multimedia.service.*;
 import com.example.multimedia.util.EmailUtil;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
@@ -78,6 +72,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private FollowerRepository followerRepository;
 
+    @Autowired
+    private CommandHistoryService commandHistoryService;
+
     @Override
     @Cacheable(value = "user", key = "#id",unless = "#result==null ")
     public User findById(Long id) {
@@ -113,6 +110,13 @@ public class UserServiceImpl implements UserService {
             user.setUserInfo(userInfo);
             user.setRoleList(Arrays.asList(userRoleRepository.findByRole(role)));
             userRepository.save(user);
+            CommandHistory commandHistory = new CommandHistory();
+            commandHistory.setContent("新建了用户:"+user.getUsername());
+            commandHistory.setCommand("创建");
+            commandHistory.setType("用户");
+            User u = userRepository.findByUsername(UserUtil.getUserName());
+            commandHistory.setPeople(u.getRoleList().get(0).getRole());
+            commandHistoryService.save(commandHistory);
             return ResultVoUtil.success();
         }
         return ResultVoUtil.error(0,"邮箱已经存在");
@@ -264,13 +268,33 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findUserById(userId);
         user.setEnable(!user.isEnable());
         userRepository.save(user);
+        CommandHistory commandHistory = new CommandHistory();
+        if (user.isEnable()){
+            commandHistory.setContent("解封了用户:"+user.getUserInfo().getNickname());
+            commandHistory.setCommand("解封");
+        }else {
+            commandHistory.setContent("封号了用户:"+user.getUserInfo().getNickname());
+            commandHistory.setCommand("封号");
+        }
+        commandHistory.setType("用户");
+        User u = userRepository.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(u.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
         return ResultVoUtil.success();
     }
 
     @Override
     @CacheEvict(value = "user", key = "#userId")
     public ResultVo deleteByUserId(Long userId) {
+        String nickname = userRepository.nickname(userId);
         userRepository.deleteById(userId);
+        CommandHistory commandHistory = new CommandHistory();
+        commandHistory.setContent("删除用户:"+nickname);
+        commandHistory.setCommand("删除");
+        commandHistory.setType("用户");
+        User user = userRepository.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(user.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
         return ResultVoUtil.success();
     }
 
@@ -288,6 +312,24 @@ public class UserServiceImpl implements UserService {
         roles.add(userRole);
         user.setRoleList(roles);
         userRepository.save(user);
+        CommandHistory commandHistory = new CommandHistory();
+        if (!"ROLE_SENIOR_USER".equals(role)){
+            if ("ROLE_IMGTXT_ADMIN".equals(role)){
+                commandHistory.setContent("设置用户:"+user.getUserInfo().getNickname()+"为图文管理员");
+            }else if ("ROLE_VIDEO_ADMIN".equals(role)){
+                commandHistory.setContent("设置用户:"+user.getUserInfo().getNickname()+"为影像管理员");
+            }else {
+                commandHistory.setContent("提升用户:" + user.getUserInfo().getNickname() + "为开发者");
+            }
+            commandHistory.setCommand("提高权限");
+        }else {
+            commandHistory.setContent("设置用户:"+user.getUserInfo().getNickname()+"为普通用户");
+            commandHistory.setCommand("降低权限");
+        }
+        commandHistory.setType("用户");
+        User u = userRepository.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(u.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
         return ResultVoUtil.success();
     }
 

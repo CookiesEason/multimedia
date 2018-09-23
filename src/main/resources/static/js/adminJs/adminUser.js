@@ -27,9 +27,9 @@ $(function(){
 			let role = $(this).closest('#power-control').find('select').val();
 			if (role==="开发者"){
 				role = "ROLE_ADMIN"
-			} else if (role==="图文管理者"){
+			} else if (role==="图文管理员"){
 				role = "ROLE_IMGTXT_ADMIN"
-			}else if (role==="影像管理者") {
+			}else if (role==="影像管理员") {
 				role = "ROLE_VIDEO_ADMIN"
 			}else {
 				role = "ROLE_SENIOR_USER"
@@ -44,6 +44,7 @@ $(function(){
 			}).then(function () {
                 layer.msg('设置权限成功');
                 $('#power-control').modal('hide');
+                window.location.reload()
             });
 	});
 
@@ -84,6 +85,7 @@ $(function(){
 			if (res.data.code=="1"){
                 layer.msg('注册用户成功');
                 $('#addUser').modal('hide');
+                window.location.reload()
 			} else {
                 layer.msg(res.data.msg);
 			}

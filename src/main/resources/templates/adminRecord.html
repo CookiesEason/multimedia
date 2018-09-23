@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN"  xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +13,8 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" th:href="@{~/css/bootstrap-datetimepicker.min.css}">
     <link rel="stylesheet" type="text/css" href="css/adminCss/adminNav.css" th:href="@{~/css/adminCss/adminNav.css}">
     <link rel="stylesheet" type="text/css" href="css/animate.css" th:href="@{~/css/animate.css}">
-    <link rel="stylesheet" type="text/css" href="css/adminCss/adminLabel.css"  th:href="@{~/css/adminCss/adminLabel.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminRecord.css" th:href="@{~/css/adminCss/adminRecord.css}">
+    <link rel="stylesheet" href="css/myPagination.css" th:href="@{~/css/myPagination.css}">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -181,7 +182,7 @@
           </a> 
         </li>
         <li class="user">
-          <a href="/admin/labels" class="nav-active">
+          <a href="/admin/labels">
             <i class="glyphicon glyphicon-tags"></i>
             <span>标签</span>
           </a> 
@@ -193,7 +194,7 @@
           </a> 
         </li>
         <li>
-          <a href="/admin/records">
+          <a href="/admin/records" class="nav-active">
             <i class="glyphicon glyphicon-file"></i>
             <span>记录</span>
           </a>
@@ -206,173 +207,282 @@
         </li>
       </ul>
     </div>
-	<!-- 标签内容 -->
+	<!-- 图文管理 -->
 	<div class="container">
 		<div class="box-container">
-      <div class="title">
-        标签管理
-      </div>
-      <div class="top-nav-search">
-        <i class="glyphicon glyphicon-search">
-            
-        </i>
-        <input type="text" placeholder="搜索内容...">
-        <!-- 下拉菜单 -->
-        <div class="btn-group search" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            搜索
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <li><a href="#">ID</a></li>
-            <li><a href="#">标题</a></li>
-            <li><a href="#">作者</a></li>
-            <li><a href="#">时间</a></li>
-          </ul>
-        </div>
-        <button type="button" class="btn btn-info add-tag-btn" data-toggle="modal" data-target="#addTagBox">新建标签</button>
-        <!-- 条件检索 -->
-        <div class="btn-group condition">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              条件筛选 <span class="caret"></span>
-              </button>
-            <ul class="dropdown-menu">
-              <li><a href="#" id="hot-top-bottom">按热度从高到低</a></li>
-              <li><a href="#" id="time-sooner-later">按发布时间从早到晚</a></li>
-              <li><a href="#" id="ID-small-big">按ID从小到大</a></li>
-            </ul>
-        </div>
-      </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>标题</th>
-            <th>热度</th>
-            <th>所属板块</th>
-            <th>发布时间</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="label:${labels}">
-            <td th:text="${label.getId()}">
-              1
-            </td>
-            <td th:text="${label.getSmallTag()}">
-              总决赛
-            </td>
-            <td th:text="${label.getHot()}">
-              1320
-            </td>
-            <td th:text="${label.getTag()}">
-              篮球
-            </td>
-            <td th:text="${label.getCreateDate()}">
-              2017-09-10 21:18:37
-            </td>
-            <td data-th-data-article="${label.getArticleNum()}" data-th-data-video="${label.getVideoNum()}">
-              <button class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#reviseTagBox">
-                    
-              </button>
-              <button data-th-data-id="${label.getId()}" class="btn btn-danger btn-delete glyphicon glyphicon-trash btn-xs">
-                    
-              </button>
-            </td>
-          </tr>
-        </tbody>   
-      </table>
-	 </div>
-  </div>
-  <div class="container bottom-page">
-    <nav aria-label="Page navigation" id="pageNav">
-    </nav>
-  </div>
-    <!-- 新建标签 -->
-    <div class="modal fade" id="addTagBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">新建标签</h4>
-          </div>
-          <div class="modal-body">
-            <div class="tag-name row">
-              <div class="col-sm-5 text-to-right">
-                <span class="title-text">
-                  标签名
-                  <span>
-                    Title
-                  </span>
-                </span>
-              </div>
-              <div class="col-sm-7 text-to-left">
-                <input type="text" class="add-tag-input" placeholder="请输入标题内容" />
-              </div>
-            </div> 
-            <div class="tag-name row">
-              <div class="col-sm-5 text-to-right">
-                <span class="title-text">
-                  所属板块
-                  <span>
-                    Belong
-                  </span>
-                </span>
-              </div>
-              <div class="col-sm-7 text-to-left">
-                <select class="form-control label-select tag-belong">
-                  <option>篮球</option>
-                  <option>足球</option>
-                  <option>电竞</option>
-                  <option>娱乐</option>
-                </select>
-              </div>
-            </div>
-            <a href="javascript:void(0);" class="send-msg">
-              提交
-            </a>
-          </div>
-        </div>
-      </div>
+			<div class="title">
+				管理员操作记录
+			</div>
+			<div class="top-nav-search">
+	          <i class="glyphicon glyphicon-search">
+	          
+	          </i>
+	          <input type="text" placeholder="搜索内容...">
+	          <!-- 下拉菜单 -->
+	          <div class="btn-group search" role="group">
+			    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      搜索
+			      <span class="caret"></span>
+			    </button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#">记录</a></li>
+			      <li><a href="#">人员</a></li>
+			      <li><a href="#">作者</a></li>
+			    </ul>
+			  </div>
+		      <!-- 条件检索 -->
+	   </div>
+     <table class="table table-hover">
+       <thead>
+         <tr>
+           <th>
+             记录
+           </th>
+           <th>
+             类型
+           </th>
+           <th>
+             操作
+           </th>
+           <th>
+             人员
+           </th>
+           <th>
+             时间
+           </th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr th:each="record : ${records.getObjectList()}">
+           <td th:text="${record.getContent()}">
+             删除名为"snake"的图文
+           </td>
+           <td th:text="${record.getType()}">
+             图文
+           </td>
+           <td th:text="${record.getCommand()}">
+             删除
+           </td>
+           <td th:if="${record.getPeople()=='ROLE_ADMIN'}">开发者</td>
+           <td th:if="${record.getPeople()=='ROLE_VIDEO_ADMIN'}">影像管理者</td>
+           <td th:if="${record.getPeople()=='ROLE_IMGTXT_ADMIN'}">图文管理者</td>
+           <td th:text="${record.getCreateDate()}">
+             2017-09-10 21:18:37
+           </td>
+         </tr>
+         <tr>
+          <td>
+            下架名为"snake"的图文
+          </td>
+          <td>
+            图文
+          </td>
+          <td>
+            下架
+          </td>
+          <td>
+            图文管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            恢复名为"snake"的图文
+          </td>
+          <td>
+            图文
+          </td>
+          <td>
+            恢复
+          </td>
+          <td>
+            图文管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            撤回名为"snake"的影像
+          </td>
+          <td>
+            影像
+          </td>
+          <td>
+            撤回
+          </td>
+          <td>
+            影像管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            下架名为"snake"的影像
+          </td>
+          <td>
+            影像
+          </td>
+          <td>
+            下架
+          </td>
+          <td>
+            影像管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            恢复名为"snake"的影像
+          </td>
+          <td>
+            影像
+          </td>
+          <td>
+            恢复
+          </td>
+          <td>
+            影像管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            上架名为"snake"的影像
+          </td>
+          <td>
+            影像
+          </td>
+          <td>
+            上架
+          </td>
+          <td>
+            影像管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            封号名为"李祉昊"的用户
+          </td>
+          <td>
+            用户
+          </td>
+          <td>
+            封号
+          </td>
+          <td>
+            影像管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            解封名为"李祉昊"的用户
+          </td>
+          <td>
+            用户
+          </td>
+          <td>
+            解封
+          </td>
+          <td>
+            影像管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            删除名为"李祉昊"的用户
+          </td>
+          <td>
+            用户
+          </td>
+          <td>
+            删除
+          </td>
+          <td>
+            影像管理员
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            提升名为"李祉昊"的用户为图文管理员
+          </td>
+          <td>
+            用户
+          </td>
+          <td>
+            提高权限
+          </td>
+          <td>
+            开发者
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            提升名为"李祉昊"的用户为影像管理员
+          </td>
+          <td>
+            用户
+          </td>
+          <td>
+            提高权限
+          </td>
+          <td>
+            开发者
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+        <tr>
+          <td>
+            降低名为"李祉昊"的用户为普通用户
+          </td>
+          <td>
+            用户
+          </td>
+          <td>
+            降低权限
+          </td>
+          <td>
+            开发者
+          </td>
+          <td>
+            2017-09-10 21:18:37
+          </td>
+        </tr>
+       </tbody>
+     </table>
     </div>
-    <!-- 标签详细内容 -->
-    <div class="modal fade" id="reviseTagBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">标签详细信息</h4>
-          </div>
-          <div class="modal-body">
-            <form class="form-horizontal">
-            <!-- 浏览数 -->
-              <div class="form-group">
-                <label class="col-sm-4 control-label">作品数</label>
-                <div class="col-sm-8">
-                  <p class="form-control-static">1320</p>
-                </div>
-              </div>
-              <!-- 点赞数 -->
-              <div class="form-group">
-                <label class="col-sm-4 control-label">图文数</label>
-                <div class="col-sm-8">
-                  <p class="form-control-static">600</p>
-                </div>
-              </div>
-              <!-- 评论数 -->
-              <div class="form-group">
-                <label class="col-sm-4 control-label">影像数</label>
-                <div class="col-sm-8">
-                  <p class="form-control-static">720</p>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+   </div>
+   <div class="container bottom-page">
+     <div id="pagination" class="pagination" data-th-data-size="${records.getTotalElements()}"
+          data-th-data-page="${records.getTotalPages()}"
+     ></div>
   </div>
-
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script type="text/javascript" src="js/plug-ins.js" th:src="@{~/js/plug-ins.js}"></script>
@@ -381,17 +491,30 @@
     <script type="text/javascript" src="js/bootstrap-datetimepicker.fr.js" th:src="@{~/js/bootstrap-datetimepicker.fr.js}"></script>
     <script type="text/javascript" src="js/adminJs/adminNav.js" th:src="@{~/js/adminJs/adminNav.js}"></script>
     <script type="text/javascript" src="js/adminJs/pageNav.js" th:src="@{~/js/adminJs/pageNav.js}"></script>
-    <script type="text/javascript" src="js/adminJs/adminLabel.js" th:src="@{~/js/adminJs/adminLabel.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminRecord.js" th:src="@{~/js/adminJs/adminRecord.js}"></script>
     <script type="text/javascript" src="/js/axios.min.js" th:src="@{~/js/axios.min.js}"></script>
+    <script src="/js/myPagination.js" th:src="@{~/js/myPagination.js}"></script>
     <script>
-      $(".btn-browse").click(function () {
-          let articleNum = $(this).parent().data('article');
-          let videoNum = $(this).parent().data('video');
-          let total = articleNum+videoNum;
-          $("#reviseTagBox .form-control-static:eq(0)").html(total);
-          $("#reviseTagBox .form-control-static:eq(1)").html(articleNum);
-          $("#reviseTagBox .form-control-static:eq(2)").html(videoNum)
-      })
+        window.onload = function () {
+            new myPagination({
+                id: 'pagination',
+                curPage:1, //初始页码
+                pageTotal:  $("#pagination").data('page'), //总页数
+                pageAmount: 16,  //每页多少条
+                dataTotal:  $("#pagination").data('size'), //总共多少条数据
+                pageSize: 5, //可选,分页个数
+                showPageTotalFlag:false, //是否显示数据统计
+                showSkipInputFlag:true, //是否支持跳转
+                getPage: function (page) {
+                    location.href = "/admin/records?page="+page;
+                }
+            })
+        }
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
     </script>
   </body>
 </html>

@@ -32,6 +32,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     List<User> findUsersByIdIn(List<Long> ids);
 
+    @Query(value = "SELECT nickname FROM USER INNER JOIN user_info ON user_info_id = user_info.id WHERE `user`.id = :Id",
+    nativeQuery = true)
+    String nickname(@Param("Id") Long userId);
+
     @Query(value = "SELECT SUM(like_count) FROM (select SUM(like_count) as like_count from video where user_id = :id\n" +
             "UNION\n" +
             "select SUM(like_count)as like_count from article where user_id = :id)t",nativeQuery = true)

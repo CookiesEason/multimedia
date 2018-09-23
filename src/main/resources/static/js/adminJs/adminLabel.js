@@ -16,7 +16,11 @@ $(function(){
 					'tag':tagBelong,
 					'smallTag':tagNameInput
 				}
-			}).then(function () {
+			}).then(function (res) {
+				if (res.data.code=="0"){
+                    layer.msg(res.data.msg)
+					return
+				}
                 layer.msg('新建成功');
                 window.location.reload()
             })

@@ -466,10 +466,14 @@
           $("#power-control .form-control-static:eq(0)").html($(this).parent().prev().prev().prev().html());
           $("#power-control .modal-footer .btn-save").data('id',$(this).parent().data('id'))
       })
+      let page = getQueryString('page')
+      if (page==null){
+          page=1
+      }
       window.onload = function () {
           new myPagination({
               id: 'pagination',
-              curPage:getQueryString('page'), //初始页码
+              curPage:page, //初始页码
               pageTotal:  $("#pagination").data('page'), //总页数
               pageAmount: 16,  //每页多少条
               dataTotal:  $("#pagination").data('size'), //总共多少条数据

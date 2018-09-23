@@ -182,7 +182,7 @@
           </a> 
         </li>
         <li class="user">
-          <a href="adminLabel.html">
+          <a href="/admin/labels">
             <i class="glyphicon glyphicon-tags"></i>
             <span>标签</span>
           </a> 
@@ -425,10 +425,14 @@
             $("#detailedBox .form-group:eq(0) .form-control-static").html($(this).parent().data('reason'));
             $("#detailedBox .form-group:eq(1) .form-control-static").html($(this).parent().data('content'))
         });
+        let page = getQueryString('page')
+        if (page==null){
+            page=1
+        }
         window.onload = function () {
             new myPagination({
                 id: 'pagination',
-                curPage:getQueryString('page'), //初始页码
+                curPage:page, //初始页码
                 pageTotal:  $("#pagination").data('page'), //总页数
                 pageAmount: 16,  //每页多少条
                 dataTotal:  $("#pagination").data('size'), //总共多少条数据

@@ -495,10 +495,14 @@
     <script type="text/javascript" src="/js/axios.min.js" th:src="@{~/js/axios.min.js}"></script>
     <script src="/js/myPagination.js" th:src="@{~/js/myPagination.js}"></script>
     <script>
+      let page = getQueryString('page')
+      if (page==null){
+          page=1
+      }
         window.onload = function () {
             new myPagination({
                 id: 'pagination',
-                curPage:1, //初始页码
+                curPage:page, //初始页码
                 pageTotal:  $("#pagination").data('page'), //总页数
                 pageAmount: 16,  //每页多少条
                 dataTotal:  $("#pagination").data('size'), //总共多少条数据

@@ -1,6 +1,7 @@
 package com.example.multimedia.controller;
 
 import com.example.multimedia.service.AdminNoticeService;
+import com.example.multimedia.service.SmallTagsService;
 import com.example.multimedia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ public class AdminWebController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SmallTagsService smallTagsService;
 
     @RequestMapping("/adminLogin")
     public String adminLoginIndex(){
@@ -42,6 +46,12 @@ public class AdminWebController {
     public String adminUsersSearch(@RequestParam String searchContent, Model model){
         model.addAttribute("users",userService.findByUsernameOrUserInfoNickname(searchContent));
         return "adminUser";
+    }
+
+    @RequestMapping("/admin/labels")
+    public String adminLabels(Model model){
+        model.addAttribute("labels",smallTagsService.findAll(1));
+        return "adminLabel";
     }
 
 }

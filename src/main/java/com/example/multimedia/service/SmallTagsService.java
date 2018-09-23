@@ -1,6 +1,7 @@
 package com.example.multimedia.service;
 
 import com.example.multimedia.domian.maindomian.tag.SmallTags;
+import com.example.multimedia.dto.AdminLableDTO;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SmallTagDTO;
 import com.example.multimedia.vo.ResultVo;
@@ -18,7 +19,7 @@ public interface SmallTagsService {
 
     List<SmallTagDTO> getSmallTagByTag(String tag);
 
-    PageDTO<SmallTagDTO> findAll(int page);
+    List<AdminLableDTO> findAll(int page);
 
     ResultVo update(Long id,String smallTag);
 

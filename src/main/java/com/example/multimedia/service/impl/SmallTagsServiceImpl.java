@@ -4,6 +4,7 @@ import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.domian.maindomian.tag.SmallTags;
+import com.example.multimedia.dto.AdminLableDTO;
 import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.dto.SmallTagDTO;
 import com.example.multimedia.repository.ArticleRepository;
@@ -45,7 +46,7 @@ public class SmallTagsServiceImpl implements SmallTagsService {
     private VideoRepository videoRepository;
 
     @Override
-    @CacheEvict(value = "smallTags",key = "#tag")
+    @CacheEvict(value = "smallTags",allEntries = true)
     public ResultVo save(String smallTag, String tag) {
         Tags tags = tagsService.findByTag(tag);
         if (tags==null){
@@ -74,16 +75,30 @@ public class SmallTagsServiceImpl implements SmallTagsService {
 
     @Override
     @Cacheable(value = "smallTags")
-    public PageDTO<SmallTagDTO> findAll(int page) {
-        Pageable pageable = PageRequest.of(page,10);
+    public List<AdminLableDTO> findAll(int page) {
+        Pageable pageable = PageRequest.of(page-1,100);
         Page<SmallTags> smallTagsPage = smallTagsRepository.findAll(pageable);
-        List<SmallTagDTO> smallTagDTOS = new ArrayList<>();
-        smallTagsPage.forEach(smallTag -> {
-            SmallTagDTO smallTagDTO = new SmallTagDTO(smallTag,smallTag.getTags().getTag());
-            smallTagDTOS.add(smallTagDTO);
+        List<AdminLableDTO> adminLableDTOList = new ArrayList<>();
+        smallTagsPage.getContent().forEach(smallTags -> {
+            AdminLableDTO adminLableDTO = new AdminLableDTO();
+            adminLableDTO.setId(smallTags.getId());
+            adminLableDTO.setSmallTag(smallTags.getSmallTag());
+            adminLableDTO.setTag(smallTags.getTags().getTag());
+            adminLableDTO.setArticleNum(smallTagsRepository.articeNum(smallTags.getId()));
+            adminLableDTO.setVideoNum(smallTagsRepository.videoNum(smallTags.getId()));
+            adminLableDTO.setCreateDate(smallTags.getCreateDate());
+            Long articleHot = smallTagsRepository.articelHot(smallTags.getId());
+            Long videoHot = smallTagsRepository.videoHot(smallTags.getId());
+            if (articleHot==null){
+                articleHot = 0L;
+            }
+            if (videoHot==null){
+                videoHot = 0L;
+            }
+            adminLableDTO.setHot(articleHot+videoHot);
+            adminLableDTOList.add(adminLableDTO);
         });
-        return new PageDTO<>(smallTagDTOS, smallTagsPage.getTotalElements(),
-                (long) smallTagsPage.getTotalPages());
+        return adminLableDTOList;
     }
 
     @Override

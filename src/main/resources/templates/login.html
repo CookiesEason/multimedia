@@ -52,7 +52,14 @@
               if (data.code==0){
                   alert(data.msg)
               }else {
-                alert("location")
+                  const user = {
+                      "id": data.data.id,
+                      "nickname": data.data.nickname,
+                      "headUrl": data.data.headUrl,
+                      "role": data.data.role
+                  };
+                  localStorage.user = JSON.stringify(user);
+                  alert("location"+user.toString())
               }
           })
       })

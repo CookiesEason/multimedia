@@ -30,6 +30,7 @@ public class ProblemServiceImpl implements ProblemService {
         problem.setTopicId(topicId);
         problem.setReasons(reason);
         problem.setTopic(topic);
+        problemRepository.save(problem);
         return ResultVoUtil.success();
     }
 

@@ -29,6 +29,9 @@ public class SimpleUserDTO {
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private Boolean isLike;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+    private String role;
+
     public SimpleUserDTO(User user) {
         this.id = user.getId();
         this.nickname = user.getUserInfo().getNickname();
@@ -40,6 +43,13 @@ public class SimpleUserDTO {
         this.id = id;
         this.nickname = nickname;
         this.headUrl = headUrl;
+    }
+
+    public SimpleUserDTO(Long id, String nickname, String headUrl,String role) {
+        this.id = id;
+        this.nickname = nickname;
+        this.headUrl = headUrl;
+        this.role = role;
     }
 
     public SimpleUserDTO(Long id, String nickname, String headUrl, String signature, Long hot) {

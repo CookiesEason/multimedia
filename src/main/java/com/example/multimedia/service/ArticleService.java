@@ -40,6 +40,12 @@ public interface ArticleService {
      */
     ResultVo deleteById(Long articleId);
 
+    /**
+     * 后台删除文章
+     * @param articleId
+     * @return
+     */
+    ResultVo deleteByAdmin(Long articleId);
 
     /**
      * 获取文章

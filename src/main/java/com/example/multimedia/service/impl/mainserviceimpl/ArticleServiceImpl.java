@@ -2,6 +2,7 @@ package com.example.multimedia.service.impl.mainserviceimpl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.multimedia.domian.CommandHistory;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Article;
@@ -70,6 +71,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private FollowerService followerService;
 
+    @Autowired
+    private CommandHistoryService commandHistoryService;
+
     @Override
     public ResultVo save(String title, String text, String tag, MultipartFile multipartFile, Set<String> smallTags) {
         Article article = new Article();
@@ -123,6 +127,22 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.deleteByIdAndUserId(articleId,getUid());
         commentService.deleteAllBycontentId(articleId, Topic.ARTICLE);
         likeService.deleteAllById(articleId,Topic.ARTICLE);
+        return ResultVoUtil.success();
+    }
+
+    @Override
+    public ResultVo deleteByAdmin(Long articleId) {
+        String title = articleRepository.articleTitle(articleId);
+        articleRepository.deleteById(articleId);
+        commentService.deleteAllBycontentId(articleId, Topic.ARTICLE);
+        likeService.deleteAllById(articleId,Topic.ARTICLE);
+        CommandHistory commandHistory = new CommandHistory();
+        commandHistory.setContent("删除了图文:"+title);
+        commandHistory.setCommand("删除");
+        commandHistory.setType("图文");
+        User u = userService.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(u.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
         return ResultVoUtil.success();
     }
 
@@ -265,12 +285,22 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = findById((long)id);
         article.setEnable(!article.getEnable());
         save(article);
+        CommandHistory commandHistory = new CommandHistory();
         if (article.getEnable()){
             problemService.delete(id,Topic.ARTICLE);
+            commandHistory.setContent("上架了图文:"+article.getTitle());
+            commandHistory.setCommand("上架");
+            commandHistory.setType("图文");
         }
         if (!article.getEnable()){
             problemService.save(id,reasons,Topic.ARTICLE);
+            commandHistory.setContent("下架了图文:"+article.getTitle());
+            commandHistory.setCommand("下架");
+            commandHistory.setType("图文");
         }
+        User u = userService.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(u.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
         return ResultVoUtil.success();
     }
 

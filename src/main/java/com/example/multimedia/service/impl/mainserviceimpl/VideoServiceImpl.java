@@ -2,6 +2,7 @@ package com.example.multimedia.service.impl.mainserviceimpl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.multimedia.domian.CommandHistory;
 import com.example.multimedia.domian.User;
 import com.example.multimedia.domian.VideoHistory;
 import com.example.multimedia.domian.enums.Topic;
@@ -11,10 +12,7 @@ import com.example.multimedia.dto.*;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.properties.TengXunProperties;
-import com.example.multimedia.repository.ArticleRepository;
-import com.example.multimedia.repository.TopicLikeRepository;
-import com.example.multimedia.repository.VideoHistoryRepository;
-import com.example.multimedia.repository.VideoRepository;
+import com.example.multimedia.repository.*;
 import com.example.multimedia.service.*;
 import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.util.UserUtil;
@@ -98,6 +96,12 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     private ProblemService problemService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CommandHistoryService commandHistoryService;
+
     @Override
     public String getUploadSignature() {
         String secretId = tengXunProperties.getAccessKey();
@@ -165,11 +169,11 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public ResultVo findVideos(int page, int size,String order,String sort,Boolean enable,Boolean auditing) {
+    public VideosDTO findVideos(int page, int size,String order,String sort,Boolean enable,Boolean auditing) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<Video> videos = videoRepository.findAllByEnableAndAuditing(pageable,enable,auditing);
         VideosDTO videosDTO = getVideosDTO(videos);
-        return ResultVoUtil.success(videosDTO);
+        return videosDTO;
     }
 
     @Override
@@ -215,6 +219,23 @@ public class VideoServiceImpl implements VideoService {
         commentService.deleteAllBycontentId(id, Topic.VIDEO);
         likeService.deleteAllById(id,Topic.VIDEO);
         return ResultVoUtil.success();
+    }
+
+    @Override
+    public ResultVo deleteByAdmin(long id) {
+        String title = videoRepository.videoTitle(id);
+        videoRepository.deleteById(id);
+        searchService.deleteVideoById(id);
+        commentService.deleteAllBycontentId(id, Topic.VIDEO);
+        likeService.deleteAllById(id,Topic.VIDEO);
+        CommandHistory commandHistory = new CommandHistory();
+        commandHistory.setContent("删除了视频:"+title);
+        commandHistory.setCommand("删除");
+        commandHistory.setType("视频");
+        User u = userRepository.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(u.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
+        return null;
     }
 
     @Override
@@ -331,11 +352,25 @@ public class VideoServiceImpl implements VideoService {
 
 
     @Override
-    public ResultVo enableVideo(Long videoId,Boolean enable) {
+    public ResultVo enableVideo(Long videoId,Boolean enable,String reason) {
         Video video = findById(videoId);
         video.setEnable(enable);
         video.setAuditing(true);
         save(video);
+        CommandHistory commandHistory = new CommandHistory();
+        if (enable){
+            commandHistory.setContent("审核通过视频:"+video.getTitle());
+            commandHistory.setCommand("审核");
+            commandHistory.setType("视频");
+        }else {
+            problemService.save(videoId,reason,Topic.VIDEO);
+            commandHistory.setContent("审核未通过视频:"+video.getTitle());
+            commandHistory.setCommand("审核");
+            commandHistory.setType("视频");
+        }
+        User u = userRepository.findByUsername(UserUtil.getUserName());
+        commandHistory.setPeople(u.getRoleList().get(0).getRole());
+        commandHistoryService.save(commandHistory);
         if (enable){
             noticeService.saveNotice(Topic.VIDEO,videoId,video.getTitle(),null,null,null,
                     null,video.getUserId(),"enable");

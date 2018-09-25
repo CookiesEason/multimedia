@@ -1,9 +1,6 @@
 package com.example.multimedia.controller;
 
-import com.example.multimedia.service.AdminNoticeService;
-import com.example.multimedia.service.CommandHistoryService;
-import com.example.multimedia.service.SmallTagsService;
-import com.example.multimedia.service.UserService;
+import com.example.multimedia.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +25,9 @@ public class AdminWebController {
 
     @Autowired
     private CommandHistoryService commandHistoryService;
+
+    @Autowired
+    private VideoService videoService;
 
     @RequestMapping("/adminLogin")
     public String adminLoginIndex(){
@@ -62,6 +62,17 @@ public class AdminWebController {
     public String adminRecords(@RequestParam(defaultValue = "1") int page,Model model){
         model.addAttribute("records",commandHistoryService.findAll(page,16));
         return "adminRecord";
+    }
+
+    @RequestMapping("/admin/examine")
+    public String adminExamine(@RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "10") int size,
+                            @RequestParam(defaultValue = "desc") String order,
+                            @RequestParam(defaultValue = "createDate") String sort,
+                            @RequestParam(defaultValue = "true") Boolean enable,
+                            @RequestParam(defaultValue = "false") Boolean auditing,Model model){
+        model.addAttribute("videos",videoService.findVideos(page, size, order, sort, enable, auditing));
+        return "adminExamine";
     }
 
 }

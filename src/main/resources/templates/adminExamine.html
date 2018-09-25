@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+    <script src="js/html5.js" th:src="@{~/js/html5.js}"></script>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" href="http://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" th:href="@{~/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminNav.css" th:href="@{~/css/adminCss/adminNav.css}">
+    <link rel="stylesheet" type="text/css" href="css/animate.css" th:href="@{~/css/animate.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminImg.css" th:href="@{~/css/adminCss/adminImg.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminExamine.css" th:href="@{~/css/adminCss/adminExamine.css}">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <!-- 导航样式 -->
+    <div class="admin-top-nav"> 
+      <div class="top-nav-logo">
+          Share Your love
+      </div>
+      <a href="javascript:void(0);" class="login-out">
+        <i class="glyphicon glyphicon-log-out">
+          
+        </i>
+        <span>
+          退出
+        </span>
+      </a> 
+      <span href="javascript:void(0);" class="remind-msg msg-email">
+        <i class="glyphicon glyphicon-envelope">
+          <span class="remind-msg-bubble">
+            99+
+          </span>
+        </i>
+        <ul class="remind-ul">
+         <li class="admin-operation">
+            <div class="admin-head">
+              <img src="images/head/browse-head-2.jpg">
+            </div>
+            <div class="admin-main-operate">
+            	<a href="adminRecord.html">
+            	  <span class="operate-name">
+	                老李头
+	              </span>
+	              <span class="operate-text">
+	                删除了名为“西风野马”的图文内容
+	              </span>
+	              <span class="operate-time">
+	                2017-09-08 下午 14:52
+	              </span>
+            	</a>
+            </div>
+         </li> 
+         <li class="admin-operation">
+	         	<div class="admin-head">
+	              <img src="images/head/browse-head-1.jpg">
+	            </div>
+	            <div class="admin-main-operate">
+	            	<a href="adminRecord.html">
+	            	  <span class="operate-name">
+		                管理员
+		              </span>
+		              <span class="operate-text">
+		                删除了名为“我在北边看到你”的影像内容
+		              </span>
+		              <span class="operate-time">
+		                2017-09-08 下午 14:52
+		              </span>
+	            	</a>   
+            	</div>
+         </li>
+         <li class="enter-list">
+         	<a href="adminRecord.html">
+         		<i class="glyphicon glyphicon-cog"></i>
+           		进入列表
+         	</a>
+         </li>
+        </ul>
+      </span>
+      <span href="javascript:void(0);" class="remind-msg msg-bell">
+        <i class="glyphicon glyphicon-bell">
+          <span class="remind-msg-bubble add-green">
+            99+
+          </span>
+        </i>
+        <ul class="remind-ul">
+         <li class="web-msg">
+	         <a href="adminHomepage.html">
+	         	<i class="glyphicon glyphicon-cloud-upload"></i>
+	           最新访问量数据已经更新
+	           <span>
+	             30分钟前
+	           </span>	
+	         </a>  	
+         </li> 
+         <li class="web-msg">
+         	<a href="adminReport.html">
+         		<i class="glyphicon glyphicon-info-sign"></i>
+	           有新的举报内容
+	           <span>
+	             30分钟前
+	           </span>
+         	</a> 
+         </li>
+         <li class="web-msg">
+         	<a href="adminHomepage.html">
+         		<i class="glyphicon glyphicon-fire"></i>
+	           月最佳员工数据更新
+	           <span>
+	             30分钟前
+	           </span>
+         	</a> 
+         </li>
+        </ul>
+      </span>
+      <span class="welcome-msg">
+        欢迎你,管理员
+      </span>
+    </div>
+    <div class="admin-left-nav">
+      <div class="left-nav-head">
+        <div class="head-picture">
+          <img src="images/head/browse-head-1.jpg" alt="head-1"> 
+        </div>
+        <span class="head-msg">
+          <i class="glyphicon glyphicon-unchecked"></i>
+          普通管理员
+        </span>
+      </div>
+      <ul class="main-menu">
+        <li>
+          <a href="adminHomepage.html">
+            <i class="glyphicon glyphicon-home"></i>
+            <span>首页</span>
+          </a> 
+        </li>
+        <li class="nav-user-btn user">
+          <a href="javascript:void(0);">
+            <i class="glyphicon glyphicon-list-alt"></i>
+            <span>主页</span>
+            <i class="glyphicon glyphicon-plus"></i>
+          </a>
+          <ul>
+            <li>
+              <a href="adminIndexHot.html">
+                热门内容更换
+              </a>
+            </li>
+            <li>
+              <a href="adminIndexTag.html">
+                专题内容管理
+              </a>
+            </li>
+          </ul> 
+        </li>
+        <li class="user">
+          <a href="adminImgTxt.html">
+            <i class="glyphicon glyphicon-tasks"></i>
+            <span>图文</span>
+          </a>  
+        </li>
+        <li class="user">
+          <a href="adminImg.html">
+            <i class="glyphicon glyphicon-picture"></i>
+            <span>影像</span>
+          </a>
+        </li>
+        <li class="user">
+          <a href="/admin/examine" class="nav-active">
+            <i class="glyphicon glyphicon-time"></i>
+            <span>审核</span>
+          </a>
+        </li>
+        <li class="user">
+          <a href="adminSpecial.html">
+            <i class="glyphicon glyphicon-th-list"></i>
+            <span>专题</span>
+          </a> 
+        </li>
+        <li class="user">
+          <a href="/admin/labels">
+            <i class="glyphicon glyphicon-tags"></i>
+            <span>标签</span>
+          </a> 
+        </li>
+        <li class="user">
+          <a href="/admin/users">
+            <i class="glyphicon glyphicon-user"></i>
+            <span>用户</span>
+          </a> 
+        </li>
+        <li>
+          <a href="/admin/records">
+            <i class="glyphicon glyphicon-file"></i>
+            <span>记录</span>
+          </a>
+        </li>
+        <li>
+          <a href="/admin/report">
+            <i class="glyphicon glyphicon-warning-sign"></i>
+            <span>举报</span>
+          </a> 
+        </li>
+      </ul>
+    </div>
+	<!-- 图文管理 -->
+	<div class="container">
+		<div class="box-container">
+			<div class="title">
+				视频审核操作
+			</div>
+			<div class="top-nav-search">
+	          <i class="glyphicon glyphicon-search">
+	          
+	          </i>
+	          <input type="text" placeholder="搜索内容...">
+	          <!-- 下拉菜单 -->
+	          <div class="btn-group search" role="group">
+			    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      搜索
+			      <span class="caret"></span>
+			    </button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#">ID</a></li>
+			      <li><a href="#">标题</a></li>
+			      <li><a href="#">作者</a></li>
+			    </ul>
+			  </div>
+		      <!-- 条件检索 -->
+			  <div class="btn-group condition">
+			    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      条件筛选 <span class="caret"></span>
+		  	    </button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#" id="hot-top-bottom">按热度从高到低</a></li>
+			      <li><a href="#" id="time-sooner-later">按发布时间从早到晚</a></li>
+			      <li><a href="#" id="ID-small-big">按ID从小到大</a></li>
+			    </ul>
+		  	  </div>
+	        </div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>标题</th>
+						<th>作者</th>
+						<th>发布时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="video : ${videos.getVideos()}">
+						<td th:text="${video.getVideoId()}">
+							1
+						</td>
+						<td th:text="${video.getTitle()}">
+							上洛记	
+						</td>
+						<td th:text="${video.getUser().getNickname()}">
+							妙鲜包
+						</td>
+						<td th:text="${video.getCreateDate()}">
+							2017-09-10 21:18:37
+						</td>
+						<td data-th-data-id="${video.getVideoId()}" data-th-data-fileid="${video.getFileId()}">
+							<button class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#imgBox">
+								
+							</button>
+							<button class="btn btn-success btn-pass glyphicon glyphicon-ok btn-xs">
+
+							</button>
+							<button class="btn btn-danger btn-refuse glyphicon glyphicon-remove btn-xs" data-toggle="modal" data-target="#refuse-reason">
+								
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="container bottom-page" >
+    	<nav aria-label="Page navigation" id="pageNav">
+   		</nav>
+    </div>
+    <!-- 影像详细内容 -->
+    <div class="modal fade" id="imgBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog imgBox" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">影像内容</h4>
+            </div>
+            <div class="modal-body">
+              <video id="banner-video" src=""></video>
+            </div>
+          </div>
+        </div>
+     </div>
+     <!-- 用户权限管理 -->
+    <div class="modal fade" id="refuse-reason" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">审核失败具体原因</h4>
+          </div>
+          <div class="modal-body">
+          <!-- 权限管理表单 -->
+            <form class="form-horizontal form-power">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">审核状态</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static examine-result">未通过</p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputPassword" class="col-sm-2 control-label">具体原因</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control detail-reason"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary btn-send-to">发送</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- 腾讯云 -->
+    <script src="http://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.min.js"></script>
+    <script src="http://imgcache.qq.com/open/qcloud/video/tcplayer/lib/hls.min.0.8.8.js"></script>
+    <script type="text/javascript" src="js/plug-ins.js" th:src="@{~/js/plug-ins.js}"></script>
+    <script type="text/javascript" src="js/layer-plug/layer.js" th:src="@{~/js/layer-plug/layer.js}"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.min.js" th:src="@{~//bootstrap-datetimepicker.min.js}"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.fr.js" th:src="@{~/js/bootstrap-datetimepicker.fr.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminNav.js" th:src="@{~/js/adminJs/adminNav.js}"></script>
+    <script type="text/javascript" src="js/adminJs/pageNav.js" th:src="@{~/js/adminJs/pageNav.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminExamine.js" th:src="@{~/js/adminJs/adminExamine.js}"></script>
+    <script type="text/javascript" src="/js/axios.min.js" th:src="@{~/js/axios.min.js}"></script>
+    <script type="text/javascript" src="/js/adminJs/adminCommon.js" th:src="@{~/js/adminJs/adminCommon.js}"></script>
+    <script>
+        $(".btn-refuse").click(function () {
+            let id = $(this).parent().data('id')
+            $(".btn-send-to").data('id',id)
+        })
+        $(".btn-browse").click(function () {
+            var player =new TCPlayer("banner-video", { // player-container-id 为播放器容器ID，必须与html中一致
+                fileID: $(this).parent().data('fileid'), // 请传入需要播放的视频filID 必须
+                appID: "1253231183", // 请传入点播账号的appID 必须
+                autoplay: false //是否自动播放
+                //其他参数请在开发文档中查看
+            });
+        })
+    </script>
+  </body>
+</html>

@@ -50,4 +50,6 @@ public interface VideoRepository extends JpaRepository<Video,Long> {
 
     Long countAllByUserIdAndEnable(Long userId,Boolean enable);
 
+    @Query(value = "SELECT title FROM video WHERE id = :id",nativeQuery = true)
+    String videoTitle(@Param("id") Long id);
 }

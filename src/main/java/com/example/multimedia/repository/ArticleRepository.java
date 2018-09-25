@@ -43,4 +43,7 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
 
     Long countAllByUserIdAndEnable(Long userId,Boolean enable);
 
+    @Query(value = "SELECT title FROM article WHERE id = :id",nativeQuery = true)
+    String articleTitle(@Param("id") Long id);
+
 }

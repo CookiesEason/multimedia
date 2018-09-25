@@ -166,7 +166,7 @@ public class AdminController {
                                @RequestParam(defaultValue = "createDate") String sort,
                                @RequestParam(defaultValue = "true") Boolean enable,
                                @RequestParam(defaultValue = "true") Boolean auditing){
-        return videoService.findVideos(page,size,order,sort,enable,auditing);
+        return ResultVoUtil.success(videoService.findVideos(page,size,order,sort,enable,auditing));
     }
 
     @GetMapping("videos/search")
@@ -191,13 +191,14 @@ public class AdminController {
     }
 
     @PostMapping("videos/enable/{videoId}")
-    private ResultVo enableVideo(@PathVariable Long videoId,@RequestParam(defaultValue = "true") Boolean enable){
-        return videoService.enableVideo(videoId,enable);
+    private ResultVo enableVideo(@PathVariable Long videoId,@RequestParam(defaultValue = "true") Boolean enable,
+                                 @RequestParam(required = false) String reason){
+        return videoService.enableVideo(videoId,enable,reason);
     }
 
    @DeleteMapping("videos/{videoId}")
     private ResultVo deleteVideo(@PathVariable Long videoId){
-       return videoService.deleteById(videoId);
+       return videoService.deleteByAdmin(videoId);
    }
 
     @GetMapping("articles")
@@ -235,7 +236,7 @@ public class AdminController {
 
     @DeleteMapping("articles/{articleId}")
     public ResultVo deleteArticle(@PathVariable Long articleId){
-        return articleService.deleteById(articleId);
+        return articleService.deleteByAdmin(articleId);
     }
 
     @GetMapping("comments")

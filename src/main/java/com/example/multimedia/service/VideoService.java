@@ -1,6 +1,7 @@
 package com.example.multimedia.service;
 
 import com.example.multimedia.domian.maindomian.Video;
+import com.example.multimedia.dto.VideosDTO;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,7 +48,7 @@ public interface VideoService {
      * @param auditing 审核状态
      * @return ResultVo
      */
-    ResultVo findVideos(int page, int size,String order,String sort,Boolean enable,Boolean auditing);
+    VideosDTO findVideos(int page, int size, String order, String sort, Boolean enable, Boolean auditing);
 
     /**
      * 分类查找视频
@@ -75,6 +76,13 @@ public interface VideoService {
      * @return ResultVo
      */
     ResultVo deleteById(long id);
+
+    /**
+     * 后台删除视频
+     * @param id;
+     * @return ResultVo
+     */
+    ResultVo deleteByAdmin(long id);
 
     /**
      * 更新视频
@@ -117,7 +125,7 @@ public interface VideoService {
      * @param videoId
      * @return
      */
-    ResultVo enableVideo(Long videoId,Boolean enable);
+    ResultVo enableVideo(Long videoId,Boolean enable,String reason);
 
     /**
      * 记录观看历史

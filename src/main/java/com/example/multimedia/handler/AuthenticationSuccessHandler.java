@@ -31,7 +31,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         CookieUtil.set(response, JwtUtil.TOKEN_PREFIX,token,9600);
         User user = service.findByUsername(authentication.getName());
         SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user.getId(),user.getUserInfo().getNickname(),
-                user.getUserInfo().getHeadImgUrl());
+                user.getUserInfo().getHeadImgUrl(),authentication.getAuthorities().toArray()[0].toString());
         response.getWriter().print(JSON.toJSON(ResultVoUtil.success(simpleUserDTO)));
     }
 }

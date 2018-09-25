@@ -3,6 +3,7 @@ package com.example.multimedia.service;
 import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.dto.ArticleDTO;
 import com.example.multimedia.dto.PageDTO;
+import com.example.multimedia.dto.VideosDTO;
 import com.example.multimedia.vo.ResultVo;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public interface SearchService {
      * @param searchContent
      * @return
      */
-    ResultVo searchVideo(int page,String order,String sort,int startTime,int endTime,String tag,
-                         String searchContent,Boolean enable,Boolean auditing);
+    VideosDTO searchVideo(int page, String order, String sort, int startTime, int endTime, String tag,
+                          String searchContent, Boolean enable, Boolean auditing);
 
     /**
      * 搜索文章

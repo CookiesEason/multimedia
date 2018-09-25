@@ -176,8 +176,8 @@ public class AdminController {
                                  @RequestParam Boolean enable,
                                  @RequestParam Boolean auditing,
                                  @RequestParam String searchContent){
-        return searchService.searchVideo(page,order,sort,0,-1,null,
-                searchContent,enable,auditing);
+        return ResultVoUtil.success(searchService.searchVideo(page,order,sort,0,-1,null,
+                searchContent,enable,auditing));
     }
 
     @PostMapping("videos/updateVideo/{videoId}")

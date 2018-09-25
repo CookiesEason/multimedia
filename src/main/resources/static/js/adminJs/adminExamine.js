@@ -6,6 +6,23 @@ $(function(){
     //     autoplay: false //是否自动播放
     //     //其他参数请在开发文档中查看
     // });
+    let player=null;
+    $(".btn-browse").click(function () {
+        if (player==null){
+            player =new TCPlayer("banner-video", { // player-container-id 为播放器容器ID，必须与html中一致
+                fileID: $(this).parent().data('fileid'), // 请传入需要播放的视频filID 必须
+                appID: "1253231183", // 请传入点播账号的appID 必须
+                autoplay: false //是否自动播放
+                //其他参数请在开发文档中查看
+            });
+        }else {
+            player.loadVideoByID({
+                fileID: $(this).parent().data('fileid'), // 请传入需要播放的视频 filID 必须
+                appID: '1253231183', // 请传入点播账号的 appID 必须
+            })
+        }
+
+    })
     // 通过按钮
     $(document).on('click','.btn-pass',function(){
 		var this_El=$(this);

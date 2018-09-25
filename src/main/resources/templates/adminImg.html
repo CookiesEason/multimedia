@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN"  xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,11 +9,13 @@
     <script src="js/html5.js" th:src="@{~/js/html5.js}"></script>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- 腾讯云 -->
     <link rel="stylesheet" href="http://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" th:href="@{~/css/bootstrap-datetimepicker.min.css}">
     <link rel="stylesheet" type="text/css" href="css/adminCss/adminNav.css" th:href="@{~/css/adminCss/adminNav.css}">
     <link rel="stylesheet" type="text/css" href="css/animate.css" th:href="@{~/css/animate.css}">
-    <link rel="stylesheet" type="text/css" href="css/adminCss/adminLabel.css"  th:href="@{~/css/adminCss/adminLabel.css}">
+    <link rel="stylesheet" type="text/css" href="css/adminCss/adminImg.css" th:href="@{~/css/adminCss/adminImg.css}">
+    <link rel="stylesheet" href="css/myPagination.css" th:href="@{~/css/myPagination.css}">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -129,7 +131,7 @@
     <div class="admin-left-nav">
       <div class="left-nav-head">
         <div class="head-picture">
-          <img src="images/head/browse-head-1.jpg" alt="head-1">
+          <img src="images/head/browse-head-1.jpg" alt="head-1"> 
         </div>
         <span class="head-msg">
           <i class="glyphicon glyphicon-unchecked"></i>
@@ -141,25 +143,25 @@
           <a href="adminHomepage.html">
             <i class="glyphicon glyphicon-home"></i>
             <span>首页</span>
-          </a>
+          </a> 
         </li>
         <li class="user">
           <a href="/admin/imgTxt">
             <i class="glyphicon glyphicon-tasks"></i>
             <span>图文</span>
-          </a>
+          </a>  
         </li>
         <li class="user">
-          <a href="/admin/video">
+          <a href="/admin/video" class="nav-active">
             <i class="glyphicon glyphicon-picture"></i>
             <span>影像</span>
           </a>
         </li>
         <li class="user">
           <a href="/admin/examine">
-            <i class="glyphicon glyphicon-tasks"></i>
+            <i class="glyphicon glyphicon-time"></i>
             <span>审核</span>
-          </a>
+          </a>  
         </li>
         <li class="user">
           <a href="adminRecover.html">
@@ -168,16 +170,16 @@
           </a>
         </li>
         <li class="user">
-          <a href="/admin/labels" class="nav-active">
+          <a href="/admin/labels">
             <i class="glyphicon glyphicon-tags"></i>
             <span>标签</span>
-          </a>
+          </a> 
         </li>
         <li class="user">
           <a href="/admin/users">
             <i class="glyphicon glyphicon-user"></i>
             <span>用户</span>
-          </a>
+          </a> 
         </li>
         <li>
           <a href="/admin/records">
@@ -189,197 +191,213 @@
           <a href="/admin/report">
             <i class="glyphicon glyphicon-warning-sign"></i>
             <span>举报</span>
-          </a>
+          </a> 
         </li>
       </ul>
     </div>
-	<!-- 标签内容 -->
-	<div class="container">
-		<div class="box-container">
-      <div class="title">
-        标签管理
-      </div>
-      <div class="top-nav-search">
-        <i class="glyphicon glyphicon-search">
-            
-        </i>
-        <input type="text" placeholder="搜索内容...">
-        <!-- 下拉菜单 -->
-        <div class="btn-group search" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            搜索
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <li><a href="#">ID</a></li>
-            <li><a href="#">标题</a></li>
-            <li><a href="#">作者</a></li>
-            <li><a href="#">时间</a></li>
-          </ul>
-        </div>
-        <button type="button" class="btn btn-info add-tag-btn" data-toggle="modal" data-target="#addTagBox">新建标签</button>
-        <!-- 条件检索 -->
-        <div class="btn-group condition">
+	  <!-- 影像内容 -->
+    	<div class="container">
+    		<div class="box-container">
+          <div class="title">
+            影像内容管理
+          </div>
+          <div class="top-nav-search">
+              <i class="glyphicon glyphicon-search">
+              
+              </i>
+              <input type="text" placeholder="搜索内容...">
+              <!-- 下拉菜单 -->
+          <div class="btn-group search" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              搜索
+            </button>
+          </div>
+            <!-- 条件检索 -->
+          <div class="btn-group condition">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               条件筛选 <span class="caret"></span>
               </button>
             <ul class="dropdown-menu">
               <li><a href="#" id="hot-top-bottom">按热度从高到低</a></li>
               <li><a href="#" id="time-sooner-later">按发布时间从早到晚</a></li>
-              <li><a href="#" id="ID-small-big">按ID从小到大</a></li>
+              <li><a href="#" id="ID-small-big">按图文ID从小到大</a></li>
             </ul>
+          </div>
         </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>标题</th>
+              <th>作者</th>
+              <th>发布时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="video : ${videos.getVideos()}">
+              <td th:text="${video.getVideoId()}">1</td>
+              <td th:text="${video.getTitle()}">你的笑容在远山云间</td>
+              <td th:text="${video.getUser().getNickname()}">清江水</td>
+              <td th:text="${video.getCreateDate()}">2017-09-10 21:18:37</td>
+              <td data-th-data-id="${video.getVideoId()}" data-th-data-fileid="${video.getFileId()}"
+              data-th-data-play="${video.getPlayCount()}"  data-th-data-comment="${video.getCommentNum()}"
+                  data-th-data-like="${video.getLikeCount()}">
+                <button class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#imgBox">
+                
+                </button>
+                <button class="btn btn-info btn-detailed glyphicon glyphicon-resize-full btn-xs" data-toggle="modal" data-target="#detailedBox">
+                  
+                </button>
+                <button class="btn btn-warning btn-revoke glyphicon glyphicon-share-alt btn-xs"  data-toggle="modal" data-target="#revoke-reason">
+
+                </button>
+                <button class="btn btn-danger btn-delete glyphicon glyphicon-trash btn-xs">
+                  
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>标题</th>
-            <th>热度</th>
-            <th>所属板块</th>
-            <th>发布时间</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="label:${labels}">
-            <td th:text="${label.getId()}">
-              1
-            </td>
-            <td th:text="${label.getSmallTag()}">
-              总决赛
-            </td>
-            <td th:text="${label.getHot()}">
-              1320
-            </td>
-            <td th:text="${label.getTag()}">
-              篮球
-            </td>
-            <td th:text="${label.getCreateDate()}">
-              2017-09-10 21:18:37
-            </td>
-            <td data-th-data-article="${label.getArticleNum()}" data-th-data-video="${label.getVideoNum()}">
-              <button class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#reviseTagBox">
-                    
-              </button>
-              <button data-th-data-id="${label.getId()}" class="btn btn-danger btn-delete glyphicon glyphicon-trash btn-xs">
-                    
-              </button>
-            </td>
-          </tr>
-        </tbody>   
-      </table>
-	 </div>
+    </div>
+    <div class="container bottom-page">
+      <div id="pagination" class="pagination" data-th-data-size="${videos.getTotalElements()}"
+           data-th-data-page="${videos.getTotalPages()}"
+      ></div>
   </div>
-  <div class="container bottom-page">
-    <nav aria-label="Page navigation" id="pageNav">
-    </nav>
-  </div>
-    <!-- 新建标签 -->
-    <div class="modal fade" id="addTagBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
+    <!-- 影像具体信息 -->
+    <div class="modal fade" id="detailedBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog detailedBox" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">新建标签</h4>
+            <h4 class="modal-title" id="myModalLabel">影像具体信息</h4>
           </div>
           <div class="modal-body">
-            <div class="tag-name row">
-              <div class="col-sm-5 text-to-right">
-                <span class="title-text">
-                  标签名
-                  <span>
-                    Title
-                  </span>
-                </span>
-              </div>
-              <div class="col-sm-7 text-to-left">
-                <input type="text" class="add-tag-input" placeholder="请输入标题内容" />
-              </div>
-            </div> 
-            <div class="tag-name row">
-              <div class="col-sm-5 text-to-right">
-                <span class="title-text">
-                  所属板块
-                  <span>
-                    Belong
-                  </span>
-                </span>
-              </div>
-              <div class="col-sm-7 text-to-left">
-                <select class="form-control label-select tag-belong">
-                  <option>篮球</option>
-                  <option>足球</option>
-                  <option>电竞</option>
-                  <option>娱乐</option>
-                </select>
+            <form class="form-horizontal">
+                <!-- 浏览数 -->
+            <div class="form-group">
+              <label class="col-sm-4 control-label">点击量</label>
+              <div class="col-sm-8">
+                <p class="form-control-static">600</p>
               </div>
             </div>
-            <a href="javascript:void(0);" class="send-msg">
-              提交
-            </a>
+            <!-- 点赞数 -->
+            <div class="form-group">
+              <label class="col-sm-4 control-label">点赞数</label>
+              <div class="col-sm-8">
+                <p class="form-control-static">465</p>
+              </div>
+            </div>
+            <!-- 评论数 -->
+            <div class="form-group">
+              <label class="col-sm-4 control-label">评论数</label>
+              <div class="col-sm-8">
+                <p class="form-control-static">26</p>
+              </div>
+            </div>
+          </form>
           </div>
         </div>
       </div>
     </div>
-    <!-- 标签详细内容 -->
-    <div class="modal fade" id="reviseTagBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <!-- 影像详细内容 -->
+    <div class="modal fade" id="imgBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog imgBox" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">影像内容</h4>
+          </div>
+          <div class="modal-body">
+            <video id="banner-video" src=""></video>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="revoke-reason" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">标签详细信息</h4>
+            <h4 class="modal-title" id="myModalLabel">撤销具体原因</h4>
           </div>
           <div class="modal-body">
-            <form class="form-horizontal">
-            <!-- 浏览数 -->
+            <!-- 权限管理表单 -->
+            <form class="form-horizontal form-power">
               <div class="form-group">
-                <label class="col-sm-4 control-label">作品数</label>
-                <div class="col-sm-8">
-                  <p class="form-control-static">1320</p>
+                <label class="col-sm-2 control-label">审核状态</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static examine-result">未通过</p>
                 </div>
               </div>
-              <!-- 点赞数 -->
               <div class="form-group">
-                <label class="col-sm-4 control-label">图文数</label>
-                <div class="col-sm-8">
-                  <p class="form-control-static">600</p>
-                </div>
-              </div>
-              <!-- 评论数 -->
-              <div class="form-group">
-                <label class="col-sm-4 control-label">影像数</label>
-                <div class="col-sm-8">
-                  <p class="form-control-static">720</p>
+                <label for="inputPassword" class="col-sm-2 control-label">具体原因</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control detail-reason"></textarea>
                 </div>
               </div>
             </form>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary btn-send-to">发送</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script type="text/javascript" src="js/plug-ins.js" th:src="@{~/js/plug-ins.js}"></script>
+    <!-- 腾讯云 -->
+    <script src="http://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.min.js"></script>
+    <script src="http://imgcache.qq.com/open/qcloud/video/tcplayer/lib/hls.min.0.8.8.js"></script>
     <script type="text/javascript" src="js/layer-plug/layer.js" th:src="@{~/js/layer-plug/layer.js}"></script>
     <script type="text/javascript" src="js/bootstrap-datetimepicker.min.js" th:src="@{~//bootstrap-datetimepicker.min.js}"></script>
     <script type="text/javascript" src="js/bootstrap-datetimepicker.fr.js" th:src="@{~/js/bootstrap-datetimepicker.fr.js}"></script>
     <script type="text/javascript" src="js/adminJs/adminNav.js" th:src="@{~/js/adminJs/adminNav.js}"></script>
     <script type="text/javascript" src="js/adminJs/pageNav.js" th:src="@{~/js/adminJs/pageNav.js}"></script>
-    <script type="text/javascript" src="js/adminJs/adminLabel.js" th:src="@{~/js/adminJs/adminLabel.js}"></script>
+    <script type="text/javascript" src="js/adminJs/adminImg.js" th:src="@{~/js/adminJs/adminImg.js}"></script>
     <script type="text/javascript" src="/js/axios.min.js" th:src="@{~/js/axios.min.js}"></script>
+    <script src="/js/myPagination.js" th:src="@{~/js/myPagination.js}"></script>
     <script type="text/javascript" src="/js/adminJs/adminCommon.js" th:src="@{~/js/adminJs/adminCommon.js}"></script>
     <script>
-      $(".btn-browse").click(function () {
-          let articleNum = $(this).parent().data('article');
-          let videoNum = $(this).parent().data('video');
-          let total = articleNum+videoNum;
-          $("#reviseTagBox .form-control-static:eq(0)").html(total);
-          $("#reviseTagBox .form-control-static:eq(1)").html(articleNum);
-          $("#reviseTagBox .form-control-static:eq(2)").html(videoNum)
-      })
+        $(".search button:eq(0)").click(function () {
+            location.href = "/admin/video/search?searchContent="+$(".top-nav-search input:eq(0)").val();
+        });
+        $(".btn-detailed").click(function () {
+            $(".detailedBox .form-control-static:eq(0)").html($(this).parent().data('play'));
+            $(".detailedBox .form-control-static:eq(1)").html($(this).parent().data('like'));
+            $(".detailedBox .form-control-static:eq(2)").html($(this).parent().data('comment'));
+        });
+        $(".btn-revoke").click(function () {
+            $("#revoke-reason .modal-footer .btn-send-to").data('id',$(this).parent().data('id'))
+        })
+        let page = getQueryString('page')
+        if (page==null){
+            page=1
+        }
+        window.onload = function () {
+            new myPagination({
+                id: 'pagination',
+                curPage:page, //初始页码
+                pageTotal:  $("#pagination").data('page'), //总页数
+                pageAmount: 16,  //每页多少条
+                dataTotal:  $("#pagination").data('size'), //总共多少条数据
+                pageSize: 5, //可选,分页个数
+                showPageTotalFlag:false, //是否显示数据统计
+                showSkipInputFlag:true, //是否支持跳转
+                getPage: function (page) {
+                    location.href = "/admin/imgTxt?page="+page;
+                }
+            })
+        };
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
     </script>
   </body>
 </html>

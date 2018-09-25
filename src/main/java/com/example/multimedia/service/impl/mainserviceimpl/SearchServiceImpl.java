@@ -94,7 +94,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public ResultVo searchVideo(int page,String order,String sort,int startTime,int endTime,String tag,
+    public VideosDTO searchVideo(int page,String order,String sort,int startTime,int endTime,String tag,
                                 String searchContent,Boolean enable,Boolean auditing) {
         SearchQuery searchQuery = getVideoSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
         Sort s = Sort.by(Sort.Direction.DESC,sort);
@@ -120,7 +120,7 @@ public class SearchServiceImpl implements SearchService {
         });
         VideosDTO videosDTO = new VideosDTO(videoDTOS,videoSearchPage.getTotalElements(),
                 (long) videoSearchPage.getTotalPages());
-        return ResultVoUtil.success(videosDTO);
+        return videosDTO;
     }
 
     @Override

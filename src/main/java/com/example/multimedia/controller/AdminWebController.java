@@ -100,4 +100,21 @@ public class AdminWebController {
         model.addAttribute("articles",searchService.searchArticle(page-1, order, sort, searchContent,null));
         return "adminImgTxt";
     }
+
+    @RequestMapping("/admin/video")
+    public String adminVideo(@RequestParam(defaultValue = "1") int page,Model model){
+        model.addAttribute("videos",videoService.findVideos(page-1,16,"desc","createDate",
+                true,true));
+        return "adminImg";
+    }
+
+    @RequestMapping("/admin/video/search")
+    public String adminVideoSearch(@RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "desc") String order,
+                                   @RequestParam(defaultValue = "create_date") String sort,
+                                   @RequestParam String searchContent,Model model){
+        model.addAttribute("videos",searchService.searchVideo(page-1,order,sort,0,9999999,
+                null,searchContent,true,true));
+        return "adminImg";
+    }
 }

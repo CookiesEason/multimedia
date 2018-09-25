@@ -30,6 +30,7 @@ $(function(){
 			}).then(function () {
                 $('#revoke-reason').modal('hide');
                 layer.msg("发送成功");
+                window.location.reload()
             })
         }
 	})

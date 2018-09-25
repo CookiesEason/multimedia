@@ -36,8 +36,8 @@ public class SearchController {
                                 @RequestParam(defaultValue = "999999") int endTime,
                                  @RequestParam(required = false) String tag,
                                  @RequestParam String searchContent){
-        return searchService.searchVideo(page,order,sort,startTime,endTime,tag,
-                searchContent,true,true);
+        return ResultVoUtil.success(searchService.searchVideo(page,order,sort,startTime,endTime,tag,
+                searchContent,true,true));
     }
 
 

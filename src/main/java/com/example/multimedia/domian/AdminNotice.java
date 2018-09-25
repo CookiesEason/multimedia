@@ -1,6 +1,7 @@
 package com.example.multimedia.domian;
 
 import com.example.multimedia.domian.enums.Topic;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -37,6 +38,7 @@ public class AdminNotice {
     private String type;
 
     @CreatedDate
+    @JsonFormat(pattern = "HH:mm:ss")
     private Timestamp date;
 
 }

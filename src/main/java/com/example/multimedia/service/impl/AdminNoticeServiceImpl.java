@@ -51,7 +51,7 @@ public class AdminNoticeServiceImpl implements AdminNoticeService {
 
     @Override
     public ResultVo getAdminNotice(int page) {
-        int size = 10;
+        int size = 20;
         Sort sort = new Sort(Sort.Direction.DESC,"date");
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<AdminNotice> adminNoticePage = adminNoticeRepository.findAll(pageable);

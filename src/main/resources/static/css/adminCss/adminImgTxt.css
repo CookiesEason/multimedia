@@ -20,9 +20,6 @@
 td {
 	vertical-align: middle!important;
 }
-.btn{
-	color: white;
-}
 /* 图文内容样式 */
 .main-browse{
 	padding-top: 20px;
@@ -182,4 +179,11 @@ td {
 }
 .send-msg:hover{
 	background:#0c79b1;
+}
+.examine-result{
+    text-align: left!important;
+}
+.detail-reason{
+    resize: none;
+    height: 150px!important;
 }

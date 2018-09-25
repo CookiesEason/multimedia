@@ -13,14 +13,25 @@ $(function(){
             })
 		});
 	})
-	$(document).on('click','.btn-revoke',function(){
-		var this_El=$(this);
-		layer.confirm('是否撤销此条图文？', {
-			btn: ['确定','取消'] //按钮
-		}, function(){
-			this_El.closest('tr').remove();
-			layer.msg('该图文已被撤销', {icon: 1});
-		}); 
+	// 撤销按钮
+    $(document).on('click','.btn-send-to',function(){
+    	let t = $(this)
+        var deMsg=$('.detail-reason').val();
+        if(deMsg==''){
+            layer.msg("内容为空,不能提交");
+        }
+        else{
+        	axios({
+				'url':'/api/admin/articles/enable/'+t.data('id'),
+				'method':'post',
+				'params':{
+					'reason':deMsg
+				}
+			}).then(function () {
+                $('#revoke-reason').modal('hide');
+                layer.msg("发送成功");
+            })
+        }
 	})
 	/* 发布时间 */
 	$('.dateTime').datetimepicker({

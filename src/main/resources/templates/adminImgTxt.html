@@ -25,7 +25,7 @@
     <!-- 导航样式 -->
     <div class="admin-top-nav"> 
       <div class="top-nav-logo">
-        Wider Auth
+        Share Your love
       </div>
       <a href="javascript:void(0);" class="login-out">
         <i class="glyphicon glyphicon-log-out">
@@ -143,25 +143,6 @@
             <span>首页</span>
           </a> 
         </li>
-        <li class="nav-user-btn user">
-          <a href="javascript:void(0);">
-            <i class="glyphicon glyphicon-list-alt"></i>
-            <span>主页</span>
-            <i class="glyphicon glyphicon-plus"></i>
-          </a>
-          <ul>
-            <li>
-              <a href="adminIndexHot.html">
-                热门内容更换
-              </a>
-            </li>
-            <li>
-              <a href="adminIndexTag.html">
-                专题内容管理
-              </a>
-            </li>
-          </ul> 
-        </li>
         <li class="user">
           <a href="/admin/imgTxt" class="nav-active">
             <i class="glyphicon glyphicon-tasks"></i>
@@ -179,12 +160,12 @@
             <i class="glyphicon glyphicon-tasks"></i>
             <span>审核</span>
           </a>  
-        </li>
-        <li class="user">
-          <a href="adminSpecial.html">
-            <i class="glyphicon glyphicon-th-list"></i>
-            <span>专题</span>
-          </a> 
+				</li>
+				<li class="user">
+          <a href="adminRecover.html">
+            <i class="glyphicon glyphicon-repeat"></i>
+            <span>恢复</span>
+          </a>
         </li>
         <li class="user">
           <a href="/admin/labels">
@@ -273,7 +254,7 @@
 							<button class="btn btn-info btn-detailed glyphicon glyphicon-resize-full btn-xs" data-toggle="modal" data-target="#detailedBox">
 								
 							</button>
-							<button class="btn btn-warning btn-revoke glyphicon glyphicon-share-alt btn-xs">
+							<button class="btn btn-warning btn-revoke glyphicon glyphicon-share-alt btn-xs" data-toggle="modal" data-target="#revoke-reason">
 
 							</button>
 							<button class="btn btn-danger btn-delete glyphicon glyphicon-trash btn-xs">
@@ -292,40 +273,40 @@
   	</div>
 	<!-- 详细图文模态框 -->
 	<div class="modal fade" id="imgTxtBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog imgTxtBoxWidth" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">图文内容</h4>
-	      </div>
-	      <div class="modal-body">
-		   <div class="main-browse">
-	   		<!-- 标题部分 -->
-	   		<h1 class="browse-title">
-	   			面试巧答考官13个问题，总有一个，值得你去借鉴
-	   		</h1>
-	   		<!-- 作者部分 -->
-	   		<div class="browse-author clearfix">
-	   			<a href="javascript:void(0);" class="browse-author-head">
-	   				<img src="images/head/browse-head-1.jpg" alt="browse-head">
-	   			</a>
-	   			<div class="browse-author-info">
-	   				<div class="browse-author-name">
-	   					<span href="javascript:void(0);">
-	   						火火火火火火
-	   					</span>
-	   				</div>
-	   				<div class="browse-author-time">
-	   					<span>
-	   						2017年6月12日
-	   					</span>
-	   					<span>
-	   						评论 0
-	   					</span>
-	   					<span>
-	   						喜欢 0
-	   					</span>
-	   				</div>
+		<div class="modal-dialog imgTxtBoxWidth" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">图文内容</h4>
+				</div>
+				<div class="modal-body">
+			<div class="main-browse">
+				<!-- 标题部分 -->
+				<h1 class="browse-title">
+					面试巧答考官13个问题，总有一个，值得你去借鉴
+				</h1>
+				<!-- 作者部分 -->
+				<div class="browse-author clearfix">
+					<a href="javascript:void(0);" class="browse-author-head">
+						<img src="images/head/browse-head-1.jpg" alt="browse-head">
+					</a>
+					<div class="browse-author-info">
+						<div class="browse-author-name">
+							<span href="javascript:void(0);">
+								火火火火火火
+							</span>
+						</div>
+						<div class="browse-author-time">
+							<span>
+								2017年6月12日
+							</span>
+							<span>
+								评论 0
+							</span>
+							<span>
+								喜欢 0
+							</span>
+						</div>
 
 	   			</div>
 	   		</div>
@@ -363,83 +344,71 @@
    </div>
    <!-- 图文具体信息 -->
 	<div class="modal fade" id="detailedBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog detailedBox" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">图文具体信息</h4>
-	      </div>
-	      <div class="modal-body">
-	      	<form class="form-horizontal">
-	      	  <!-- 浏览数 -->
-			  <div class="form-group">
-			    <label class="col-sm-4 control-label">浏览数</label>
-			    <div class="col-sm-8">
-			      <p class="form-control-static">600</p>
-			    </div>
-			  </div>
-			  <!-- 点赞数 -->
-			  <div class="form-group">
-			    <label class="col-sm-4 control-label">点赞数</label>
-			    <div class="col-sm-8">
-			      <p class="form-control-static">465</p>
-			    </div>
-			  </div>
-			  <!-- 评论数 -->
-			  <div class="form-group">
-			    <label class="col-sm-4 control-label">评论数</label>
-			    <div class="col-sm-8">
-			      <p class="form-control-static">26</p>
-			    </div>
-			  </div>
+		<div class="modal-dialog detailedBox" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">图文具体信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal">
+						<!-- 浏览数 -->
+				<div class="form-group">
+					<label class="col-sm-4 control-label">浏览数</label>
+					<div class="col-sm-8">
+						<p class="form-control-static">600</p>
+					</div>
+				</div>
+				<!-- 点赞数 -->
+				<div class="form-group">
+					<label class="col-sm-4 control-label">点赞数</label>
+					<div class="col-sm-8">
+						<p class="form-control-static">465</p>
+					</div>
+				</div>
+				<!-- 评论数 -->
+				<div class="form-group">
+					<label class="col-sm-4 control-label">评论数</label>
+					<div class="col-sm-8">
+						<p class="form-control-static">26</p>
+					</div>
+				</div>
 			</form>
-	      </div>
-	    </div>
-	  </div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<!-- 置顶控制模态框 -->
-	<div class="modal fade" id="hot-selected" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">图文置顶</h4>
-	      </div>
-	      <div class="modal-body">
-	        <div class="hot-selected-title">
-	        	<span class="title-text">
-	        		段落
-	        		<span>
-	        			Graph
-	        		</span>
-	        	</span>
-	        	<input class="graph-input" type="text" placeholder="请输入段落">
-	        </div>
-	        <div class="hot-selected-title">
-	        	<span class="title-text">
-	        		发布时间
-	        		<span>
-	        			time
-	        		</span>
-	        	</span>
-				<input type="text" class="dateTime" placeholder="请选择发布时间">
-	        </div>
-	        <div class="img-upload-box">
-	        	<i class="glyphicon glyphicon-plus">
-	        		
-	        	</i>
-	        	<span>
-	        		请上传960*300的图片
-	        	</span>
-	        	<img src="">
-	        	<input type="file">
-	        </div>
-	        <a href="javascript:void(0);" class="send-msg">
-	        	提交
-	        </a>
-	      </div>
-	    </div>
-	  </div>
+	<!-- 撤销图文管理 -->
+	<div class="modal fade" id="revoke-reason" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">撤销具体原因</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 权限管理表单 -->
+					<form class="form-horizontal form-power">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">审核状态</label>
+							<div class="col-sm-10">
+								<p class="form-control-static examine-result">未通过</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword" class="col-sm-2 control-label">具体原因</label>
+							<div class="col-sm-10">
+								<textarea class="form-control detail-reason"></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary btn-send-to">发送</button>
+				</div>
+			</div>
+		</div>
 	</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -474,6 +443,9 @@
             $(".detailedBox .form-control-static:eq(1)").html($(this).parent().data('like'));
             $(".detailedBox .form-control-static:eq(2)").html($(this).parent().data('comment'));
         });
+        $(".btn-revoke").click(function () {
+			$("#revoke-reason .modal-footer .btn-send-to").data('id',$(this).parent().data('id'))
+        })
         let page = getQueryString('page')
         if (page==null){
             page=1

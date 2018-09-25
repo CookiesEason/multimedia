@@ -17,6 +17,15 @@ $(function(){
 		  thisEl.closest('tr').remove();
 		});
 	})
+	$(document).on('click','.btn-revoke',function(){
+		var this_El=$(this);
+		layer.confirm('是否撤销此条图文？', {
+			btn: ['确定','取消'] //按钮
+		}, function(){
+			this_El.closest('tr').remove();
+			layer.msg('该图文已被撤销', {icon: 1});
+		}); 
+	})
 	// 播放器
 	var player =new TCPlayer("banner-video", { // player-container-id 为播放器容器ID，必须与html中一致
 			fileID: "5285890781646748172", // 请传入需要播放的视频filID 必须

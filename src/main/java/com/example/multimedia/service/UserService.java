@@ -160,11 +160,11 @@ public interface UserService {
     ResultVo checkAccessComment();
 
     /**
-     * 某时间段新注册用户
+     * 本月上月新注册用户
      * @param day
      * @return
      */
-    int newRegisterCountForDays(int day);
+    List<Object> newRegisterCountForDays();
 
     /**
      * 最新点赞5位作者

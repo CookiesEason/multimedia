@@ -485,6 +485,11 @@ public class VideoServiceImpl implements VideoService {
         return problemService.getById(id,Topic.VIDEO);
     }
 
+    @Override
+    public List<Object> worksCompare() {
+        return videoRepository.works();
+    }
+
     private ResultVo saveVideo(Video video, Tags tags,Set<String> smallTags) {
         Set<SmallTags> smallTagsSet = smallTagsService.findAllBySmallTag(smallTags);
         if (tags!=null){

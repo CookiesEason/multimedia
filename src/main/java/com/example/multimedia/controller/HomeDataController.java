@@ -1,6 +1,7 @@
 package com.example.multimedia.controller;
 
 import com.example.multimedia.service.ArticleService;
+import com.example.multimedia.service.SmallTagsService;
 import com.example.multimedia.service.UserService;
 import com.example.multimedia.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author CookiesEason
@@ -26,6 +29,9 @@ public class HomeDataController {
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private SmallTagsService smallTagsService;
+
     @GetMapping("/newCount")
     public int newWorks(@RequestParam(defaultValue = "3") int day){
         return articleService.countArticlesForDays(day)+videoService.countVideosForDays(day);
@@ -38,8 +44,13 @@ public class HomeDataController {
     }
 
     @GetMapping("/newRegisterCount")
-    public int newRegisterCount(@RequestParam(defaultValue = "30") int day){
-        return userService.newRegisterCountForDays(day);
+    public List<Object> newRegisterCount(){
+        return userService.newRegisterCountForDays();
+    }
+
+    @GetMapping("/smallTag/topFive")
+    public List<Object> topFive(){
+        return smallTagsService.topFive();
     }
 
 }

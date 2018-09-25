@@ -1,5 +1,7 @@
 package com.example.multimedia.controller;
 
+import com.example.multimedia.dto.PageDTO;
+import com.example.multimedia.dto.SimpleUserDTO;
 import com.example.multimedia.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,17 @@ public class AdminWebController {
     @RequestMapping("/adminLogin")
     public String adminLoginIndex(){
         return "login";
+    }
+
+    @RequestMapping("/admin/index")
+    public String index(Model model){
+        model.addAttribute("register",userService.newRegisterCountForDays());
+        model.addAttribute("works",videoService.worksCompare());
+        PageDTO<SimpleUserDTO> simpleUserDTOPageDTO = (PageDTO<SimpleUserDTO>)userService.findHotUsers(0,1).getData();
+        SimpleUserDTO simpleUserDTO = simpleUserDTOPageDTO.getObjectList().get(0);
+        model.addAttribute("bestPeople",simpleUserDTO);
+        model.addAttribute("records",commandHistoryService.findAll(1,5));
+        return "adminHomepage";
     }
 
     @RequestMapping("/admin/report")

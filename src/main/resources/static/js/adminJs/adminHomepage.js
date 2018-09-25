@@ -48,49 +48,56 @@ $(function(){
     /* 标签 */
     var echartsB = echarts.init(document.getElementById('hot-tags-chart'));
         echartsB.title = '五大热门标签';
-
-		option = {
-		    color: ['#3398DB'],
-		    tooltip : {
-		        trigger: 'axis',
-		        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-		            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-		        }
-		    },
-		    grid: {
-		        left: '0%',
-		        right: '3%',
-		        bottom: '4%',
-		        top:'3%',
-		        containLabel: true
-		    },
-		    xAxis : [
-		        {
-		            type : 'category',
-		            data : [ '美食', '文化', '地域', '饮料', '故事'],
-		            axisTick: {
-		                alignWithLabel: true
-		            }
-		        }
-		    ],
-		    yAxis : [
-		        {
-		            type : 'value'
-		        }
-		    ],
-		    series : [
-		        {
-		            name:'作品量',
-		            type:'bar',
-		            barWidth: '60%',
-		            data:[ 200, 334, 390, 330, 220]
-		        }
-		    ]
-		};
-		echartsB.setOption(option);
-        $(window).resize(function(){
-        	echartsA.resize();
-        	echartsB.resize();
+        let tag = null;
+        let num = null;
+        axios.get('/api/data/smallTag/topFive').then(function (res) {
+            console.log(res.data)
+            num = res.data[0];
+            tag = res.data[1];
+            option = {
+                color: ['#3398DB'],
+                tooltip : {
+                    trigger: 'axis',
+                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                grid: {
+                    left: '0%',
+                    right: '3%',
+                    bottom: '4%',
+                    top:'3%',
+                    containLabel: true
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : tag,
+                        axisTick: {
+                            alignWithLabel: true
+                        }
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'作品量',
+                        type:'bar',
+                        barWidth: '60%',
+                        data:num
+                    }
+                ]
+            };
+            echartsB.setOption(option);
+            $(window).resize(function(){
+                echartsA.resize();
+                echartsB.resize();
+            })
         })
+
         
 })

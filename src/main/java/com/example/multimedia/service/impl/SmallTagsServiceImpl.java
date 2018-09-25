@@ -170,5 +170,20 @@ public class SmallTagsServiceImpl implements SmallTagsService {
         return smallTagsRepository.findBySmallTag(tag);
     }
 
+    @Override
+    public List<Object> topFive() {
+        List<Object> o = new ArrayList<>(0);
+        List<Object[]> objectList = smallTagsRepository.topFive();
+        List<String> smallTags = new ArrayList<>();
+        List<Object> works = new ArrayList<>();
+        objectList.forEach(objects -> {
+            works.add(objects[0]);
+            smallTags.add((String) objects[1]);
+        });
+        o.add(works);
+        o.add(smallTags);
+        return o;
+    }
+
 
 }

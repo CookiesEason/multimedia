@@ -28,4 +28,7 @@ public interface SmallTagsService {
     Set<SmallTags> findAllBySmallTag(Set<String> set);
 
     SmallTags findBySmallTag(String tag);
+
+    List<Object> topFive();
+
 }

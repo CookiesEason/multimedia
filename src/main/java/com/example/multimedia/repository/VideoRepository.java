@@ -52,4 +52,12 @@ public interface VideoRepository extends JpaRepository<Video,Long> {
 
     @Query(value = "SELECT title FROM video WHERE id = :id",nativeQuery = true)
     String videoTitle(@Param("id") Long id);
+
+    @Query(value = "select COUNT(*)+(select COUNT(*) from `article` where date_format( `article`.create_date, '%y%m' ) = date_format(curdate() , '%y%m') ) as now\n" +
+            "from `video` where date_format( `video`.create_date, '%y%m' ) = date_format(curdate() , '%y%m')\n" +
+            "UNION\n" +
+            "select COUNT(*)+(select COUNT(*) as last from `article` where period_diff( date_format(now() , '%y%m') ,date_format( `article`.create_date, '%y%m' ) ) =1) as last\n" +
+            "from `video` where period_diff( date_format(now() , '%y%m') ,date_format( `video`.create_date, '%y%m' ) ) =1",
+    nativeQuery = true)
+    List<Object> works();
 }

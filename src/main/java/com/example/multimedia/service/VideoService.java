@@ -6,6 +6,7 @@ import com.example.multimedia.vo.ResultVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -192,4 +193,10 @@ public interface VideoService {
      * @return
      */
     ResultVo problems(Long id);
+
+    /**
+     * 后台作品比较
+     * @return
+     */
+    List<Object> worksCompare();
 }

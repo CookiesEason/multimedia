@@ -54,8 +54,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Page<User> getHotUsers(Pageable pageable);
 
 
-    @Query(value = "SELECT count(*) FROM `user` WHERE TO_DAYS(NOW()) - TO_DAYS(date) <=:day",nativeQuery = true)
-    int countNewRegister(@Param("day") int day);
+    @Query(value = "select COUNT(*) as now ,(select COUNT(*) as last from `user` where period_diff( date_format(now() , '%y%m') ,date_format( `user`.date, '%y%m' ) ) =1) as last\n" +
+            "from `user` where date_format(`user`.date, '%y%m' ) = date_format( curdate() , '%y%m' )",nativeQuery = true)
+    List<Object> countNewRegister();
 
    @Query(value = "SELECT * FROM (SELECT video.user_id,date FROM topic_like  INNER JOIN\n" +
            "video on video.id = topic_like.top_id\n" +

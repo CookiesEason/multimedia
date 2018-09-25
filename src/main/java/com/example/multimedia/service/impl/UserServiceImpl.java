@@ -381,8 +381,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int newRegisterCountForDays(int day) {
-        return userRepository.countNewRegister(day);
+    public List<Object> newRegisterCountForDays() {
+        return userRepository.countNewRegister();
     }
 
     @Override

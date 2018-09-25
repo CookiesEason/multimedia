@@ -37,4 +37,17 @@ public interface SmallTagsRepository extends JpaRepository<SmallTags,Long> {
             "where small_tags_id = :id",nativeQuery = true)
     Long videoHot(@Param("id") Long id);
 
+
+    @Query(value = "SELECT COUNT(*) as time,t.small_tag from (\n" +
+            "SELECT article_id as id, small_tags_id,small_tags.small_tag from article_small_tags\n" +
+            "INNER JOIN small_tags on small_tags.id = small_tags_id\n" +
+            "UNION\n" +
+            "SELECT video_id as id, small_tags_id,small_tags.small_tag from video_small_tags\n" +
+            "INNER JOIN small_tags on small_tags.id = small_tags_id\n" +
+            ") t\n" +
+            "GROUP BY small_tags_id\n" +
+            "ORDER BY time DESC\n" +
+            "LIMIT 5 ",nativeQuery = true)
+    List<Object[]> topFive();
+
 }

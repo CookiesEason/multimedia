@@ -289,8 +289,9 @@
 		</div>
 	</div>
 	<div class="container bottom-page" >
-    	<nav aria-label="Page navigation" id="pageNav">
-   		</nav>
+        <div id="pagination" class="pagination" data-th-data-size="${videos.getTotalElements()}"
+             data-th-data-page="${videos.getTotalPages()}"
+        ></div>
     </div>
     <!-- 影像详细内容 -->
     <div class="modal fade" id="imgBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -365,6 +366,25 @@
                 //其他参数请在开发文档中查看
             });
         })
+        let page = getQueryString('page')
+        if (page==null){
+            page=1
+        }
+        window.onload = function () {
+            new myPagination({
+                id: 'pagination',
+                curPage:page, //初始页码
+                pageTotal:  $("#pagination").data('page'), //总页数
+                pageAmount: 16,  //每页多少条
+                dataTotal:  $("#pagination").data('size'), //总共多少条数据
+                pageSize: 5, //可选,分页个数
+                showPageTotalFlag:false, //是否显示数据统计
+                showSkipInputFlag:true, //是否支持跳转
+                getPage: function (page) {
+                    location.href = "/admin/examine?page="+page;
+                }
+            })
+        }
     </script>
   </body>
 </html>

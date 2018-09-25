@@ -29,6 +29,12 @@ public class AdminWebController {
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private ArticleService articleService;
+
+    @Autowired
+    private SearchService searchService;
+
     @RequestMapping("/adminLogin")
     public String adminLoginIndex(){
         return "login";
@@ -65,14 +71,33 @@ public class AdminWebController {
     }
 
     @RequestMapping("/admin/examine")
-    public String adminExamine(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int size,
+    public String adminExamine(@RequestParam(defaultValue = "1") int page,
+                            @RequestParam(defaultValue = "16") int size,
                             @RequestParam(defaultValue = "desc") String order,
                             @RequestParam(defaultValue = "createDate") String sort,
                             @RequestParam(defaultValue = "true") Boolean enable,
                             @RequestParam(defaultValue = "false") Boolean auditing,Model model){
-        model.addAttribute("videos",videoService.findVideos(page, size, order, sort, enable, auditing));
+        model.addAttribute("videos",videoService.findVideos(page-1, size, order, sort, enable, auditing));
         return "adminExamine";
     }
 
+
+    @RequestMapping("/admin/imgTxt")
+    public String adminImgTxt(@RequestParam(defaultValue = "1") int page,
+                              @RequestParam(defaultValue = "16") int size,
+                              @RequestParam(defaultValue = "desc") String order,
+                              @RequestParam(defaultValue = "createDate") String sort,
+                              @RequestParam(defaultValue = "true") Boolean enable,Model model){
+        model.addAttribute("articles",articleService.findAll(page-1, size, order, sort, enable));
+        return "adminImgTxt";
+    }
+
+    @RequestMapping("/admin/imgTxt/search")
+    public String adminImgTxtSearch(@RequestParam(defaultValue = "1") int page,
+                                    @RequestParam(defaultValue = "desc") String order,
+                                    @RequestParam(defaultValue = "create_date") String sort,
+                                    @RequestParam String searchContent,Model model){
+        model.addAttribute("articles",searchService.searchArticle(page-1, order, sort, searchContent,null));
+        return "adminImgTxt";
+    }
 }

@@ -207,7 +207,7 @@ public class AdminController {
                                 @RequestParam(defaultValue = "asc") String order,
                                 @RequestParam(defaultValue = "createDate") String sort,
                                 @RequestParam(defaultValue = "true") Boolean enable){
-        return articleService.findAll(page,size,order,sort,enable);
+        return ResultVoUtil.success(articleService.findAll(page,size,order,sort,enable));
     }
 
     @GetMapping("/articles/search")
@@ -215,7 +215,7 @@ public class AdminController {
                                   @RequestParam(defaultValue = "asc") String order,
                                   @RequestParam(defaultValue = "create_date") String sort,
                                   @RequestParam String searchContent){
-        return searchService.searchArticle(page, order, sort, searchContent,null);
+        return ResultVoUtil.success(searchService.searchArticle(page, order, sort, searchContent,null));
     }
 
     @PostMapping("articles/update/{articleId}")

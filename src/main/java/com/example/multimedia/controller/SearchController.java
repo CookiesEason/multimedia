@@ -2,6 +2,7 @@ package com.example.multimedia.controller;
 
 import com.example.multimedia.service.SearchService;
 import com.example.multimedia.service.UserService;
+import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +47,7 @@ public class SearchController {
                                 @RequestParam(defaultValue = "create_date") String sort,
                                 @RequestParam(required = false) String tag,
                                 @RequestParam String searchContent){
-        return searchService.searchArticle(page,order,sort,searchContent,tag);
+        return ResultVoUtil.success(searchService.searchArticle(page,order,sort,searchContent,tag));
     }
 
 

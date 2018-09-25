@@ -147,28 +147,28 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResultVo findAll(int page,int size,String order,String sort,Boolean enable) {
+    public PageDTO<ArticleDTO> findAll(int page,int size,String order,String sort,Boolean enable) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<Article> articlePage =  articleRepository.findAllByEnable(pageable,enable);
         return getResultVo(articlePage);
     }
 
     @Override
-    public ResultVo findAllByTag(int page, int size, String order, String sort,String tag) {
+    public PageDTO<ArticleDTO> findAllByTag(int page, int size, String order, String sort,String tag) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<Article> articlePage = articleRepository.findAllByTagsTagAndEnable(tag,pageable,true);
         return getResultVo(articlePage);
     }
 
     @Override
-    public ResultVo findMyAll(int page, int size, String order, String sort,Boolean enable) {
+    public PageDTO<ArticleDTO> findMyAll(int page, int size, String order, String sort,Boolean enable) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<Article> articlePage = articleRepository.findAllByUserIdAndEnable(getUid(),pageable,enable);
         return getResultVo(articlePage);
     }
 
     @Override
-    public ResultVo findUserAll(Long userId,int page, int size, String order, String sort) {
+    public PageDTO<ArticleDTO> findUserAll(Long userId,int page, int size, String order, String sort) {
         Pageable pageable = PageRequest.of(page,size,sort(order, sort));
         Page<Article> articlePage = articleRepository.findAllByUserIdAndEnable(userId,pageable,true);
         return getResultVo(articlePage);
@@ -230,7 +230,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResultVo findAllBySmallTag(int page, int size,String smallTag,String sort) {
+    public PageDTO<ArticleDTO> findAllBySmallTag(int page, int size,String smallTag,String sort) {
         Sort s = new Sort(Sort.Direction.DESC,sort);
         Pageable pageable = PageRequest.of(page,size,s);
         Page<Article> articlePage = articleRepository.findAllBySmallTagsAndEnable(smallTagsService.findBySmallTag(smallTag),
@@ -260,7 +260,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResultVo findAllByLike(Long userId, int page, int size) {
+    public PageDTO<ArticleDTO> findAllByLike(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Article> articlePage = articleRepository.findAllByIdInAndEnable(topicLikeRepository.ids(Topic.ARTICLE.toString(),
                 userId),pageable,true);
@@ -309,7 +309,7 @@ public class ArticleServiceImpl implements ArticleService {
         return problemService.getById(id,Topic.ARTICLE);
     }
 
-    private ResultVo getResultVo(Page<Article> articlePage) {
+    private PageDTO<ArticleDTO> getResultVo(Page<Article> articlePage) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         articlePage.getContent().forEach(article -> {
             boolean isLike = false;
@@ -329,8 +329,8 @@ public class ArticleServiceImpl implements ArticleService {
                     article,isLike,smallTagDTOS,commentService.num(article.getId(),Topic.ARTICLE));
             articleDTOList.add(articleDTO);
         });
-        return ResultVoUtil.success(new PageDTO<>(articleDTOList, articlePage.getTotalElements(),
-                (long) articlePage.getTotalPages()));
+        return new PageDTO<>(articleDTOList, articlePage.getTotalElements(),
+                (long) articlePage.getTotalPages());
     }
 
     private Sort sort(String order, String sort){

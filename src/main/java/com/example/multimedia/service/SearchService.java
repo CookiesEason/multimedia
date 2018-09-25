@@ -1,6 +1,8 @@
 package com.example.multimedia.service;
 
 import com.example.multimedia.domian.enums.Topic;
+import com.example.multimedia.dto.ArticleDTO;
+import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.vo.ResultVo;
 
 import java.util.List;
@@ -37,7 +39,7 @@ public interface SearchService {
      * @param searchContent
      * @return
      */
-    ResultVo searchArticle(int page,String order,String sort,String searchContent,String tag);
+    PageDTO<ArticleDTO> searchArticle(int page, String order, String sort, String searchContent, String tag);
 
     /**
      *搜索评论

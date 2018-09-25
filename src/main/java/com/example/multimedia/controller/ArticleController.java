@@ -5,6 +5,7 @@ import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.service.ArticleService;
 import com.example.multimedia.service.LikeService;
 import com.example.multimedia.service.ProblemService;
+import com.example.multimedia.util.ResultVoUtil;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,7 +34,7 @@ public class ArticleController {
                                 @RequestParam(defaultValue = "10") int size,
                                 @RequestParam(defaultValue = "desc") String order,
                                 @RequestParam(defaultValue = "createDate") String sort){
-        return articleService.findAll(page,size,order,sort,true);
+        return ResultVoUtil.success(articleService.findAll(page,size,order,sort,true));
     }
 
     @GetMapping("/tag")
@@ -42,7 +43,7 @@ public class ArticleController {
                                      @RequestParam(defaultValue = "desc") String order,
                                      @RequestParam(defaultValue = "createDate") String sort,
                                      @RequestParam String tag){
-        return articleService.findAllByTag(page,size,order,sort,tag);
+        return ResultVoUtil.success(articleService.findAllByTag(page,size,order,sort,tag));
     }
 
     @GetMapping("/smallTag")
@@ -50,7 +51,7 @@ public class ArticleController {
                                           @RequestParam(defaultValue = "10") int size,
                                           @RequestParam String smallTag,
                                           @RequestParam(defaultValue = "createDate") String sort){
-        return articleService.findAllBySmallTag(page, size, smallTag, sort);
+        return ResultVoUtil.success(articleService.findAllBySmallTag(page, size, smallTag, sort));
     }
 
     @GetMapping("/{articleId}")
@@ -64,7 +65,7 @@ public class ArticleController {
                                    @RequestParam(defaultValue = "10") int size,
                                    @RequestParam(defaultValue = "desc") String order,
                                    @RequestParam(defaultValue = "createDate") String sort){
-        return articleService.findUserAll(userId,page,size,order,sort);
+        return ResultVoUtil.success(articleService.findUserAll(userId,page,size,order,sort));
     }
 
     @GetMapping("/me")
@@ -73,13 +74,13 @@ public class ArticleController {
                                  @RequestParam(defaultValue = "desc") String order,
                                  @RequestParam(defaultValue = "createDate") String sort,
                                  @RequestParam(defaultValue = "true") Boolean enable){
-        return articleService.findMyAll(page, size, order, sort,enable);
+        return ResultVoUtil.success(articleService.findMyAll(page, size, order, sort,enable));
     }
 
     @GetMapping("/userLike/{userId}")
     public ResultVo getMyLikeVideos(@PathVariable Long userId,@RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "10")int size){
-        return articleService.findAllByLike(userId,page,size);
+        return ResultVoUtil.success(articleService.findAllByLike(userId,page,size));
     }
 
     @PostMapping

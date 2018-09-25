@@ -124,7 +124,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public ResultVo searchArticle(int page, String order, String sort, String searchContent,String tag) {
+    public PageDTO<ArticleDTO> searchArticle(int page, String order, String sort, String searchContent,String tag) {
         //SearchQuery searchQuery = getArticleSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
         Page<ArticleSearch> articleSearchPage ;
         Sort s = Sort.by(Sort.Direction.DESC,sort);
@@ -146,7 +146,7 @@ public class SearchServiceImpl implements SearchService {
         });
         PageDTO<ArticleDTO> articleDTOPageDTO = new PageDTO<>(articleDTOList,articleSearchPage.getTotalElements(),
                 (long) articleSearchPage.getTotalPages());
-        return ResultVoUtil.success(articleDTOPageDTO);
+        return articleDTOPageDTO;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.example.multimedia.service;
 
 import com.example.multimedia.domian.maindomian.Article;
+import com.example.multimedia.dto.ArticleDTO;
+import com.example.multimedia.dto.PageDTO;
 import com.example.multimedia.vo.ResultVo;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,7 +58,7 @@ public interface ArticleService {
      * @param enable
      * @return
      */
-    ResultVo findAll(int page,int size,String order,String sort,Boolean enable);
+    PageDTO<ArticleDTO> findAll(int page,int size,String order,String sort,Boolean enable);
 
     /**
      * 分类查找文章
@@ -67,7 +69,7 @@ public interface ArticleService {
      * @param tag
      * @return
      */
-    ResultVo findAllByTag(int page,int size,String order,String sort,String tag);
+    PageDTO<ArticleDTO> findAllByTag(int page,int size,String order,String sort,String tag);
 
     /**
      * 获取自己文章
@@ -77,7 +79,7 @@ public interface ArticleService {
      * @param sort
      * @return
      */
-    ResultVo findMyAll(int page,int size,String order,String sort,Boolean enable);
+    PageDTO<ArticleDTO> findMyAll(int page,int size,String order,String sort,Boolean enable);
 
     /**
      * 查看他人所有文章
@@ -87,7 +89,7 @@ public interface ArticleService {
      * @param sort
      * @return
      */
-    ResultVo findUserAll(Long userId,int page,int size,String order,String sort);
+    PageDTO<ArticleDTO> findUserAll(Long userId,int page,int size,String order,String sort);
 
     /**
      * 查看某文章
@@ -109,7 +111,7 @@ public interface ArticleService {
      * @param smallTag
      * @return
      */
-    ResultVo findAllBySmallTag(int page, int size,String smallTag,String sort);
+    PageDTO<ArticleDTO> findAllBySmallTag(int page, int size,String smallTag,String sort);
 
     void save(Article article);
 
@@ -129,7 +131,7 @@ public interface ArticleService {
      */
     int countArticlesForDays(int day);
 
-    ResultVo findAllByLike(Long userId, int page, int size);
+    PageDTO<ArticleDTO> findAllByLike(Long userId, int page, int size);
 
     /**
      * 作品类别占比

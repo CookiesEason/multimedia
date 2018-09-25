@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="css/animate.css" th:href="@{~/css/animate.css}">
     <link rel="stylesheet" type="text/css" href="css/adminCss/adminImg.css" th:href="@{~/css/adminCss/adminImg.css}">
     <link rel="stylesheet" type="text/css" href="css/adminCss/adminExamine.css" th:href="@{~/css/adminCss/adminExamine.css}">
+    <link rel="stylesheet" href="css/myPagination.css" th:href="@{~/css/myPagination.css}">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -164,7 +165,7 @@
           </ul> 
         </li>
         <li class="user">
-          <a href="adminImgTxt.html">
+          <a href="/admin/imgTxt">
             <i class="glyphicon glyphicon-tasks"></i>
             <span>图文</span>
           </a>  
@@ -384,6 +385,11 @@
                     location.href = "/admin/examine?page="+page;
                 }
             })
+        }
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
         }
     </script>
   </body>

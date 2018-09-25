@@ -209,14 +209,7 @@
         <div class="btn-group search" role="group">
           <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             搜索
-            <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu">
-            <li><a href="#">ID</a></li>
-            <li><a href="#">权限</a></li>
-            <li><a class='userSearch' href="#">用户名</a></li>
-            <li><a href="#">注册时间</a></li>
-          </ul>
         </div>
         <button type="button" class="btn btn-info add-tag-btn" data-toggle="modal" data-target="#addUser">新建用户</button>
         <!-- 条件检索 -->
@@ -474,7 +467,7 @@
           })
 
       }
-      $(".userSearch").click(function () {
+      $(".search button:eq(0)").click(function () {
           location.href = "/admin/users/search?searchContent="+$(".top-nav-search input:eq(0)").val();
       });
       function getQueryString(name) {

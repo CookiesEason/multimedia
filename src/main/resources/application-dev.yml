@@ -22,7 +22,7 @@ spring:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 115.159.6.45:9300 #127.0.0.1:9300 #
+      cluster-nodes: 127.0.0.1:9300
   servlet:
     multipart:
       max-file-size: 100Mb
@@ -36,8 +36,8 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   redis:
-    host: 115.159.6.45
-    password: justdoit
+    host: 127.0.0.1
+    # password: justdoit
     port: 6379
 tengxun:
   accessKey: AKIDELHhzAodcP1Yu76yFNOF6qOkuseOwlOv

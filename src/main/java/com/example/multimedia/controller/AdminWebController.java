@@ -170,4 +170,9 @@ public class AdminWebController {
         return "adminRecoverImgTxt";
     }
 
+    @RequestMapping("/403")
+    public String error403(){
+        return "403";
+    }
+
 }

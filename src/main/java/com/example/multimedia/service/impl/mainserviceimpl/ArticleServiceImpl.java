@@ -175,8 +175,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResultVo findById(Long id) {
-        Optional<Article> articleOptional = articleRepository.findByIdAndEnable(id,true);
+    public ResultVo findById(Long id,Boolean enable) {
+        Optional<Article> articleOptional = articleRepository.findByIdAndEnable(id,enable);
         if (articleOptional.isPresent()){
             boolean isLike = false;
             Long userId = getUid();

@@ -124,16 +124,16 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public PageDTO<ArticleDTO> searchArticle(int page, String order, String sort, String searchContent,String tag) {
+    public PageDTO<ArticleDTO> searchArticle(int page, String order, String sort, String searchContent,String tag,Boolean enable) {
         //SearchQuery searchQuery = getArticleSearchQuery(page,PAGE_SIZE,order,sort,searchContent);
         Page<ArticleSearch> articleSearchPage ;
         Sort s = Sort.by(Sort.Direction.DESC,sort);
         Pageable pageable = PageRequest.of(page,10,s);
         if (tag!=null){
-            articleSearchPage = articleSearchRepository.findAllByTagAndTitleOrText(pageable,
-                    tag, searchContent,searchContent);
+            articleSearchPage = articleSearchRepository.findAllByTagAndTitleOrTextAndEnable(pageable,
+                    tag, searchContent,searchContent,enable);
         }else {
-            articleSearchPage = articleSearchRepository.findAllByTitleOrText(pageable,searchContent,searchContent);
+            articleSearchPage = articleSearchRepository.findAllByTitleOrTextAndEnable(pageable,searchContent,searchContent,enable);
         }
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         articleSearchPage.getContent().forEach(articleSearch -> {

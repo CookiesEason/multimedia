@@ -215,7 +215,7 @@ public class AdminController {
                                   @RequestParam(defaultValue = "asc") String order,
                                   @RequestParam(defaultValue = "create_date") String sort,
                                   @RequestParam String searchContent){
-        return ResultVoUtil.success(searchService.searchArticle(page, order, sort, searchContent,null));
+        return ResultVoUtil.success(searchService.searchArticle(page, order, sort, searchContent,null,true));
     }
 
     @PostMapping("articles/update/{articleId}")

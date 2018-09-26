@@ -40,7 +40,7 @@ public interface SearchService {
      * @param searchContent
      * @return
      */
-    PageDTO<ArticleDTO> searchArticle(int page, String order, String sort, String searchContent, String tag);
+    PageDTO<ArticleDTO> searchArticle(int page, String order, String sort, String searchContent, String tag,Boolean enable);
 
     /**
      *搜索评论

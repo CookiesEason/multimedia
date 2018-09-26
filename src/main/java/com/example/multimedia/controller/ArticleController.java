@@ -55,8 +55,8 @@ public class ArticleController {
     }
 
     @GetMapping("/{articleId}")
-    public ResultVo getArticle(@PathVariable Long articleId){
-        return articleService.findById(articleId);
+    public ResultVo getArticle(@PathVariable Long articleId,@RequestParam(defaultValue = "true") Boolean enable){
+        return articleService.findById(articleId,enable);
     }
 
     @GetMapping("/user/{userId}")

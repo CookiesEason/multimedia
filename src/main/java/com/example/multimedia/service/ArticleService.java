@@ -96,7 +96,7 @@ public interface ArticleService {
      * @param id
      * @return
      */
-    ResultVo findById(Long id);
+    ResultVo findById(Long id,Boolean enable);
 
     /**
      * 查找某文章

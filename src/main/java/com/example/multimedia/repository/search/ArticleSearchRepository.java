@@ -12,8 +12,8 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  */
 public interface ArticleSearchRepository extends ElasticsearchRepository<ArticleSearch,Long> {
 
-    Page<ArticleSearch> findAllByTagAndTitleOrText(Pageable pageable,String tag,String content,String text);
+    Page<ArticleSearch> findAllByTagAndTitleOrTextAndEnable(Pageable pageable,String tag,String content,String text,Boolean enable);
 
-    Page<ArticleSearch> findAllByTitleOrText(Pageable pageable,String content,String text);
+    Page<ArticleSearch> findAllByTitleOrTextAndEnable(Pageable pageable,String content,String text,Boolean enable);
 
 }

@@ -110,7 +110,7 @@ public class AdminWebController {
                                     @RequestParam(defaultValue = "desc") String order,
                                     @RequestParam(defaultValue = "create_date") String sort,
                                     @RequestParam String searchContent,Model model){
-        model.addAttribute("articles",searchService.searchArticle(page-1, order, sort, searchContent,null));
+        model.addAttribute("articles",searchService.searchArticle(page-1, order, sort, searchContent,null,true));
         return "adminImgTxt";
     }
 
@@ -150,4 +150,23 @@ public class AdminWebController {
                 null,searchContent,false,true));
         return "adminRecoverImg";
     }
+
+    @RequestMapping("/admin/imgTxt/recover")
+    public String adminRecoverImgTxt(@RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "16") int size,
+                                     @RequestParam(defaultValue = "desc") String order,
+                                     @RequestParam(defaultValue = "createDate") String sort, Model model){
+        model.addAttribute("articles",articleService.findAll(page-1, size, order, sort, false));
+        return "adminRecoverImgTxt";
+    }
+
+    @RequestMapping("/admin/imgTxt/recover/search")
+    public String adminRecoverImgTxt(@RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "desc") String order,
+                                     @RequestParam(defaultValue = "create_date") String sort,
+                                     @RequestParam String searchContent,Model model){
+        model.addAttribute("articles",searchService.searchArticle(page-1, order, sort, searchContent,null,false));
+        return "adminRecoverImgTxt";
+    }
+
 }

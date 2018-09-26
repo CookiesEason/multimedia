@@ -28,7 +28,7 @@
     <!-- 导航样式 -->
     <div class="admin-top-nav"> 
       <div class="top-nav-logo">
-        Share Your love
+       Share Your love
       </div>
       <a href="javascript:void(0);" class="login-out">
         <i class="glyphicon glyphicon-log-out">
@@ -121,12 +121,12 @@
           </a>
           <ul>
             <li>
-              <a href="/admin/imgTxt/recover">
+              <a href="/admin/imgTxt/recover" class="nav-active">
                 恢复图文
               </a>
             </li>
             <li>
-              <a href="/admin/video/recover" class="nav-active">
+              <a href="/admin/video/recover">
                 恢复影像
               </a>
             </li>
@@ -162,7 +162,7 @@
     	<div class="container">
     		<div class="box-container">
           <div class="title">
-            影像内容管理
+            图文内容管理
           </div>
           <div class="top-nav-search">
               <i class="glyphicon glyphicon-search">
@@ -199,15 +199,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr th:each="video : ${videos.getVideos()}">
-              <td th:text="${video.getVideoId()}">1</td>
-              <td th:text="${video.getTitle()}">你的笑容在远山云间</td>
-              <td>影像</td>
-              <td th:text="${video.getUser().getNickname()}">清江水</td>
-              <td th:text="${video.getCreateDate()}">2017-09-10 21:18:37</td>
-              <td data-th-data-id="${video.getVideoId()}" data-th-data-fileid="${video.getFileId()}"
-                  data-type="video">
-                <button class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#imgBox">
+            <tr th:each="article : ${articles.getObjectList()}">
+              <td th:text="${article.getId()}">
+                1
+              </td>
+              <td th:text="${article.getTitle()}">
+                上洛记
+              </td>
+              <td th:text="${article.getUser().getNickname()}">
+                妙鲜包
+              </td>
+              <td th:text="${article.getCreateDate()}">
+                2017-09-10 21:18:37
+              </td>
+              <td data-th-data-id="${article.getId()}" data-type="article">
+                <button class="btn btn-primary btn-browse glyphicon glyphicon-eye-open btn-xs" data-toggle="modal" data-target="#imgTxtBox">
                 
                 </button>
                 <button class="btn btn-info btn-detailed glyphicon glyphicon-exclamation-sign btn-xs" data-toggle="modal" data-target="#recover-know">
@@ -226,22 +232,79 @@
       </div>
     </div>
     <div class="container bottom-page">
-      <div id="pagination" class="pagination" data-th-data-size="${videos.getTotalElements()}"
-           data-th-data-page="${videos.getTotalPages()}"
+      <div id="pagination" class="pagination" data-th-data-size="${articles.getTotalElements()}"
+           data-th-data-page="${articles.getTotalPages()}"
       ></div>
-  </div>
-    <!-- 影像详细内容 -->
-    <div class="modal fade" id="imgBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog imgBox" role="document">
+    </div>
+    <!-- 详细图文模态框 -->
+    <div class="modal fade" id="imgTxtBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog imgTxtBoxWidth" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">影像内容</h4>
+            <h4 class="modal-title" id="myModalLabel">图文内容</h4>
           </div>
           <div class="modal-body">
-            <video id="banner-video" src=""></video>
+        <div class="main-browse">
+          <!-- 标题部分 -->
+          <h1 class="browse-title">
+            面试巧答考官13个问题，总有一个，值得你去借鉴
+          </h1>
+          <!-- 作者部分 -->
+          <div class="browse-author clearfix">
+            <a href="javascript:void(0);" class="browse-author-head">
+              <img src="images/head/browse-head-1.jpg" alt="browse-head">
+            </a>
+            <div class="browse-author-info">
+              <div class="browse-author-name">
+                <span href="javascript:void(0);">
+                  火火火火火火
+                </span>
+              </div>
+              <div class="browse-author-time">
+                <span>
+                  2017年6月12日
+                </span>
+                <span>
+                  评论 0
+                </span>
+                <span>
+                  喜欢 0
+                </span>
+              </div>
+
+            </div>
+          </div>
+          <!-- 文章部分 -->
+          <div class="browse-content">
+            <p>一战真正开启了现代史的进程</p>
+            <p>至今我们仍活在一战的百年遗绪中</p>
+            <p>这些在近年来已成为耳熟能详的的共识性新常识，却并不为太多人知道</p>
+            <p>那些在一战中发生的深刻影响到其后百年全球政治格局的事件，大多集中出现在 1916 年</p>
+            <p>1916 年发生的事件，或者通过影响一战的结局进而影响了其后的历史</p>
+            <p>或者当时并未对一战的结果产生决定性影响，然而却对后来的全球政治格局演变产生了意想不到的触发作用。</p>
+            <p>也因此，1916 年不仅仅是一战史视域中的分割线，更是全球史视野中的关键年份。</p>
+            <p>一战真正开启了现代史的进程</p>
+            <p>至今我们仍活在一战的百年遗绪中</p>
+            <p>这些在近年来已成为耳熟能详的的共识性新常识，却并不为太多人知道</p>
+            <p>那些在一战中发生的深刻影响到其后百年全球政治格局的事件，大多集中出现在 1916 年</p>
+            <p>1916 年发生的事件，或者通过影响一战的结局进而影响了其后的历史</p>
+            <p>或者当时并未对一战的结果产生决定性影响，然而却对后来的全球政治格局演变产生了意想不到的触发作用。</p>
+            <p>也因此，1916 年不仅仅是一战史视域中的分割线，更是全球史视野中的关键年份。</p>
+            <p>一战真正开启了现代史的进程</p>
+            <p>至今我们仍活在一战的百年遗绪中</p>
+            <p>这些在近年来已成为耳熟能详的的共识性新常识，却并不为太多人知道</p>
+            <p>那些在一战中发生的深刻影响到其后百年全球政治格局的事件，大多集中出现在 1916 年</p>
+            <p>1916 年发生的事件，或者通过影响一战的结局进而影响了其后的历史</p>
+            <p>或者当时并未对一战的结果产生决定性影响，然而却对后来的全球政治格局演变产生了意想不到的触发作用。</p>
+            <p>也因此，1916 年不仅仅是一战史视域中的分割线，更是全球史视野中的关键年份。</p>
+          </div>
+          <div class="browse-foot">
+            © 著作权归作者所有
+          </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
     <!-- 未通过原因 -->
@@ -294,10 +357,10 @@
     <script type="text/javascript" src="/js/adminJs/adminCommon.js" th:src="@{~/js/adminJs/adminCommon.js}"></script>
     <script>
         $(".search button:eq(0)").click(function () {
-            location.href = "/admin/video/recover/search?searchContent="+$(".top-nav-search input:eq(0)").val();
+            location.href = "/admin/imgTxt/recover/search?searchContent="+$(".top-nav-search input:eq(0)").val();
         });
         $(".btn-detailed").click(function () {
-            axios.get('/api/video/problems/'+$(this).parent().data('id')).then(function (res) {
+            axios.get('/api/articles/problems/'+$(this).parent().data('id')).then(function (res) {
                 $("#recover-know .recover-know-box").html(res.data.data)
             })
         })
@@ -316,7 +379,7 @@
                 showPageTotalFlag:false, //是否显示数据统计
                 showSkipInputFlag:true, //是否支持跳转
                 getPage: function (page) {
-                    location.href = "/admin/video/recover?page="+page;
+                    location.href = "/admin/imgTxt/recover?page="+page;
                 }
             })
 

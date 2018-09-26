@@ -36,5 +36,6 @@ public class ArticleSearch implements Serializable {
 
     private Timestamp create_date;
 
+    private Boolean enable;
 
 }

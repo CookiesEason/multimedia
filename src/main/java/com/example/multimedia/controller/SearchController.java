@@ -47,7 +47,7 @@ public class SearchController {
                                 @RequestParam(defaultValue = "create_date") String sort,
                                 @RequestParam(required = false) String tag,
                                 @RequestParam String searchContent){
-        return ResultVoUtil.success(searchService.searchArticle(page,order,sort,searchContent,tag));
+        return ResultVoUtil.success(searchService.searchArticle(page,order,sort,searchContent,tag,true));
     }
 
 

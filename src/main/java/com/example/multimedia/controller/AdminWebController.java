@@ -115,8 +115,9 @@ public class AdminWebController {
     }
 
     @RequestMapping("/admin/video")
-    public String adminVideo(@RequestParam(defaultValue = "1") int page,Model model){
-        model.addAttribute("videos",videoService.findVideos(page-1,16,"desc","createDate",
+    public String adminVideo(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "desc") String order,
+                             @RequestParam(defaultValue = "createDate") String sort,Model model){
+        model.addAttribute("videos",videoService.findVideos(page-1,16,order,sort,
                 true,true));
         return "adminImg";
     }

@@ -12,6 +12,6 @@ public interface ProblemRepository extends JpaRepository<Problem,Long> {
 
     Problem findByTopicIdAndTopic(Long id, Topic topic);
 
-    void deleteByIdAndTopic(Long topicId,Topic topic);
+    void deleteByTopicIdAndTopic(Long topicId,Topic topic);
 
 }

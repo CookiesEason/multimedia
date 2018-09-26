@@ -130,4 +130,24 @@ public class AdminWebController {
                 null,searchContent,true,true));
         return "adminImg";
     }
+
+    @RequestMapping("/admin/video/recover")
+    public String adminRecoverVideo(@RequestParam(defaultValue = "1") int page,
+                                    @RequestParam(defaultValue = "16") int size,
+                                    @RequestParam(defaultValue = "desc") String order,
+                                    @RequestParam(defaultValue = "createDate") String sort,
+                                    @RequestParam(defaultValue = "false") Boolean enable,
+                                    @RequestParam(defaultValue = "true") Boolean auditing,Model model){
+        model.addAttribute("videos",videoService.findVideos(page-1, size, order, sort, enable, auditing));
+        return "adminRecoverImg";
+    }
+    @RequestMapping("/admin/video/recover/search")
+    public String adminRecoverVideoSearch(@RequestParam(defaultValue = "1") int page,
+                                          @RequestParam(defaultValue = "desc") String order,
+                                          @RequestParam(defaultValue = "create_date") String sort,
+                                          @RequestParam String searchContent,Model model){
+        model.addAttribute("videos",searchService.searchVideo(page-1,order,sort,0,9999999,
+                null,searchContent,false,true));
+        return "adminRecoverImg";
+    }
 }

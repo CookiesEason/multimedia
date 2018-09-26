@@ -359,6 +359,7 @@ public class VideoServiceImpl implements VideoService {
         save(video);
         CommandHistory commandHistory = new CommandHistory();
         if (enable){
+            problemService.delete(videoId,Topic.VIDEO);
             commandHistory.setContent("审核通过视频:"+video.getTitle());
             commandHistory.setCommand("审核");
             commandHistory.setType("视频");

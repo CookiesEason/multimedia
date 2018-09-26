@@ -56,7 +56,8 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public ResultVo delete(Long topicId, Topic topic) {
-        problemRepository.deleteByIdAndTopic(topicId, topic);
+        System.out.println(topicId);
+        problemRepository.deleteByTopicIdAndTopic(topicId, topic);
         return ResultVoUtil.success();
     }
 

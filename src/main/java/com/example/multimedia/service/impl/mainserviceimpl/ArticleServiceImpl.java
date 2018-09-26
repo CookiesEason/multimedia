@@ -8,7 +8,6 @@ import com.example.multimedia.domian.enums.Topic;
 import com.example.multimedia.domian.maindomian.Article;
 import com.example.multimedia.domian.maindomian.Tags;
 import com.example.multimedia.domian.maindomian.TopicLike;
-import com.example.multimedia.domian.maindomian.Video;
 import com.example.multimedia.domian.maindomian.tag.SmallTags;
 import com.example.multimedia.dto.*;
 import com.example.multimedia.repository.ArticleRepository;
@@ -186,7 +185,7 @@ public class ArticleServiceImpl implements ArticleService {
             }
             Article article = articleOptional.get();
             article.setReadCount(article.getReadCount()+1);
-            save(article);
+            saveArticle(article);
             Set<SmallTagDTO> smallTagDTOS = new HashSet<>();
             article.getSmallTags().forEach(smallTags -> {
                 SmallTagDTO smallTagDTO = new SmallTagDTO(smallTags);
@@ -239,7 +238,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void save(Article article) {
+    public void saveArticle(Article article) {
         articleRepository.save(article);
     }
 
@@ -284,7 +283,7 @@ public class ArticleServiceImpl implements ArticleService {
     public ResultVo enable(Long id,String reasons) {
         Article article = findById((long)id);
         article.setEnable(!article.getEnable());
-        save(article);
+        saveArticle(article);
         CommandHistory commandHistory = new CommandHistory();
         if (article.getEnable()){
             problemService.delete(id,Topic.ARTICLE);

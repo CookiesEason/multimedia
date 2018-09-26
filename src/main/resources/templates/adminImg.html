@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="css/animate.css" th:href="@{~/css/animate.css}">
     <link rel="stylesheet" type="text/css" href="css/adminCss/adminImg.css" th:href="@{~/css/adminCss/adminImg.css}">
     <link rel="stylesheet" href="css/myPagination.css" th:href="@{~/css/myPagination.css}">
+    <script src="../../../../../Share/static/js/homepage/circle.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -351,7 +352,7 @@
                 showPageTotalFlag:false, //是否显示数据统计
                 showSkipInputFlag:true, //是否支持跳转
                 getPage: function (page) {
-                    location.href = "/admin/imgTxt?page="+page;
+                    location.href = "/admin/video?page="+page;
                 }
             })
         };

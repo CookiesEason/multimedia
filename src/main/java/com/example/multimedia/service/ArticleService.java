@@ -113,7 +113,7 @@ public interface ArticleService {
      */
     PageDTO<ArticleDTO> findAllBySmallTag(int page, int size,String smallTag,String sort);
 
-    void save(Article article);
+    void saveArticle(Article article);
 
     /**
      * 举报

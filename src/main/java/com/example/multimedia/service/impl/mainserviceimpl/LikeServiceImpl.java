@@ -66,7 +66,7 @@ public class LikeServiceImpl implements LikeService {
             }else {
                 article.setLikeCount(article.getLikeCount()-1);
             }
-            articleService.save(article);
+            articleService.saveArticle(article);
             topicLikeRepository.save(topicLike);
             return  article.getLikeCount();
         }

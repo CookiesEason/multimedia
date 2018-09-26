@@ -46,6 +46,7 @@ public class SensitiveAop {
         System.out.println("处理敏感词");
         //获取目标方法的参数信息
         Object[] obj = joinPoint.getArgs();
+        System.out.println(obj);
         SensitiveWordFiler sw = new SensitiveWordFiler();
         sw.InitializationWork();
         sw.filterInfo(obj[0].toString());

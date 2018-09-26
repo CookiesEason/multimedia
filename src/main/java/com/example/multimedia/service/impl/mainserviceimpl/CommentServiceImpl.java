@@ -23,9 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author CookiesEason
@@ -91,7 +89,7 @@ public class CommentServiceImpl implements CommentService {
         }else {
             Article article = articleService.findById((long)topicId);
             article.setCommentNum(article.getCommentNum()+1);
-            articleService.save(article);
+            articleService.saveArticle(article);
             toUid = article.getUserId();
             title = article.getTitle();
         }

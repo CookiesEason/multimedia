@@ -37,4 +37,4 @@ tengxun:
   bucketName: zone-1253231183
   path: https://zone-1253231183.cos.ap-shanghai.myqcloud.com
 mail:
-  activateUrl: http://localhost:8080/api/user/activateEmail?
+  activateUrl: http://localhost/userActive.html?

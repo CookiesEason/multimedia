@@ -32,7 +32,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     List<User> findUsersByIdIn(List<Long> ids);
 
-    @Query(value = "SELECT nickname FROM USER INNER JOIN user_info ON user_info_id = user_info.id WHERE `user`.id = :Id",
+    @Query(value = "SELECT nickname FROM `user` INNER JOIN user_info ON user_info_id = user_info.id WHERE `user`.id = :Id",
     nativeQuery = true)
     String nickname(@Param("Id") Long userId);
 

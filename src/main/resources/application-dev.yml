@@ -40,8 +40,8 @@ spring:
     # password: justdoit
     port: 6379
 tengxun:
-  accessKey: AKIDELHhzAodcP1Yu76yFNOF6qOkuseOwlOv
-  secretKey: SimXFtQmyzufHjFiicKrYAg1Pm0iLtGR
+  accessKey: xxx
+  secretKey: xxx
   bucket: ap-shanghai
   bucketName: zone-1253231183
   path: https://zone-1253231183.cos.ap-shanghai.myqcloud.com

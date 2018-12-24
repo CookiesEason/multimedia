@@ -30,7 +30,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: 837447352@qq.com
-    password: tbtshyehhponbbfa
+    password: xxxx
     default-encoding: UTF-8
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

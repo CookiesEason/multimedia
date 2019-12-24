@@ -97,35 +97,10 @@
           </a>
         </li>
         <li class="user">
-          <a href="/admin/video">
-            <i class="glyphicon glyphicon-picture"></i>
-            <span>影像</span>
-          </a>
-        </li>
-        <li class="user">
-          <a href="/admin/examine">
-            <i class="glyphicon glyphicon-tasks"></i>
-            <span>审核</span>
-          </a>
-        </li>
-        <li class="nav-user-btn user" style="height:135px;">
-          <a href="javascript:void(0);">
+          <a href="/admin/imgTxt/recover">
             <i class="glyphicon glyphicon-list-alt"></i>
-            <span>恢复</span>
-            <i class="glyphicon glyphicon-minus"></i>
+            <span> 恢复图文</span>
           </a>
-          <ul>
-            <li>
-              <a href="/admin/imgTxt/recover">
-                恢复图文
-              </a>
-            </li>
-            <li>
-              <a href="/admin/video/recover">
-                恢复影像
-              </a>
-            </li>
-          </ul>
         </li>
         <li class="user">
           <a href="/admin/labels">
@@ -278,7 +253,6 @@
                     删除
                   </td>
                   <td th:if="${record.getPeople()=='ROLE_ADMIN'}">开发者</td>
-                  <td th:if="${record.getPeople()=='ROLE_VIDEO_ADMIN'}">影像管理者</td>
                   <td th:if="${record.getPeople()=='ROLE_IMGTXT_ADMIN'}">图文管理者</td>
                   <td th:text="${record.getCreateDate()}">
                     2017-09-10 21:18:37

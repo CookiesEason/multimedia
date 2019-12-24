@@ -15,10 +15,10 @@ body{
 	margin-top: -300px;
 }
 .main-box img{
-	width: 220px;
-	height: 220px;
+	width:auto;
+	height: 100px;
 	display: block;
-	margin:0 auto;
+	margin-left: -120px;
 }	
 input{
 	width: 100%;
